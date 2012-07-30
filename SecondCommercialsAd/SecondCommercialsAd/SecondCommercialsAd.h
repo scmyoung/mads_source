@@ -10,8 +10,8 @@
 #import <SecondCommercialsAd/ASIHTTPRequest.h>
 #import <SecondCommercialsAd/ASIFormDataRequest.h>
 #import <SecondCommercialsAd/FBConnect.h>
-#import <SecondCommercialsAd/SA_OAuthTwitterEngine.h>
-#import <SecondCommercialsAd/SA_OAuthTwitterController.h>
+#import <Accounts/Accounts.h>
+#import <Twitter/Twitter.h>
 
 
 typedef enum BannerPosition {
@@ -25,7 +25,7 @@ typedef enum BannerPosition {
 - (void)scmAdBannerWillShow;
 @end
 
-@interface SecondCommercialsAd : UIViewController <NSXMLParserDelegate, UIAlertViewDelegate, FBSessionDelegate_Scm, FBRequestDelegate_Scm, ASIHTTPRequestDelegate, SA_OAuthTwitterEngineDelegate, SA_OAuthTwitterControllerDelegate> {
+@interface SecondCommercialsAd : UIViewController <NSXMLParserDelegate, UIAlertViewDelegate, FBSessionDelegate_Scm, FBRequestDelegate_Scm, ASIHTTPRequestDelegate> {
     
     // scmAdView - A view container it contains a banner and stamp views
     UIView *scmAdView;

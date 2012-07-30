@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		85FFB21F15C247220099B0AA /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85FFB21E15C247220099B0AA /* Accounts.framework */; };
+		85FFB22215C2472C0099B0AA /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85FFB22115C2472C0099B0AA /* Twitter.framework */; };
 		E252F26114C5B1BF00D9D48F /* JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = E252F25414C5B1BF00D9D48F /* JSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E252F26214C5B1BF00D9D48F /* NSObject+SBJSON_Scm.h in Headers */ = {isa = PBXBuildFile; fileRef = E252F25514C5B1BF00D9D48F /* NSObject+SBJSON_Scm.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E252F26314C5B1BF00D9D48F /* NSObject+SBJSON_Scm.m in Sources */ = {isa = PBXBuildFile; fileRef = E252F25614C5B1BF00D9D48F /* NSObject+SBJSON_Scm.m */; };
@@ -113,6 +115,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		85FFB21E15C247220099B0AA /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		85FFB22115C2472C0099B0AA /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		E252F25414C5B1BF00D9D48F /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
 		E252F25514C5B1BF00D9D48F /* NSObject+SBJSON_Scm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON_Scm.h"; sourceTree = "<group>"; };
 		E252F25614C5B1BF00D9D48F /* NSObject+SBJSON_Scm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SBJSON_Scm.m"; sourceTree = "<group>"; };
@@ -226,6 +230,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85FFB22215C2472C0099B0AA /* Twitter.framework in Frameworks */,
+				85FFB21F15C247220099B0AA /* Accounts.framework in Frameworks */,
 				E2E5951814EFF8EF008ADF76 /* libOAuth.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -256,6 +262,8 @@
 		E255028014AB4FEC00B6A816 = {
 			isa = PBXGroup;
 			children = (
+				85FFB22115C2472C0099B0AA /* Twitter.framework */,
+				85FFB21E15C247220099B0AA /* Accounts.framework */,
 				E2E594B014EFF8EF008ADF76 /* Twitter+OAuth */,
 				E255031514AB61CA00B6A816 /* ASIHTTPRequest */,
 				E25502D214AB503A00B6A816 /* Facebook */,
