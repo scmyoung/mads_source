@@ -7,10 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <SecondCommercialsAd/ASIHTTPRequest.h>
-#import <SecondCommercialsAd/ASIFormDataRequest.h>
-#import <SecondCommercialsAd/FBConnect.h>
-
 
 typedef enum BannerPosition {
     TOP = 0,
@@ -23,16 +19,13 @@ typedef enum BannerPosition {
 - (void)scmAdBannerWillShow;
 @end
 
-@interface SecondCommercialsAd : UIViewController <NSXMLParserDelegate, UIAlertViewDelegate, FBSessionDelegate_Scm, FBRequestDelegate_Scm, ASIHTTPRequestDelegate> {
+@interface SecondCommercialsAd : UIViewController <NSXMLParserDelegate, UIAlertViewDelegate> {
     
-    // scmAdView - A view container it contains a banner and stamp views
+    // scmAdView - A view container, it contains a banner and stamp views
     UIView *scmAdView;
-
     
     // delegate
     id <SecondCommercialsAdDelegate> scmAdDelegate;
-    
-   
     
     /************************************************************/
     

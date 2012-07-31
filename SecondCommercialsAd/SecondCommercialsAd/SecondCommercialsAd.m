@@ -8,8 +8,12 @@
 
 #import "SecondCommercialsAd.h"
 #import "TwitterHandler.h"
+#import <FacebookSDK/FacebookSDK.h>
+#import <SecondCommercialsAd/ASIHTTPRequest.h>
+#import <SecondCommercialsAd/ASIFormDataRequest.h>
 
-@interface SecondCommercialsAd() {
+
+@interface SecondCommercialsAd() <FBLoginViewDelegate, ASIHTTPRequestDelegate>{
     
     
     // scmAdBgButton - receive any event from upper layer
@@ -55,8 +59,12 @@
     // hurdle point for a game
     NSInteger hurdlePoint;
     
-    Facebook_Scm *facebook;
-    TWTweetComposeViewController *twController; //SA_OAuthTwitterEngine *_engine;
+    // Facebook Handler
+    FBSession *fbSession;
+    
+    
+    // Twitter Handler
+    TWTweetComposeViewController *twController;
     TWRequest *twRequest;
     ACAccountStore *accountStore;
     ACAccount *twAccount;
@@ -1006,6 +1014,7 @@
     
     /***************************************************/
     
+    /*
     // Facebook Initiation
     facebook = [[Facebook_Scm alloc] initWithAppId:FB_APP_ID andDelegate:self];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -1013,6 +1022,10 @@
         facebook.accessToken = [defaults objectForKey:@"FBAccessTokenKey"];
         facebook.expirationDate = [defaults objectForKey:@"FBExpirationDateKey"];
     }
+    */
+    
+    
+    
     
     // Twitter Initiation
     twHandler = [[TwitterHandler alloc] init];
@@ -1053,11 +1066,30 @@
 #pragma - Facebook Delegate methods
 - (void) scmAdFacebookLogin: (id)sender
 {
+   
+    
+    /*
     //NSLog(@"SCM: Facebook Login!");
     NSArray *fbPermission = [[NSArray alloc] initWithObjects:@"publish_stream", @"email", nil];
     [facebook authorize:fbPermission];
     [fbPermission release];
+    */
     
+    NSArray *permissions = [NSArray arrayWithObjects:@"publish_stream", @"email", nil];
+    [FBSession sessionOpenWithPermissions:permissions
+                        completionHandler:
+     ^(FBSession *session,
+       FBSessionState status,
+       NSError *error) {
+         // if login fails for any reason, we alert
+         if (error) {
+             // TODO: Handle Facebook Login Error
+         } else if (FB_ISSESSIONOPENWITHSTATE(status)) {
+             // send our requests if we successfully logged in
+             isFacebookLogin = YES;
+             [self fbDidLogin];
+         }
+     }];
 }
 
 - (void)scmAdPostToFacebook
@@ -1104,7 +1136,13 @@
     [strPost release];
     fb_link = nil, fb_link_desc=nil, fb_ad_desc=nil;
     
-    [facebook requestWithGraphPath:@"me/feed" andParams:params andHttpMethod:@"POST" andDelegate:self];
+    //[facebook requestWithGraphPath:@"me/feed" andParams:params andHttpMethod:@"POST" andDelegate:self];
+    [FBRequestConnection startWithGraphPath:@"me/feed" parameters:params HTTPMethod:@"POST" completionHandler:
+     ^(FBRequestConnection *connection, id result, NSError *error) {
+         if (error) {
+             NSLog(@"[scm]: Post to Facebook Error with: %@", error.description);
+         }
+    }];
     
 }
 
@@ -1257,17 +1295,33 @@
         }
     }  
     
-     scmAdSnsLoginView.alpha = 0.0f;
-     [UIView commitAnimations];
-    
-    // Save the access token key info.
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:[facebook accessToken] forKey:@"FBAccessTokenKey"];
-    [defaults setObject:[facebook expirationDate] forKey:@"FBExpirationDateKey"];
-    [defaults synchronize];
+    scmAdSnsLoginView.alpha = 0.0f;
+    [UIView commitAnimations];
     
     // Get the user's info.
-    [facebook requestWithGraphPath:@"me" andDelegate:self];
+    //[facebook requestWithGraphPath:@"me" andDelegate:self];
+    [FBRequestConnection startWithGraphPath:@"me" completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+        if ([result isKindOfClass:[NSDictionary class]])
+        {
+            fb_email = [result objectForKey: @"email"];
+            fb_name = [result objectForKey: @"name"];
+            //NSString *facebookId = [result objectForKey: @"id"];
+            //NSLog(@"Facebook Email: %@", fb_email);
+            //NSLog(@"Facebook Name: %@", fb_name);
+            //NSLog(@"FacebookID: %@", facebookId);
+            
+            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_FB_PLIST];
+            
+            if (fb_email && fb_name) {
+                //NSLog(@"Write FB Info");
+                [fbContainer setObject:fb_email forKey:@"fb_email"];
+                [fbContainer setObject:fb_name forKey:@"fb_name"];
+                [fbContainer writeToFile:filePath atomically:YES];
+            }
+            fbContainer = nil;
+        }
+
+    }];
 
     // Post first feed
     if (isMissedView == NO) {
@@ -1282,33 +1336,8 @@
 
 }
 
--(void)fbDidNotLogin:(BOOL)cancelled
-{
-    // Keep this for testing purposes.
-    //NSLog(@"Did not login");
-}
-
-
 -(BOOL)checkForPreviouslySavedAccessTokenInfo
 {
-    
-    // Check if there is a previous access token key in the user defaults file.
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if ([defaults objectForKey:@"FBAccessTokenKey"] &&
-        [defaults objectForKey:@"FBExpirationDateKey"]) {
-        facebook.accessToken = [defaults objectForKey:@"FBAccessTokenKey"];
-        facebook.expirationDate = [defaults objectForKey:@"FBExpirationDateKey"];
-        
-        // Check if the facebook session is valid.
-        // If it’s not valid clear any authorization and mark the status as not connected.
-        if (![facebook isSessionValid]) {
-            [facebook authorize:nil];
-            isFacebookLogin = NO;
-        }else {
-            isFacebookLogin = YES;
-        }
-    }
-    
     
     if (isFacebookLogin || isTwitterLogin) {
         return YES;
@@ -1318,6 +1347,7 @@
      
 }
 
+/*
 - (void) request:(FBRequest_Scm*)request didLoad:(id)result
 {
     if ([result isKindOfClass:[NSDictionary class]])
@@ -1339,7 +1369,8 @@
             }
             fbContainer = nil;
     }
-}
+} 
+*/
 
 
 #pragma - Twitter Delegate Methods
@@ -1490,12 +1521,6 @@
         }        
     }
 }
-
-
-
-
-
-
 
 
 #pragma - NSXMLParser Delegate methods
