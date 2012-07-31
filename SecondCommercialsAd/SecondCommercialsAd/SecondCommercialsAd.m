@@ -7,6 +7,7 @@
 //
 
 #import "SecondCommercialsAd.h"
+#import "TwitterHandler.h"
 
 @interface SecondCommercialsAd() {
     
@@ -59,6 +60,9 @@
     TWRequest *twRequest;
     ACAccountStore *accountStore;
     ACAccount *twAccount;
+    
+    TwitterHandler *twHandler;
+    
     BOOL isDownloadOk;
     
     
@@ -1011,12 +1015,7 @@
     }
     
     // Twitter Initiation
-    twController = [[TWTweetComposeViewController alloc]init]; //_engine = [[SA_OAuthTwitterEngine alloc] initOAuthWithDelegate:self];
-    
-    accountStore = [[ACAccountStore alloc] init];
-    
-	//_engine.consumerKey = TW_OAUTH_CONSUMER_KEY;
-	//_engine.consumerSecret = TW_OAUTH_CONSUMER_SECRET;
+    twHandler = [[TwitterHandler alloc] init];
     
     // initiate DataStructure for plist infor file
     dictXmlInfo = [[NSMutableDictionary alloc] init];
@@ -1111,43 +1110,29 @@
 
 - (void) scmAdPostToTwitter
 {
-    NSLog(@"[scm]: ---- Post to Twitter");
-    // Post to twitter
+    NSLog(@"[scm]: - Post to Twitter");
     
-    NSString *tw_text_one = nil;
-    NSString *tw_text_two = nil;
-    NSString *tw_text_three = nil;
-    
+    NSString *stampText = [[NSString alloc] init];    
     NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES)
                            objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
+    
     if ([fileMgr fileExistsAtPath:filePath]) {
         dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
         
-        tw_text_one = [dictXmlInfo objectForKey:@"tw_post_one"];
-        tw_text_two = [dictXmlInfo objectForKey:@"tw_post_two"];
-        tw_text_three = [dictXmlInfo objectForKey:@"tw_post_three"];
+        if (stampsCounter == 1) {
+            stampText = [dictXmlInfo objectForKey:@"tw_post_one"];
+        } else if (stampsCounter == 2) {
+            stampText = [dictXmlInfo objectForKey:@"tw_post_two"];
+        } else if (stampsCounter == 3) {
+            stampText = [dictXmlInfo objectForKey:@"tw_post_three"];
+        }
         
         dictXmlInfo = nil;
     }
     
-    NSString *stampText = [[NSString alloc] init];
-    if (stampsCounter == 1) {
-        stampText = tw_text_one;
-    } else if (stampsCounter == 2) {
-        stampText = tw_text_two;
-    } else if (stampsCounter == 3) {
-        stampText = tw_text_three;
-    }
     stampText = [stampText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    twRequest = [[TWRequest alloc]initWithURL:[NSURL URLWithString:@"http://api.twitter.com/1/statuses/update.json"] parameters:[NSDictionary dictionaryWithObject:stampText forKey:@"status"] requestMethod:TWRequestMethodPOST];    //[_engine sendUpdate:stampText];
-    
-   
-    [twRequest setAccount:twAccount];
-    [twRequest performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
-        NSLog(@"send~");
-    }];
+    [twHandler twSendUpdate:stampText];
     [stampText release];
-    tw_text_one = nil, tw_text_two = nil, tw_text_three = nil;
 }
 
 #pragma - send email for facebook user
@@ -1193,40 +1178,17 @@
 #pragma - send DM for twitter user
 - (void) sendDirectMessageToTwitter
 {
-    NSLog(@"~~~~~~~~~~~~~~~~~~~~");
     NSString *tw_dm = [[NSString alloc] init];;
     NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES)
                            objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
     if ([fileMgr fileExistsAtPath:filePath]) {
         twContainer = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
         tw_dm = [twContainer objectForKey:@"tw_dm"];
-        //NSLog(@"[scm]: tw_dm is ------- \n%@", tw_dm);
-        
         twContainer = nil;
     }
-    NSLog(@"!!!!!!!!!!!!!!!!!!!!!");
+    
     tw_dm = [tw_dm stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    
-    
-    NSLog(@"name string %@     %@",twAccount.username,tw_dm);
-    
-    twRequest = [[TWRequest alloc] initWithURL:[NSURL URLWithString:@"https://api.twitter.com/1/direct_messages/new.json"] parameters:[NSDictionary dictionaryWithObjectsAndKeys:twAccount.username,@"screen_name",tw_dm,@"text", nil] requestMethod:TWRequestMethodPOST];
-
-    
-
-    [twRequest setAccount:twAccount];
-    [twRequest performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
-        NSLog(@"send dm~~~");
-        NSLog(@"Twitter response, HTTP response: %i", [urlResponse statusCode]);
-        //NSLog(@"Response Data\n%@", responseData);
-        NSString* newStr = [[NSString alloc] initWithData:responseData
-                                                 encoding:NSUTF8StringEncoding];
-        NSLog(@"Response Data: %@", newStr);
-        if (!error)
-            NSLog(@"%@", [error description]);
-
-    }];
-    //[_engine sendDirectMessage:tw_dm to:tw_id];
+    [twHandler twSendDirectMessage:tw_dm];
     [tw_dm release];
 }
 
@@ -1235,7 +1197,7 @@
     if (stampsCounter == 3) {
         //NSLog(@"SCM: *--------* Stamp is three");
         if (isInternetAvailable == YES) {
-            NSLog(@"SCM: *--------* Internet is available");
+            NSLog(@"[scm]: - Internet is available");
             
             NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
             if ([fileMgr fileExistsAtPath:filePath]) {
@@ -1254,7 +1216,6 @@
                     fb_name = [fbContainer objectForKey:@"fb_name"];
                     // send email to user
                     if (fb_email && fb_name) {
-                        NSLog(@"SCM: *--------* fb_email, fb_name OK!");
                         digitalVoucher = @"YES";
                         [self sendMailToServer:fb_email withName:fb_name];
                         [alert_dv_fb show];
@@ -1264,16 +1225,7 @@
                 }
             } else if (isTwitterLogin) {
                 
-                
-                NSLog(@"TW Send DM");
-                
-                // Send Direct Message
-                //NSString *filePathTW = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_FB_PLIST];
-                
                 if ([twAccount username]) {
-                    NSLog(@"file pathTW !!!!!!!!!!!!!!!!!!!");
-                    //twContainer = [[NSMutableDictionary alloc] initWithContentsOfFile:filePathTW];
-                    //tw_username = [twContainer objectForKey:@"tw_username"];
                     [self sendDirectMessageToTwitter];
                     [alert_dv_tw show];
                 }
@@ -1393,77 +1345,55 @@
 #pragma - Twitter Delegate Methods
 - (void) scmAdTwitterLogin: (id)sender
 {
-    
-    NSLog(@"Twitter Login");	
-
-    
+    NSLog(@"[scm] - Twitter Login");
     if (![TWTweetComposeViewController canSendTweet]) {
-        
-        NSLog(@"TW Can't access");
-        
-        twController.view.hidden = YES;
+        //twController.view.hidden = YES;
+
+        [twController.view removeFromSuperview];
         [self presentModalViewController:twController animated:YES];
         [twController.view endEditing:YES];
+
     } else {
         
-        NSLog(@"TW OK");
-        isTwitterLogin = YES;
-        ACAccountType *accountType = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
-        NSArray *accountsArray = [accountStore accountsWithAccountType:accountType];
-        twAccount = [accountsArray objectAtIndex:0];
-
-        
-        [UIView beginAnimations:@"HideSnsLoginView" context:(void *)scmAdView];
-        [UIView setAnimationDuration:1.0f];
-        [UIView setAnimationDelegate:self];
-        
-        isSnsLoginView = NO;
-        if (bannerPosition == BOTTOM) {
-            scmAdSnsLoginView.frame = CGRectMake(0, 480, 320, 480);
-        } else {
+        isTwitterLogin = [twHandler twLogin];
+ 
+        if (isTwitterLogin == YES) {
+            [UIView beginAnimations:@"HideSnsLoginView" context:(void *)scmAdView];
+            [UIView setAnimationDuration:1.0f];
+            [UIView setAnimationDelegate:self];
             
-            if (isPortraitMode == YES) {
-                scmAdSnsLoginView.frame = CGRectMake(0, -480, 320, 480);
+            isSnsLoginView = NO;
+            if (bannerPosition == BOTTOM) {
+                scmAdSnsLoginView.frame = CGRectMake(0, 480, 320, 480);
             } else {
-                scmAdSnsLoginView.frame = CGRectMake(0, -370, 480, 370);
+                if (isPortraitMode == YES) {
+                    scmAdSnsLoginView.frame = CGRectMake(0, -480, 320, 480);
+                } else {
+                    scmAdSnsLoginView.frame = CGRectMake(0, -370, 480, 370);
+                }
             }
-        }  
-        
-        scmAdSnsLoginView.alpha = 0.0f;
-        [UIView commitAnimations];
-        
-        if (isMissedView == NO) {
-            [self scmAdPostToTwitter];
-            [self scmAdIssueDv];
             
-            if (stampsCounter == 3) {
-                [alert_dv_tw show];
+            scmAdSnsLoginView.alpha = 0.0f;
+            [UIView commitAnimations];
+            
+            if (isMissedView == NO) {
+                [self scmAdPostToTwitter];
+                [self scmAdIssueDv];
+                
+                if (stampsCounter == 3) {
+                    [alert_dv_tw show];
+                }
             }
-        }
 
+        } else {
+            // Should never visit here
+        }
+        
+        
     }
     
 }
 
-
-
-#pragma mark SA_OAuthTwitterEngineDelegate
-
-- (void) storeCachedTwitterOAuthData: (NSString *) data forUsername: (NSString *) username 
-{
-	
-    //NSLog(@"SCM ---- store otuch data");
-	NSUserDefaults	*defaults = [NSUserDefaults standardUserDefaults];
-	
-	[defaults setObject: data forKey: @"twOauthData"];
-	[defaults synchronize];
-}
-
-- (NSString *) cachedTwitterOAuthDataForUsername: (NSString *) username 
-{
-    //NSLog(@"SCM ---- store otuch data for user %@", username);
-	return [[NSUserDefaults standardUserDefaults] objectForKey: @"twOauthData"];
-}
 
 #pragma - animation callback methods
 - (void)scmAdAnimationFinished:(NSString *)animationID finished:(BOOL)finished context:(void *)context 

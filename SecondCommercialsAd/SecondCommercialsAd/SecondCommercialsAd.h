@@ -10,8 +10,6 @@
 #import <SecondCommercialsAd/ASIHTTPRequest.h>
 #import <SecondCommercialsAd/ASIFormDataRequest.h>
 #import <SecondCommercialsAd/FBConnect.h>
-#import <Accounts/Accounts.h>
-#import <Twitter/Twitter.h>
 
 
 typedef enum BannerPosition {
