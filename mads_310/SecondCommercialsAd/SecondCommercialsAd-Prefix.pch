@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'SecondCommercialsAd' target in the 'SecondCommercialsAd' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+#endif
