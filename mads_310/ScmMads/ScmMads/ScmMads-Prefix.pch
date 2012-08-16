@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'ScmMads' target in the 'ScmMads' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+#endif
