@@ -10,6 +10,8 @@
 		BFB44B6F15D3B60D003A6515 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BFB44B6D15D3B60D003A6515 /* InfoPlist.strings */; };
 		BFB44B7C15D3C333003A6515 /* ScmMads.h in Headers */ = {isa = PBXBuildFile; fileRef = BFB44B7A15D3C333003A6515 /* ScmMads.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BFB44B7D15D3C333003A6515 /* ScmMads.m in Sources */ = {isa = PBXBuildFile; fileRef = BFB44B7B15D3C333003A6515 /* ScmMads.m */; };
+		D4151BBA15DE80740083D319 /* Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = D4151BB815DE80740083D319 /* Utilities.h */; };
+		D4151BBB15DE80740083D319 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = D4151BB915DE80740083D319 /* Utilities.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +21,8 @@
 		BFB44B7015D3B60D003A6515 /* ScmMads-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ScmMads-Prefix.pch"; sourceTree = "<group>"; };
 		BFB44B7A15D3C333003A6515 /* ScmMads.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScmMads.h; sourceTree = SOURCE_ROOT; };
 		BFB44B7B15D3C333003A6515 /* ScmMads.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScmMads.m; sourceTree = SOURCE_ROOT; };
+		D4151BB815DE80740083D319 /* Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = SOURCE_ROOT; };
+		D4151BB915DE80740083D319 /* Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utilities.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +57,8 @@
 			children = (
 				BFB44B7A15D3C333003A6515 /* ScmMads.h */,
 				BFB44B7B15D3C333003A6515 /* ScmMads.m */,
+				D4151BB815DE80740083D319 /* Utilities.h */,
+				D4151BB915DE80740083D319 /* Utilities.m */,
 				BFB44B6B15D3B60D003A6515 /* Supporting Files */,
 			);
 			path = ScmMads;
@@ -76,6 +82,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BFB44B7C15D3C333003A6515 /* ScmMads.h in Headers */,
+				D4151BBA15DE80740083D319 /* Utilities.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,6 +181,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BFB44B7D15D3C333003A6515 /* ScmMads.m in Sources */,
+				D4151BBB15DE80740083D319 /* Utilities.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

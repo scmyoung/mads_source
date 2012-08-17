@@ -10,14 +10,11 @@
 
 @protocol ScmMadsDelegate <NSObject>
 
-
-
 @end
 
 @interface ScmMads : UIViewController
 
 
-@property(strong,nonatomic)UIImageView *scmView;
 @property(strong,nonatomic)id<ScmMadsDelegate>ScmMadsDelegate;
 
 -(id)initScmMads;
