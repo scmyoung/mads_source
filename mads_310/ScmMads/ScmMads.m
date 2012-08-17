@@ -193,6 +193,8 @@
 
 - (void) syncToServer
 {
+    [self parseScmPlistFile];
+    
     NSString* appId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
     NSString* deviceId = [[UIDevice currentDevice] uniqueIdentifier];
     
@@ -242,6 +244,8 @@
     
     // ------------- Initiate Properties ----------
     fileMgr = [[NSFileManager alloc] init];
+    phoneCountryCode = [[NSLocale currentLocale] objectForKey: NSLocaleCountryCode];
+
     
     // ------------- Initiate UI ------------------
     

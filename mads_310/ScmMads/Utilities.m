@@ -7,7 +7,6 @@
 //
 
 #import "Utilities.h"
-#import "macro.h"
 
 @implementation Utilities {
     NSString *currentElement;
