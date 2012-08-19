@@ -9,17 +9,19 @@
 #import <UIKit/UIKit.h>
 
 @protocol ScmMadsDelegate <NSObject>
-
+- (void)scmAdViewWillShow;
+- (void)scmAdViewDidFinish;
+- (void)scmAdBannerWillShow;
 @end
 
 @interface ScmMads : UIViewController
 
 
-@property(strong,nonatomic)id<ScmMadsDelegate>ScmMadsDelegate;
+@property (strong,nonatomic) id<ScmMadsDelegate> scmMadsDelegate;
 
--(id)initScmMads;
+- (id) initScmMads;
 
--(void)showScmMads:(NSInteger)points;
--(void)hidenScmMads;
+- (void) showScmMads:(NSInteger)points;
+- (void) hideScmMads;
 
 @end

@@ -32,15 +32,13 @@
     NSString *campaignName;
     
     /**** Globals ****/
-    NSArray *downloadFiles;
-    //NSError *error;
     NSFileManager *fileMgr;
     
     NSInteger missed_banner_counter;
     NSInteger missed_ad_counter;
     NSString *first_missed_time;
-    NSInteger stamp1_banner_counter;
-    NSInteger stamp1_ad_counter;
+    NSInteger stamp_banner_counter;
+    NSInteger stamp_ad_counter;
     NSString *first_stamp_time;
     
     // campaign url
@@ -49,7 +47,6 @@
     // Country Code
     NSString *phoneCountryCode;
     NSString *campaignCountryCode;
-    BOOL isCountryCodeMatch;
     
     // hurdle label x,y,w,h
     NSInteger hurdle_x_p;
@@ -65,14 +62,19 @@
     // NSDictionary to hold XML information
     NSMutableDictionary *dictXmlInfo;
     
-    // count stamps
-    NSInteger stampsCounter;
-    
     // digital voucher YES or NO
     NSString *digitalVoucher;
     
     // hurdle point for a game
     NSInteger hurdlePoint;
+    
+    // Booleans
+    BOOL isCountryCodeMatch;
+    BOOL isDownloading;
+    BOOL isDownloadOk;
+    BOOL isInternetAvailable;
+    BOOL isNoCampaignView;
+    
 }
 
 @end
@@ -81,16 +83,12 @@
 #define LOCAL_SERVER_IP     @"http://localhost/"
 
 #define IMG_SNS_CONNECT_P     @"connect_portrait.png"
-#define IMG_STAMP_ONE_P       @"stamp1_portrait.png"
-#define IMG_STAMP_TWO_P       @"stamp2_portrait.png"
-#define IMG_STAMP_THREE_P     @"stamp3_portrait.png"
+#define IMG_STAMP_P       @"stamp_portrait.png"
 #define IMG_MISSED_P          @"missed_portrait.png"
 #define IMG_DEFAULT_P         @"scmdefault_portrait.png"
 
 #define IMG_SNS_CONNECT_L     @"connect_landscape.png"
-#define IMG_STAMP_ONE_L       @"stamp1_landscape.png"
-#define IMG_STAMP_TWO_L       @"stamp2_landscape.png"
-#define IMG_STAMP_THREE_L     @"stamp3_landscape.png"
+#define IMG_STAMP_L       @"stamp_landscape.png"
 #define IMG_MISSED_L          @"missed_landscape.png"
 #define IMG_DEFAULT_L         @"scmdefault_landscape.png"
 
@@ -108,13 +106,14 @@
 
 @implementation ScmMads
 
-@synthesize ScmMadsDelegate;
+@synthesize scmMadsDelegate;
 
-- (void)clearDocumentoryFiles
+- (void) clearDocumentoryFiles
 {
-    
-    for (int i=0; i<downloadFiles.count; i++) {
-        NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:[downloadFiles objectAtIndex:i]];
+    NSArray *campaignFiles = [[NSArray alloc] initWithObjects:IMG_ARROW, IMG_SNS_CONNECT_P, IMG_STAMP_P, IMG_MISSED_P, IMG_X_MARK, SCM_AD_XML, IMG_DEFAULT_P, IMG_SNS_CONNECT_L, IMG_STAMP_L, IMG_MISSED_L, IMG_DEFAULT_L, nil];
+
+    for (int i=0; i<campaignFiles.count; i++) {
+        NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:[campaignFiles objectAtIndex:i]];
         
         if ([fileMgr fileExistsAtPath:filePath]) {
             [fileMgr removeItemAtPath:filePath error:nil];
@@ -129,7 +128,7 @@
 }
 
 
-- (void)parseScmPlistFile
+- (void) parseScmPlistFile
 {
     NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:@"scmAdPlist.plist"];
     if ([fileMgr fileExistsAtPath:filePath]) {
@@ -141,8 +140,8 @@
         missed_banner_counter   = [[dictXmlInfo objectForKey:@"missed_banner_imp"] intValue];
         missed_ad_counter       = [[dictXmlInfo objectForKey:@"missed_banner_click"] intValue];
         first_missed_time       = [dictXmlInfo objectForKey:@"first_missed_time"];
-        stamp1_banner_counter   = [[dictXmlInfo objectForKey:@"stamp1_banner_imp"] intValue];
-        stamp1_ad_counter       = [[dictXmlInfo objectForKey:@"stamp1_banner_click"] intValue];
+        stamp_banner_counter   = [[dictXmlInfo objectForKey:@"stamp_banner_imp"] intValue];
+        stamp_ad_counter       = [[dictXmlInfo objectForKey:@"stamp_banner_click"] intValue];
         first_stamp_time        = [dictXmlInfo objectForKey:@"first_stamp_time"];
         
         
@@ -163,15 +162,14 @@
         
         dictXmlInfo = nil;
     } else {
-        stampsCounter = 0;
         hurdlePoint = 0;
         digitalVoucher = @"NO";
         campaignName = @"NoCampaign";
         
         missed_banner_counter   = 0;
         missed_ad_counter       = 0;
-        stamp1_banner_counter   = 0;
-        stamp1_ad_counter       = 0;
+        stamp_banner_counter   = 0;
+        stamp_ad_counter       = 0;
         
         first_missed_time   = @"0000-00-00 00:00:00";
         first_stamp_time    = @"0000-00-00 00:00:00";
@@ -198,7 +196,7 @@
     NSString* appId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
     NSString* deviceId = [[UIDevice currentDevice] uniqueIdentifier];
     
-    NSString *baseUrl = @"http://211.115.71.69/logic/tmp.php";
+    NSString *baseUrl = @"http://211.115.71.69/logic/mads_3_1_0.php";
     baseUrl = [baseUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSURL *url = [NSURL URLWithString:baseUrl];
             
@@ -216,20 +214,46 @@
     params = [params stringByAppendingFormat:@"&missed_banner_imp=%@", [NSNumber numberWithInteger:missed_banner_counter]];
     params = [params stringByAppendingFormat:@"&missed_banner_click=%@", [NSNumber numberWithInteger:missed_ad_counter]];
     params = [params stringByAppendingFormat:@"&first_missed_time=%@", first_missed_time];
-    params = [params stringByAppendingFormat:@"&stamp1_banner_imp=%@", [NSNumber numberWithInteger:stamp1_banner_counter]];
-    params = [params stringByAppendingFormat:@"&stamp1_banner_click=%@", [NSNumber numberWithInteger:stamp1_ad_counter]];
+    params = [params stringByAppendingFormat:@"&stamp_banner_imp=%@", [NSNumber numberWithInteger:stamp_banner_counter]];
+    params = [params stringByAppendingFormat:@"&stamp_banner_click=%@", [NSNumber numberWithInteger:stamp_ad_counter]];
     params = [params stringByAppendingFormat:@"&first_stamp_time=%@", first_stamp_time];
 
     
     [request setHTTPBody:[params dataUsingEncoding:NSUTF8StringEncoding]];
-
+    [request setTimeoutInterval:2.0f];
+    
     NSURLResponse *response = nil;
     NSError *error = nil;
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-            
+    NSString *responseStr = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
     if ([data length] > 0 && error == nil)
     {
-        NSLog(@"Data: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        NSLog(@"[scm]: Network Response - %@", responseStr);
+        
+        if ([responseStr isEqualToString:@"NoCampaign"]) {
+            NSLog(@"[scm]: No Campaign Available!");
+            isNoCampaignView = YES;
+            
+            NSArray *defaultFiles = [[NSArray alloc] initWithObjects:IMG_DEFAULT_P, IMG_DEFAULT_L,
+                                     IMG_ARROW, IMG_X_MARK, nil];
+            [self downloadFiles:defaultFiles campaignPath:@"NoCampaign"];
+        
+        } else if ([responseStr isEqualToString:@"SameCampaign"]) {
+            NSLog(@"[scm]: Same Campaign!");
+            isDownloadOk = YES;
+        } else if ([responseStr isEqualToString:@"NoCountryCodeMatch"]) {
+            NSLog(@"[scm]: Country Code Doesn't Match!");
+            isCountryCodeMatch = NO;
+        } else if ([responseStr isEqualToString:@"HurdleChange"]) {
+            NSLog(@"[scm]: Hurdle Changed!");
+            
+        } else {
+            NSLog(@"[scm]: New Campaign ---- %@", responseStr);
+            NSArray *campaignFiles = [[NSArray alloc] initWithObjects:IMG_ARROW, IMG_SNS_CONNECT_P, IMG_STAMP_P, IMG_MISSED_P, IMG_X_MARK, SCM_AD_XML, IMG_DEFAULT_P, IMG_SNS_CONNECT_L, IMG_STAMP_L, IMG_MISSED_L, IMG_DEFAULT_L, nil];
+            [self downloadFiles:campaignFiles campaignPath:responseStr];
+        }
+        
     } else if ([data length] ==0 && error == nil) {
         NSLog(@"No Data");
     } else if  (error) {
@@ -238,13 +262,18 @@
 
 }
 
--(id)initScmMads
+- (id) initScmMads
 {
     self=[super init];
     
     // ------------- Initiate Properties ----------
     fileMgr = [[NSFileManager alloc] init];
     phoneCountryCode = [[NSLocale currentLocale] objectForKey: NSLocaleCountryCode];
+    isCountryCodeMatch  = YES;
+    isDownloading       = NO;
+    isDownloadOk        = NO;
+    isInternetAvailable = NO;
+    isNoCampaignView    = NO;
 
     
     // ------------- Initiate UI ------------------
@@ -270,8 +299,31 @@
     return self;
 }
 
--(void)showScmMads:(NSInteger)points
+- (void) showScmMads:(NSInteger)points
 {
+    NSLog(@"[scm]: Show Scm Mads Banner");
+    
+    [[self scmMadsDelegate] scmAdBannerWillShow];
+    
+    // Check for Country Code First
+    if (isCountryCodeMatch == NO) {
+        NSLog(@"[scm]: Country Code doesn't match");
+        return;
+    }
+    
+    if (isDownloading == NO) {
+        [self syncToServer];
+    }
+
+    if (isDownloadOk == YES) {
+        if (isNoCampaignView == YES) {
+            NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
+
+            [stampView_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_DEFAULT_P]]]];
+            [closeArrowButton setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_ARROW]]] forState:UIControlStateNormal];
+            [closeXButton setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_X_MARK]]] forState:UIControlStateNormal];
+        }
+    }
     
     [UIImageView beginAnimations:@"showBanner" context:nil];
     [UIImageView setAnimationDuration:0.5f];
@@ -282,8 +334,11 @@
     [UIImageView commitAnimations];
 }
 
--(void)hidenScmMads
+- (void) hideScmMads
 {
+    NSLog(@"[scm]: Hide Scm Mads Banner");
+    isNoCampaignView = NO;
+    
     [UIImageView beginAnimations:@"hideBanner" context:nil];
     [UIImageView setAnimationDuration:0.5f];
     [UIImageView setAnimationDelegate:self];
@@ -293,9 +348,9 @@
     [UIImageView commitAnimations];
 }
 
--(void)showStamp
+- (void) showStamp
 {
-    NSLog(@"Show Stamp");
+    NSLog(@"[scm]: Show Stamp");
     
     [UIImageView beginAnimations:@"showStamp" context:nil];
     [UIImageView setAnimationDuration:1];
@@ -306,9 +361,11 @@
     [UIImageView commitAnimations];
 }
 
--(void)hideStamp
+- (void) hideStamp
 {
-    NSLog(@"Hide Stamp");
+    NSLog(@"[scm]: Hide Stamp");
+    
+    isNoCampaignView = NO;
     
     [UIImageView beginAnimations:@"hideStamp" context:nil];
     [UIImageView setAnimationDuration:1];
@@ -319,15 +376,15 @@
     [UIImageView commitAnimations];
 }
 
--(void)createStampView
+- (void) createStampView
 {
     
     stampView_p.frame = CGRectMake(0, 0, 320, 530);
-    [stampView_p setImage:[UIImage imageNamed:@"stamp1_portrait.png"]];
+    //[stampView_p setImage:[UIImage imageNamed:IMG_STAMP_P]];
     [stampView_p setUserInteractionEnabled:YES];
     
     stampView_l.frame = CGRectMake(0, 160, 480, 370);
-    [stampView_l setImage:[UIImage imageNamed:@"stamp1.png"]];
+    //[stampView_l setImage:[UIImage imageNamed:IMG_STAMP_L]];
     [stampView_l setUserInteractionEnabled:YES];
     
     
@@ -337,8 +394,8 @@
     closeArrowButton.frame = CGRectMake(82, 432, 156, 48);
     closeXButton.frame = CGRectMake(270, 0, 50, 53);
     
-    [closeArrowButton setImage:[UIImage imageNamed:@"arrow.png"] forState:UIControlStateNormal];
-    [closeXButton setImage:[UIImage imageNamed:@"xmark.png"] forState:UIControlStateNormal];
+    //[closeArrowButton setImage:[UIImage imageNamed:IMG_ARROW] forState:UIControlStateNormal];
+    //[closeXButton setImage:[UIImage imageNamed:IMG_X_MARK] forState:UIControlStateNormal];
 
     [bannerButton_p addTarget:self action:@selector(showStamp) forControlEvents:UIControlEventTouchUpInside];
     [bannerButton_l addTarget:self action:@selector(showStamp) forControlEvents:UIControlEventTouchUpInside];
@@ -360,6 +417,32 @@
     
     // TODO: check orientation and revive landscape mode
     [stampView_l setHidden:YES];
+}
+
+- (void) downloadFiles:(NSArray *)fileArray campaignPath:(NSString *)campaign
+{
+    
+    // Download NoCampaign images if files don't exist in the Documentation Directory.
+    dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        isDownloading = YES;
+        for (id fileObject in fileArray) {
+            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:fileObject];
+            
+            if ([fileMgr fileExistsAtPath:filePath] == NO) {
+                NSLog(@"[scm]: Download ... %@", fileObject);
+                
+                NSString *strUrl = [[NSString alloc] initWithFormat:@"%@/%@/%@/%@/%@", SERVER_IP,
+                                    @"campaign", @"310_campaign", campaign, fileObject];
+                NSData *fileData = [NSData dataWithContentsOfURL:[NSURL URLWithString:strUrl]];
+                [fileData writeToFile:filePath atomically:YES];
+            }
+        }
+        dispatch_async( dispatch_get_main_queue(), ^{
+            isDownloading = NO;
+            isDownloadOk = YES;
+            isInternetAvailable = YES;
+        });
+    });
 }
 
 
