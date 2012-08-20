@@ -15,6 +15,6 @@
 @property (nonatomic, strong) NSMutableDictionary *xmlContainer;
 
 - (NSString *)getCurrentDateTime;
-
+- (void)parseScmAdXmlFile: (NSData *)fileData;
 
 @end

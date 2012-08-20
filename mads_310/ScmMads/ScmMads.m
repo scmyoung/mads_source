@@ -22,11 +22,16 @@
     UIButton *bannerButton_p;   // portrait banner button
     UIButton *bannerButton_l;   // landscape banner button
     
-    UIButton *closeXButton;
-    UIButton *closeArrowButton;
+    UIButton *closeXButton_p;
+    UIButton *closeArrowButton_p;
+    UIButton *closeXButton_l;
+    UIButton *closeArrowButton_l;
     
     
     // ------------------------
+    
+    // Utility Calss
+    Utilities *utilities;
     
     // campaign name
     NSString *campaignName;
@@ -74,46 +79,45 @@
     BOOL isDownloadOk;
     BOOL isInternetAvailable;
     BOOL isNoCampaignView;
+    BOOL isMissedView;
     
 }
 
 @end
 
-#define SERVER_IP           @"http://211.115.71.69"
-#define LOCAL_SERVER_IP     @"http://localhost/"
+#define SERVER_IP               @"http://211.115.71.69"
+#define LOCAL_SERVER_IP         @"http://localhost/"
 
-#define IMG_SNS_CONNECT_P     @"connect_portrait.png"
-#define IMG_STAMP_P       @"stamp_portrait.png"
-#define IMG_MISSED_P          @"missed_portrait.png"
-#define IMG_DEFAULT_P         @"scmdefault_portrait.png"
+#define IMG_SNS_CONNECT_P       @"connect_portrait.png"
+#define IMG_STAMP_P             @"stamp_portrait.png"
+#define IMG_MISSED_P            @"missed_portrait.png"
+#define IMG_DEFAULT_P           @"scmdefault_portrait.png"
 
-#define IMG_SNS_CONNECT_L     @"connect_landscape.png"
-#define IMG_STAMP_L       @"stamp_landscape.png"
-#define IMG_MISSED_L          @"missed_landscape.png"
-#define IMG_DEFAULT_L         @"scmdefault_landscape.png"
+#define IMG_SNS_CONNECT_L       @"connect_landscape.png"
+#define IMG_STAMP_L             @"stamp_landscape.png"
+#define IMG_MISSED_L            @"missed_landscape.png"
+#define IMG_DEFAULT_L           @"scmdefault_landscape.png"
 
-#define IMG_X_MARK          @"xmark.png"
-#define IMG_ARROW           @"arrow.png"
+#define IMG_X_MARK              @"xmark.png"
+#define IMG_ARROW               @"arrow.png"
 
-#define SCM_AD_XML          @"scmAdInfo.xml"
-#define SCM_AD_PLIST        @"scmAdPlist.plist"
-#define SCM_FB_PLIST        @"scmFbPlist.plist"
+#define SCM_AD_XML              @"scmAdInfo.xml"
+#define SCM_AD_PLIST            @"scmAdPlist.plist"
+#define SCM_FB_PLIST            @"scmFbPlist.plist"
 
-#define FB_APP_ID           @"196736437067322"
+#define FB_APP_ID               @"196736437067322"
 
-#define PHP_LOGIC_FILE      @"mads_3_1_0.php"
+#define PHP_LOGIC_FILE          @"mads_3_1_0.php"
 
 
 @implementation ScmMads
 
 @synthesize scmMadsDelegate;
 
-- (void) clearDocumentoryFiles
+- (void) clearCampaignFiles : (NSArray *)clearFiles
 {
-    NSArray *campaignFiles = [[NSArray alloc] initWithObjects:IMG_ARROW, IMG_SNS_CONNECT_P, IMG_STAMP_P, IMG_MISSED_P, IMG_X_MARK, SCM_AD_XML, IMG_DEFAULT_P, IMG_SNS_CONNECT_L, IMG_STAMP_L, IMG_MISSED_L, IMG_DEFAULT_L, nil];
-
-    for (int i=0; i<campaignFiles.count; i++) {
-        NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:[campaignFiles objectAtIndex:i]];
+    for (int i=0; i<clearFiles.count; i++) {
+        NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:[clearFiles objectAtIndex:i]];
         
         if ([fileMgr fileExistsAtPath:filePath]) {
             [fileMgr removeItemAtPath:filePath error:nil];
@@ -130,7 +134,7 @@
 
 - (void) parseScmPlistFile
 {
-    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:@"scmAdPlist.plist"];
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
     if ([fileMgr fileExistsAtPath:filePath]) {
         dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
         campaignName = [dictXmlInfo objectForKey:@"campaign"];
@@ -229,7 +233,7 @@
     
     if ([data length] > 0 && error == nil)
     {
-        NSLog(@"[scm]: Network Response - %@", responseStr);
+        NSLog(@"[scm]: Response - %@", responseStr);
         
         if ([responseStr isEqualToString:@"NoCampaign"]) {
             NSLog(@"[scm]: No Campaign Available!");
@@ -268,12 +272,15 @@
     
     // ------------- Initiate Properties ----------
     fileMgr = [[NSFileManager alloc] init];
+    utilities = [[Utilities alloc] init];
     phoneCountryCode = [[NSLocale currentLocale] objectForKey: NSLocaleCountryCode];
     isCountryCodeMatch  = YES;
     isDownloading       = NO;
     isDownloadOk        = NO;
     isInternetAvailable = NO;
     isNoCampaignView    = NO;
+    isMissedView        = NO;
+
 
     
     // ------------- Initiate UI ------------------
@@ -287,8 +294,11 @@
     bannerButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
     bannerButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
 
-    closeArrowButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    closeXButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    closeArrowButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
+    closeArrowButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    closeXButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
+    closeXButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
     
     twtButton = [UIButton buttonWithType:UIButtonTypeCustom];
     fbButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -316,13 +326,45 @@
     }
 
     if (isDownloadOk == YES) {
+        // User Document Directory Path
+        NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
+        [closeArrowButton_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_ARROW]]] forState:UIControlStateNormal];
+        [closeXButton_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_X_MARK]]] forState:UIControlStateNormal];
+        [closeArrowButton_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_ARROW]]] forState:UIControlStateNormal];
+        [closeXButton_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_X_MARK]]] forState:UIControlStateNormal];
+        
+        // No Campaign Default View
         if (isNoCampaignView == YES) {
-            NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
-
-            [stampView_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_DEFAULT_P]]]];
-            [closeArrowButton setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_ARROW]]] forState:UIControlStateNormal];
-            [closeXButton setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_X_MARK]]] forState:UIControlStateNormal];
+            [stampView_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
+                                                          [docPath stringByAppendingPathComponent:IMG_DEFAULT_P]]]];
+            [stampView_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
+                                                          [docPath stringByAppendingPathComponent:IMG_DEFAULT_L]]]];
+            
+        } else if (points >= hurdlePoint) {
+            [stampView_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
+                                                          [docPath stringByAppendingPathComponent:IMG_STAMP_P]]]];
+            [stampView_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
+                                                          [docPath stringByAppendingPathComponent:IMG_STAMP_L]]]];
+        } else {
+            isMissedView = YES;
+            [stampView_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
+                                                          [docPath stringByAppendingPathComponent:IMG_MISSED_P]]]];
+            [stampView_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
+                                                          [docPath stringByAppendingPathComponent:IMG_MISSED_L]]]];
         }
+    
+        isDownloading = NO;
+    }
+    
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if (orientation == UIDeviceOrientationPortrait) {
+        NSLog(@"[scm]: Device has Portrait Mode...");
+        stampView_p.hidden = NO;
+        stampView_l.hidden = YES;
+    } else  {
+        NSLog(@"[scm]: Device has Landscape Mode...");
+        stampView_p.hidden = YES;
+        stampView_l.hidden = NO;
     }
     
     [UIImageView beginAnimations:@"showBanner" context:nil];
@@ -342,10 +384,14 @@
     [UIImageView beginAnimations:@"hideBanner" context:nil];
     [UIImageView setAnimationDuration:0.5f];
     [UIImageView setAnimationDelegate:self];
+
     
     self.view.frame = CGRectMake(0, -550, 320, 550);
     
     [UIImageView commitAnimations];
+    
+    isDownloadOk = NO;
+    isMissedView = NO;
 }
 
 - (void) showStamp
@@ -355,8 +401,14 @@
     [UIImageView beginAnimations:@"showStamp" context:nil];
     [UIImageView setAnimationDuration:1];
     [UIImageView setAnimationDelegate:self];
-    
-    self.view.frame = CGRectMake(0, 0, 320, 550);
+    [UIView setAnimationDidStopSelector:@selector(scmAdAnimationFinished:finished:context:)];
+
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if (orientation == UIDeviceOrientationPortrait) {
+        self.view.frame = CGRectMake(0, 0, 320, 530);
+    } else  {
+        self.view.frame = CGRectMake(0, -160, 320, 530);
+    }
     
     [UIImageView commitAnimations];
 }
@@ -370,6 +422,8 @@
     [UIImageView beginAnimations:@"hideStamp" context:nil];
     [UIImageView setAnimationDuration:1];
     [UIImageView setAnimationDelegate:self];
+    [UIView setAnimationDidStopSelector:@selector(scmAdAnimationFinished:finished:context:)];
+
     
     self.view.frame = CGRectMake(0, -550, 320, 550);
     
@@ -380,54 +434,54 @@
 {
     
     stampView_p.frame = CGRectMake(0, 0, 320, 530);
-    //[stampView_p setImage:[UIImage imageNamed:IMG_STAMP_P]];
     [stampView_p setUserInteractionEnabled:YES];
     
     stampView_l.frame = CGRectMake(0, 160, 480, 370);
-    //[stampView_l setImage:[UIImage imageNamed:IMG_STAMP_L]];
     [stampView_l setUserInteractionEnabled:YES];
     
     
     bannerButton_p.frame = CGRectMake(0, 480, 320, 50);
     bannerButton_l.frame = CGRectMake(0, 320, 480, 50);
 
-    closeArrowButton.frame = CGRectMake(82, 432, 156, 48);
-    closeXButton.frame = CGRectMake(270, 0, 50, 53);
+    closeArrowButton_p.frame = CGRectMake(82, 432, 156, 48);
+    closeArrowButton_l.frame = CGRectMake(158, 272, 156, 48);
+    closeXButton_p.frame = CGRectMake(270, 0, 50, 53);
+    closeXButton_l.frame = CGRectMake(429, 0, 50, 53);
     
-    //[closeArrowButton setImage:[UIImage imageNamed:IMG_ARROW] forState:UIControlStateNormal];
-    //[closeXButton setImage:[UIImage imageNamed:IMG_X_MARK] forState:UIControlStateNormal];
-
     [bannerButton_p addTarget:self action:@selector(showStamp) forControlEvents:UIControlEventTouchUpInside];
     [bannerButton_l addTarget:self action:@selector(showStamp) forControlEvents:UIControlEventTouchUpInside];
 
-    [closeArrowButton addTarget:self action:@selector(hideStamp) forControlEvents:UIControlEventTouchUpInside];
-    [closeXButton addTarget:self action:@selector(hideStamp) forControlEvents:UIControlEventTouchUpInside];
+    [closeArrowButton_p addTarget:self action:@selector(hideStamp) forControlEvents:UIControlEventTouchUpInside];
+    [closeXButton_p addTarget:self action:@selector(hideStamp) forControlEvents:UIControlEventTouchUpInside];
+    [closeArrowButton_l addTarget:self action:@selector(hideStamp) forControlEvents:UIControlEventTouchUpInside];
+    [closeXButton_l addTarget:self action:@selector(hideStamp) forControlEvents:UIControlEventTouchUpInside];
     
     [stampView_p addSubview:bannerButton_p];
-    [stampView_p addSubview:closeArrowButton];
-    [stampView_p addSubview:closeXButton];
+    [stampView_p addSubview:closeArrowButton_p];
+    [stampView_p addSubview:closeXButton_p];
     
     [stampView_l addSubview:bannerButton_l];
-    //[stampView_l addSubview:closeArrowButton];
-    //[stampView_l addSubview:closeXButton];
+    [stampView_l addSubview:closeArrowButton_l];
+    [stampView_l addSubview:closeXButton_l];
     
     self.view.frame = CGRectMake(0, -530, 320, 530);
     [self.view addSubview:stampView_p];
     [self.view addSubview:stampView_l];
     
-    // TODO: check orientation and revive landscape mode
-    [stampView_l setHidden:YES];
 }
 
 - (void) downloadFiles:(NSArray *)fileArray campaignPath:(NSString *)campaign
 {
+    // clear cached campaign files
+    [self clearCampaignFiles:[NSArray arrayWithObjects:IMG_STAMP_L, IMG_STAMP_P, nil]];
     
     // Download NoCampaign images if files don't exist in the Documentation Directory.
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         isDownloading = YES;
         for (id fileObject in fileArray) {
             NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:fileObject];
-            
+                        
+            // If check for file existance
             if ([fileMgr fileExistsAtPath:filePath] == NO) {
                 NSLog(@"[scm]: Download ... %@", fileObject);
                 
@@ -435,6 +489,10 @@
                                     @"campaign", @"310_campaign", campaign, fileObject];
                 NSData *fileData = [NSData dataWithContentsOfURL:[NSURL URLWithString:strUrl]];
                 [fileData writeToFile:filePath atomically:YES];
+                
+                if ([fileMgr fileExistsAtPath:filePath] && [fileObject isEqualToString:SCM_AD_XML]) {
+                    [utilities parseScmAdXmlFile:fileData];
+                }
             }
         }
         dispatch_async( dispatch_get_main_queue(), ^{
@@ -444,6 +502,85 @@
         });
     });
 }
+
+
+#pragma - animation callback methods
+- (void)scmAdAnimationFinished:(NSString *)animationID finished:(BOOL)finished context:(void *)context
+{
+    NSLog(@"Animation Finished!");
+    
+    if ([animationID isEqualToString:@"hideStamp"]) {
+        if (isMissedView)
+            isMissedView = NO;
+
+        
+        [self syncToServer];
+        [[self scmMadsDelegate] scmAdViewDidFinish];
+    }
+    
+    if ([animationID isEqualToString:@"showStamp"] && isNoCampaignView == NO) {
+        // Save click impressions
+        // Save stampsCounter to Plist file
+        NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
+        if ([fileMgr fileExistsAtPath:filePath]) {
+            dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+            
+            // save stampx_banner_click to plist file
+            if (isMissedView) {
+                [dictXmlInfo setObject:[[NSString alloc] initWithFormat:@"%d", ++missed_ad_counter] forKey:@"missed_banner_click"];
+                
+                // check for first_missed_time and assign it if it's 0
+                
+                NSString *oldDateTime = [dictXmlInfo objectForKey:@"first_missed_time"];
+                
+                if ([oldDateTime isEqualToString:@"0000-00-00 00:00:00"]) {
+                    NSString *dateTime = [utilities getCurrentDateTime];
+                    [dictXmlInfo setObject:dateTime forKey:@"first_missed_time"];
+                }
+                
+            } else {
+                [dictXmlInfo setObject:[[NSString alloc] initWithFormat:@"%d", 1] forKey:@"stamp_banner_click"];
+                
+                // Record first stamp time
+                NSString *dateTime = [utilities getCurrentDateTime];
+                [dictXmlInfo setObject:dateTime forKey:@"first_stamp_time"];
+            }
+            
+            [dictXmlInfo writeToFile:filePath atomically:YES];
+            dictXmlInfo = nil;
+            
+        }
+        /*
+        // Show sns view
+        if ([self checkForPreviouslySavedAccessTokenInfo] == NO && isInternetAvailable == YES) {
+            
+            if (isPortraitMode == YES) {
+                scmAdSnsLoginView.frame = CGRectMake(0, 0, 320, 480);
+            } else {
+                scmAdSnsLoginView.frame = CGRectMake(0, 0, 480, 320);
+            }
+            
+            [UIView beginAnimations:@"ShowSnsLoginView" context:(void *)scmAdSnsLoginView];
+            [UIView setAnimationDuration:1.0f];
+            [UIView setAnimationDelegate:self];
+            [UIView setAnimationDelay:1.0f];
+            //scmAdSnsLoginView.frame = CGRectMake(0, 0, 320, 480);
+            [scmAdSnsLoginView setAlpha:1.0f];
+            isSnsLoginView = YES;
+            [UIView commitAnimations];
+        } else if (isInternetAvailable == YES && isNoCampaignView == NO) {
+            if (isFacebookLogin) {
+                [self scmAdPostToFacebook];
+            } else if (isTwitterLogin) {
+                [self scmAdPostToTwitter];
+            }
+            [self scmAdIssueDv];
+            
+        }
+        */
+    }
+}
+
 
 
 

@@ -61,32 +61,6 @@
     //NSLog(@"object - %@, key - %@", string, currentElement);
     [xmlContainer setObject:string  forKey:currentElement];
     
-    /*
-    if ([currentElement isEqualToString:@"hurdle"]) {
-        hurdlePoint = [string intValue];
-    } else if ([currentElement isEqualToString:@"campaign"]) {
-        campaignName = string;
-    } else if ([currentElement isEqualToString:@"countryCode"]) {
-        NSLog(@"[scm]: parse campaign country code: %@", string);
-        campaignCountryCode = string;
-    } else if ([currentElement isEqualToString:@"hurdle_x_p"]) {
-        hurdle_x_p = [string intValue];
-    } else if ([currentElement isEqualToString:@"hurdle_y_p"]) {
-        hurdle_y_p = [string intValue];
-    } else if ([currentElement isEqualToString:@"hurdle_w_p"]) {
-        hurdle_w_p = [string intValue];
-    } else if ([currentElement isEqualToString:@"hurdle_y_p"]) {
-        hurdle_h_p = [string intValue];
-    } else if ([currentElement isEqualToString:@"hurdle_x_l"]) {
-        hurdle_x_l = [string intValue];
-    } else if ([currentElement isEqualToString:@"hurdle_y_l"]) {
-        hurdle_y_l = [string intValue];
-    } else if ([currentElement isEqualToString:@"hurdle_w_l"]) {
-        hurdle_w_l = [string intValue];
-    } else if ([currentElement isEqualToString:@"hurdle_y_l"]) {
-        hurdle_h_l = [string intValue];
-    }
-     */
 }
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser
