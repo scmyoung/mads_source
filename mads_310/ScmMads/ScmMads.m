@@ -16,8 +16,11 @@
     
     UIImageView *snsView_p;     // portrait sns view
     UIImageView *snsView_l;     // landscape sns view
-    UIButton *twtButton;
-    UIButton *fbButton;
+    
+    UIButton *twButton_p;
+    UIButton *fbButton_p;
+    UIButton *twButton_l;
+    UIButton *fbButton_l;
     
     UIButton *bannerButton_p;   // portrait banner button
     UIButton *bannerButton_l;   // landscape banner button
@@ -305,8 +308,10 @@
     closeXButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
     closeXButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
     
-    twtButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    fbButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    twButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
+    fbButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
+    twButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
+    fbButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
     
     [self createStampView];
     [self syncToServer];
@@ -316,7 +321,6 @@
 
 - (void) showScmMads:(NSInteger)points
 {
-    NSLog(@"[scm]: Show Scm Mads Banner");
     
     [[self scmMadsDelegate] scmAdBannerWillShow];
     
@@ -365,11 +369,9 @@
     
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
     if (orientation == UIDeviceOrientationPortrait) {
-        NSLog(@"[scm]: Device has Portrait Mode...");
         stampView_p.hidden = NO;
         stampView_l.hidden = YES;
     } else  {
-        NSLog(@"[scm]: Device has Landscape Mode...");
         stampView_p.hidden = YES;
         stampView_l.hidden = NO;
     }
@@ -391,9 +393,6 @@
 
 - (void) hideScmMads
 {
-    NSLog(@"[scm]: Hide Scm Mads Banner");
-    
-
     [UIView beginAnimations:@"hideBanner" context:nil];
     [UIView setAnimationDuration:1.0f];
     [UIView setAnimationDelegate:self];
@@ -409,9 +408,7 @@
 }
 
 - (void) showStamp
-{
-    NSLog(@"[scm]: Show Stamp");
-    
+{    
     [UIImageView beginAnimations:@"showStamp" context:nil];
     [UIImageView setAnimationDuration:1];
     [UIImageView setAnimationDelegate:self];
@@ -428,9 +425,7 @@
 }
 
 - (void) hideStamp
-{
-    NSLog(@"[scm]: Hide Stamp");
-    
+{    
     if (isSnsLoginView == YES) {
         [UIView beginAnimations:@"HideSnsLoginView" context:nil];
         [UIView setAnimationDuration:1.0f];
@@ -472,13 +467,28 @@
     stampView_l.frame = CGRectMake(0, 160, 480, 370);
     [stampView_l setUserInteractionEnabled:YES];
     
+    // ---- SNS View and Buttons
     snsView_p.frame = CGRectMake(0, -480, 320, 480);
     [snsView_p setUserInteractionEnabled:YES];
     [snsView_p setAlpha:0.0f];
+    fbButton_p.frame = CGRectMake(36, 254, 245, 42);
+    twButton_p.frame = CGRectMake(36, 297, 245, 42);
+    [fbButton_p addTarget:self action:@selector(scmFacebookLogin) forControlEvents:UIControlEventTouchUpInside];
+    [twButton_p addTarget:self action:@selector(scmTwitterLogin) forControlEvents:UIControlEventTouchUpInside];
+    [snsView_p addSubview:fbButton_p];
+    [snsView_p addSubview:twButton_p];
     
     snsView_l.frame = CGRectMake(0, -160, 480, 320);
     [snsView_l setUserInteractionEnabled:YES];
     [snsView_l setAlpha:0.0f];
+    fbButton_l.frame = CGRectMake(124, 162, 245, 42);
+    twButton_l.frame = CGRectMake(124, 204, 245, 42);
+    [fbButton_l addTarget:self action:@selector(scmFacebookLogin) forControlEvents:UIControlEventTouchUpInside];
+    [twButton_l addTarget:self action:@selector(scmTwitterLogin) forControlEvents:UIControlEventTouchUpInside];
+    [snsView_l addSubview:fbButton_l];
+    [snsView_l addSubview:twButton_l];
+    // ---- End of SNS View and Buttons
+    
     
     bannerButton_p.frame = CGRectMake(0, 480, 320, 50);
     bannerButton_l.frame = CGRectMake(0, 320, 480, 50);
@@ -549,7 +559,6 @@
 #pragma - animation callback methods
 - (void)scmAdAnimationFinished:(NSString *)animationID finished:(BOOL)finished context:(void *)context
 {
-    NSLog(@"Animation Finished!");
     
     if ([animationID isEqualToString:@"hideStamp"]) {
         if (isMissedView)
@@ -595,7 +604,6 @@
         
         // Show sns view
         if ([self checkForPreviouslySavedAccessTokenInfo] == NO && isInternetAvailable == YES) {
-            NSLog(@"show sns");
             
             [UIView beginAnimations:@"showSnsLoginView" context:nil];
             [UIView setAnimationDuration:1.0f];
@@ -631,6 +639,17 @@
     return NO;
 }
 
+
+// --- SNS Callbacks
+- (void) scmFacebookLogin
+{
+    NSLog(@"Facebook Login");
+}
+
+- (void) scmTwitterLogin
+{
+    NSLog(@"Twitter Login");
+}
 
 
 @end
