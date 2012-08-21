@@ -81,6 +81,9 @@
     BOOL isNoCampaignView;
     BOOL isMissedView;
     
+    BOOL isSnsLoginView;
+    BOOL isFacebookLogin;
+    BOOL isTwitterLogin;
 }
 
 @end
@@ -280,8 +283,10 @@
     isInternetAvailable = NO;
     isNoCampaignView    = NO;
     isMissedView        = NO;
-
-
+    
+    isSnsLoginView      = NO;
+    isFacebookLogin     = NO;
+    isTwitterLogin      = NO;
     
     // ------------- Initiate UI ------------------
     
@@ -328,6 +333,8 @@
     if (isDownloadOk == YES) {
         // User Document Directory Path
         NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
+        [snsView_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_SNS_CONNECT_P]]]];
+        [snsView_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_SNS_CONNECT_L]]]];
         [closeArrowButton_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_ARROW]]] forState:UIControlStateNormal];
         [closeXButton_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_X_MARK]]] forState:UIControlStateNormal];
         [closeArrowButton_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_ARROW]]] forState:UIControlStateNormal];
@@ -371,25 +378,32 @@
     [UIImageView setAnimationDuration:0.5f];
     [UIImageView setAnimationDelegate:self];
     
-    self.view.frame = CGRectMake(0, -480, 320, 550);
+    // self.view.frame = CGRectMake(0, -480, 320, 550);
+    // [UIImageView commitAnimations];
     
-    [UIImageView commitAnimations];
+    [UIView animateWithDuration:0.5 animations:^{ self.view.frame = CGRectMake(0, -470, 320, 530); } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.1 animations:^{ self.view.frame = CGRectMake (0, -480, 320, 530); } completion:^(BOOL finished) {
+            /*NSLog(@"Animation Finished");*/}];
+    }];
+    [UIView commitAnimations];
+
 }
 
 - (void) hideScmMads
 {
     NSLog(@"[scm]: Hide Scm Mads Banner");
-    isNoCampaignView = NO;
     
-    [UIImageView beginAnimations:@"hideBanner" context:nil];
-    [UIImageView setAnimationDuration:0.5f];
-    [UIImageView setAnimationDelegate:self];
+
+    [UIView beginAnimations:@"hideBanner" context:nil];
+    [UIView setAnimationDuration:1.0f];
+    [UIView setAnimationDelegate:self];
+        
+    self.view.frame = CGRectMake(0, -530, 320, 530);
+        
+    [UIView commitAnimations];
 
     
-    self.view.frame = CGRectMake(0, -550, 320, 550);
-    
-    [UIImageView commitAnimations];
-    
+    isNoCampaignView = NO;
     isDownloadOk = NO;
     isMissedView = NO;
 }
@@ -417,17 +431,36 @@
 {
     NSLog(@"[scm]: Hide Stamp");
     
+    if (isSnsLoginView == YES) {
+        [UIView beginAnimations:@"HideSnsLoginView" context:nil];
+        [UIView setAnimationDuration:1.0f];
+        [UIView setAnimationDelegate:self];
+        
+        isSnsLoginView = NO;
+        
+        snsView_p.frame = CGRectMake(0, -480, 320, 480);
+        snsView_l.frame = CGRectMake(0, -320, 480, 320);
+        
+        [snsView_p setAlpha:0.0f];
+        [snsView_l setAlpha:0.0f];
+        
+        [UIView commitAnimations];
+        
+        
+    } else {
+        [UIView beginAnimations:@"hideStamp" context:nil];
+        [UIView setAnimationDuration:1.0f];
+        [UIView setAnimationDelegate:self];
+        [UIView setAnimationDidStopSelector:@selector(scmAdAnimationFinished:finished:context:)];
+        
+        self.view.frame = CGRectMake(0, -530, 320, 530);
+        
+        [UIView commitAnimations];
+        
+    }
+    
     isNoCampaignView = NO;
-    
-    [UIImageView beginAnimations:@"hideStamp" context:nil];
-    [UIImageView setAnimationDuration:1];
-    [UIImageView setAnimationDelegate:self];
-    [UIView setAnimationDidStopSelector:@selector(scmAdAnimationFinished:finished:context:)];
 
-    
-    self.view.frame = CGRectMake(0, -550, 320, 550);
-    
-    [UIImageView commitAnimations];
 }
 
 - (void) createStampView
@@ -439,6 +472,13 @@
     stampView_l.frame = CGRectMake(0, 160, 480, 370);
     [stampView_l setUserInteractionEnabled:YES];
     
+    snsView_p.frame = CGRectMake(0, -480, 320, 480);
+    [snsView_p setUserInteractionEnabled:YES];
+    [snsView_p setAlpha:0.0f];
+    
+    snsView_l.frame = CGRectMake(0, -160, 480, 320);
+    [snsView_l setUserInteractionEnabled:YES];
+    [snsView_l setAlpha:0.0f];
     
     bannerButton_p.frame = CGRectMake(0, 480, 320, 50);
     bannerButton_l.frame = CGRectMake(0, 320, 480, 50);
@@ -456,10 +496,12 @@
     [closeArrowButton_l addTarget:self action:@selector(hideStamp) forControlEvents:UIControlEventTouchUpInside];
     [closeXButton_l addTarget:self action:@selector(hideStamp) forControlEvents:UIControlEventTouchUpInside];
     
+    [stampView_p addSubview:snsView_p];
     [stampView_p addSubview:bannerButton_p];
     [stampView_p addSubview:closeArrowButton_p];
     [stampView_p addSubview:closeXButton_p];
     
+    [stampView_l addSubview:snsView_l];
     [stampView_l addSubview:bannerButton_l];
     [stampView_l addSubview:closeArrowButton_l];
     [stampView_l addSubview:closeXButton_l];
@@ -473,7 +515,7 @@
 - (void) downloadFiles:(NSArray *)fileArray campaignPath:(NSString *)campaign
 {
     // clear cached campaign files
-    [self clearCampaignFiles:[NSArray arrayWithObjects:IMG_STAMP_L, IMG_STAMP_P, nil]];
+    [self clearCampaignFiles:[NSArray arrayWithObjects:IMG_STAMP_L, IMG_STAMP_P, SCM_AD_XML, nil]];
     
     // Download NoCampaign images if files don't exist in the Documentation Directory.
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -550,37 +592,44 @@
             dictXmlInfo = nil;
             
         }
-        /*
+        
         // Show sns view
         if ([self checkForPreviouslySavedAccessTokenInfo] == NO && isInternetAvailable == YES) {
+            NSLog(@"show sns");
             
-            if (isPortraitMode == YES) {
-                scmAdSnsLoginView.frame = CGRectMake(0, 0, 320, 480);
-            } else {
-                scmAdSnsLoginView.frame = CGRectMake(0, 0, 480, 320);
-            }
-            
-            [UIView beginAnimations:@"ShowSnsLoginView" context:(void *)scmAdSnsLoginView];
+            [UIView beginAnimations:@"showSnsLoginView" context:nil];
             [UIView setAnimationDuration:1.0f];
             [UIView setAnimationDelegate:self];
             [UIView setAnimationDelay:1.0f];
-            //scmAdSnsLoginView.frame = CGRectMake(0, 0, 320, 480);
-            [scmAdSnsLoginView setAlpha:1.0f];
+            
+            UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+            if (orientation == UIDeviceOrientationPortrait) {
+                snsView_p.frame = CGRectMake(0, 0, 320, 480);
+                [snsView_p setAlpha:1.0f];
+            } else  {
+                snsView_l.frame = CGRectMake(0, 0, 480, 320);
+                [snsView_l setAlpha:1.0f];
+            }
+            
             isSnsLoginView = YES;
             [UIView commitAnimations];
         } else if (isInternetAvailable == YES && isNoCampaignView == NO) {
             if (isFacebookLogin) {
-                [self scmAdPostToFacebook];
+                //[self scmAdPostToFacebook];
             } else if (isTwitterLogin) {
-                [self scmAdPostToTwitter];
+                //[self scmAdPostToTwitter];
             }
-            [self scmAdIssueDv];
+            //[self scmAdIssueDv];
             
         }
-        */
+        
     }
 }
 
+- (BOOL) checkForPreviouslySavedAccessTokenInfo
+{
+    return NO;
+}
 
 
 
