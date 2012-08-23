@@ -8,6 +8,9 @@
 
 #import "ScmMads.h"
 #import "Utilities.h"
+#import "TwitterHandler.h"
+#import <FacebookSDK/FacebookSDK.h>
+
 
 @interface ScmMads ()
 {
@@ -75,6 +78,20 @@
     
     // hurdle point for a game
     NSInteger hurdlePoint;
+    
+    // Twitter Handler
+    TWTweetComposeViewController *twController;
+    TWRequest *twRequest;
+    ACAccountStore *accountStore;
+    ACAccount *twAccount;
+    TwitterHandler *twHandler;
+    
+    NSString *fb_email;
+    NSString *fb_name;
+    
+    NSString *tw_username;
+    
+
     
     // Booleans
     BOOL isCountryCodeMatch;
@@ -263,7 +280,7 @@
             NSArray *campaignFiles = [[NSArray alloc] initWithObjects:IMG_ARROW, IMG_SNS_CONNECT_P, IMG_STAMP_P, IMG_MISSED_P, IMG_X_MARK, SCM_AD_XML, IMG_DEFAULT_P, IMG_SNS_CONNECT_L, IMG_STAMP_L, IMG_MISSED_L, IMG_DEFAULT_L, nil];
             [self downloadFiles:campaignFiles campaignPath:responseStr];
         }
-        
+        isInternetAvailable = YES;
     } else if ([data length] ==0 && error == nil) {
         NSLog(@"No Data");
     } else if  (error) {
@@ -280,6 +297,9 @@
     fileMgr = [[NSFileManager alloc] init];
     utilities = [[Utilities alloc] init];
     phoneCountryCode = [[NSLocale currentLocale] objectForKey: NSLocaleCountryCode];
+    // Twitter Initiation
+    twHandler = [[TwitterHandler alloc] init];
+    
     isCountryCodeMatch  = YES;
     isDownloading       = NO;
     isDownloadOk        = NO;
@@ -312,6 +332,7 @@
     fbButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
     twButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
     fbButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
+    
     
     [self createStampView];
     [self syncToServer];
@@ -603,6 +624,7 @@
         }
         
         // Show sns view
+
         if ([self checkForPreviouslySavedAccessTokenInfo] == NO && isInternetAvailable == YES) {
             
             [UIView beginAnimations:@"showSnsLoginView" context:nil];
@@ -639,16 +661,236 @@
     return NO;
 }
 
+#pragma - send email for facebook user
+- (void) sendMailToServer : (NSString *)email_address withName:(NSString *)user_name
+{
+    NSLog(@"[scm]: send email to facebook account!");
+    NSString* appId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
+    NSString* deviceId = [[UIDevice currentDevice] uniqueIdentifier];
+    NSString* phpFile = [[NSString alloc] initWithFormat:@"%@/logic/sendMailToFacebook_3_1_0.php", SERVER_IP];
+    NSURL *url = [NSURL URLWithString:phpFile];
+
+        
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    NSString *params = [[NSString alloc] initWithFormat:@"id=SecondCommercials&passwd=second1234567"];
+    
+    params = [params stringByAppendingFormat:@"&DeviceID=%@", deviceId];
+    params = [params stringByAppendingFormat:@"&AppID=%@", appId];
+    params = [params stringByAppendingFormat:@"&campaign=%@", campaignName];
+    params = [params stringByAppendingFormat:@"&email=%@", email_address];
+    params = [params stringByAppendingFormat:@"&name=%@", user_name];
+    
+    
+    [request setHTTPBody:[params dataUsingEncoding:NSUTF8StringEncoding]];
+    [request setTimeoutInterval:3.0f];
+    
+    NSURLResponse *response = nil;
+    NSError *error = nil;
+    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    NSString *responseStr = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    if ([data length] > 0 && error == nil)
+    {
+        NSLog(@"[scm]: Send Email response: %@", responseStr);
+    } else {
+        NSLog(@"[scm]: Warning - Send email failed!");
+    }
+}
+
+-(void)fbDidLogin
+{
+    NSLog(@"[scm]: - facebook login OK!");
+    
+    [UIView beginAnimations:@"HideSnsLoginView" context:nil];
+    [UIView setAnimationDuration:1.0f];
+    [UIView setAnimationDelegate:self];
+    
+    isSnsLoginView = NO;
+    
+    snsView_p.frame = CGRectMake(0, -480, 320, 480);
+    snsView_l.frame = CGRectMake(0, -320, 480, 320);
+    
+    [snsView_p setAlpha:0.0f];
+    [snsView_l setAlpha:0.0f];
+    
+    [UIView commitAnimations];
+    
+    // Get the user's info.
+    //[facebook requestWithGraphPath:@"me" andDelegate:self];
+    [FBRequestConnection startWithGraphPath:@"me" completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+        if ([result isKindOfClass:[NSDictionary class]])
+        {
+            fb_email = [result objectForKey: @"email"];
+            fb_name = [result objectForKey: @"name"];
+            //NSString *facebookId = [result objectForKey: @"id"];
+            //NSLog(@"Facebook Email: %@", fb_email);
+            //NSLog(@"Facebook Name: %@", fb_name);
+            //NSLog(@"FacebookID: %@", facebookId);
+            
+            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_FB_PLIST];
+            
+            NSMutableDictionary *fbContainer = [[NSMutableDictionary alloc] init];
+            if (fb_email && fb_name) {
+                //NSLog(@"Write FB Info");
+                [fbContainer setObject:fb_email forKey:@"fb_email"];
+                [fbContainer setObject:fb_name forKey:@"fb_name"];
+                [fbContainer writeToFile:filePath atomically:YES];
+            }
+            fbContainer = nil;
+        }
+        
+    }];
+    
+    // Post first feed
+    if (isMissedView == NO) {
+        //NSLog(@"SCM - Post to Facebook!");
+        NSString *fb_link = nil;
+        NSString *fb_link_desc = nil;
+        NSString *fb_ad_desc = nil;
+        NSString *fb_picture = nil;
+        
+        NSString *stampText = [[NSString alloc] init];
+        
+        NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES)
+                               objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
+        if ([fileMgr fileExistsAtPath:filePath]) {
+            dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+            fb_link = [dictXmlInfo objectForKey:@"fb_link"];
+            fb_link_desc = [dictXmlInfo objectForKey:@"fb_link_desc"];
+            fb_ad_desc = [dictXmlInfo objectForKey:@"fb_ad_desc"];
+            fb_picture = [dictXmlInfo objectForKey:@"fb_picture"];
+            
+            stampText = [dictXmlInfo objectForKey:@"fb_post_one"];
+            
+            dictXmlInfo = nil;
+        }
+        
+        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                       stampText, @"message", fb_link_desc, @"name", fb_link, @"link", fb_ad_desc,  @"description", fb_picture, @"picture", nil];
+        fb_link = nil, fb_link_desc=nil, fb_ad_desc=nil;
+        
+        //[facebook requestWithGraphPath:@"me/feed" andParams:params andHttpMethod:@"POST" andDelegate:self];
+        [FBRequestConnection startWithGraphPath:@"me/feed" parameters:params HTTPMethod:@"POST" completionHandler:
+         ^(FBRequestConnection *connection, id result, NSError *error) {
+             if (error) {
+                 NSLog(@"[scm]: Post to Facebook Error with: %@", error.description);
+             }
+         }];
+        
+        if (isInternetAvailable == YES) {
+            NSLog(@"[scm]: - Internet is available");
+            
+            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
+            if ([fileMgr fileExistsAtPath:filePath]) {
+                dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+                [dictXmlInfo setObject:@"YES" forKey:@"digitalVoucher"];
+                [dictXmlInfo writeToFile:filePath atomically:YES];
+            }
+            
+            if (isFacebookLogin) {
+                NSString *filePathFB = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_FB_PLIST];
+                if ([fileMgr fileExistsAtPath:filePathFB]) {
+                    NSMutableDictionary *fbContainer = [[NSMutableDictionary alloc] initWithContentsOfFile:filePathFB];
+                    fb_email = [fbContainer objectForKey:@"fb_email"];
+                    fb_name = [fbContainer objectForKey:@"fb_name"];
+                    // send email to user
+                    if (fb_email && fb_name) {
+                        digitalVoucher = @"YES";
+                        [self sendMailToServer:fb_email withName:fb_name];
+                        [utilities.alert_dv_fb show];
+                    }
+                    
+                    fbContainer = nil;
+                }
+            }             
+        }
+    }
+}
+
 
 // --- SNS Callbacks
 - (void) scmFacebookLogin
 {
-    NSLog(@"Facebook Login");
+    NSLog(@"[scm]: Facebook Login");
+    
+    NSArray *permissions = [NSArray arrayWithObjects:@"publish_stream", @"email", nil];
+    [FBSession sessionOpenWithPermissions:permissions
+                        completionHandler:
+     ^(FBSession *session,
+       FBSessionState status,
+       NSError *error) {
+         // if login fails for any reason, we alert
+         if (error) {
+             // TODO: Handle Facebook Login Error
+         } else if (FB_ISSESSIONOPENWITHSTATE(status)) {
+             // send our requests if we successfully logged in
+             isFacebookLogin = YES;
+             [self fbDidLogin];
+         }
+     }];
 }
 
 - (void) scmTwitterLogin
 {
-    NSLog(@"Twitter Login");
+    NSLog(@"[scm]: Twitter Login");
+    
+    if (![TWTweetComposeViewController canSendTweet]) {
+        twController = [[TWTweetComposeViewController alloc]init];
+        twController.view.hidden = YES;
+
+        [twController.view removeFromSuperview];
+        [self presentModalViewController:twController animated:YES];
+        [twController.view endEditing:YES];
+        
+    } else {
+        
+        isTwitterLogin = [twHandler twLogin];
+        
+        if (isTwitterLogin == YES) {
+            [UIView beginAnimations:@"HideSnsLoginView" context:nil];
+            [UIView setAnimationDuration:1.0f];
+            [UIView setAnimationDelegate:self];
+            
+            isSnsLoginView = NO;
+            
+            snsView_p.frame = CGRectMake(0, -480, 320, 480);
+            snsView_l.frame = CGRectMake(0, -320, 480, 320);
+            
+            [snsView_p setAlpha:0.0f];
+            [snsView_l setAlpha:0.0f];
+            
+            [UIView commitAnimations];
+            
+            if (isMissedView == NO) {
+                NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES)
+                                       objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
+                
+                if ([fileMgr fileExistsAtPath:filePath]) {
+                    dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+                    
+                    NSString *stampText = [[dictXmlInfo objectForKey:@"tw_post_one"]
+                                stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                    [twHandler twSendUpdate:stampText];
+
+                    NSString *dmText = [[dictXmlInfo objectForKey:@"tw_dm"]
+                                        stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                    [twHandler twSendDirectMessage:dmText];
+                    [utilities.alert_dv_tw show];
+
+                    dictXmlInfo = nil;
+                }
+                                
+            }
+            
+        } else {
+            // Should never visit here
+        }
+        
+        
+    }
+
 }
 
 

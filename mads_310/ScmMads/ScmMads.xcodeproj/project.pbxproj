@@ -12,6 +12,11 @@
 		BFB44B7D15D3C333003A6515 /* ScmMads.m in Sources */ = {isa = PBXBuildFile; fileRef = BFB44B7B15D3C333003A6515 /* ScmMads.m */; };
 		D4151BBA15DE80740083D319 /* Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = D4151BB815DE80740083D319 /* Utilities.h */; };
 		D4151BBB15DE80740083D319 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = D4151BB915DE80740083D319 /* Utilities.m */; };
+		D443205A15E6536100889F00 /* TwitterHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = D443205815E6536100889F00 /* TwitterHandler.h */; };
+		D443205B15E6536100889F00 /* TwitterHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = D443205915E6536100889F00 /* TwitterHandler.m */; };
+		D443205E15E653D300889F00 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D443205D15E653D300889F00 /* Twitter.framework */; };
+		D443206015E653DA00889F00 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D443205F15E653DA00889F00 /* Accounts.framework */; };
+		D48E7E9A15E69A7600170ED0 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D48E7E9915E69A7600170ED0 /* FacebookSDK.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +28,11 @@
 		BFB44B7B15D3C333003A6515 /* ScmMads.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScmMads.m; sourceTree = SOURCE_ROOT; };
 		D4151BB815DE80740083D319 /* Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = SOURCE_ROOT; };
 		D4151BB915DE80740083D319 /* Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utilities.m; sourceTree = SOURCE_ROOT; };
+		D443205815E6536100889F00 /* TwitterHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterHandler.h; sourceTree = "<group>"; };
+		D443205915E6536100889F00 /* TwitterHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterHandler.m; sourceTree = "<group>"; };
+		D443205D15E653D300889F00 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
+		D443205F15E653DA00889F00 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		D48E7E9915E69A7600170ED0 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../FacebookSDK.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -30,6 +40,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D48E7E9A15E69A7600170ED0 /* FacebookSDK.framework in Frameworks */,
+				D443206015E653DA00889F00 /* Accounts.framework in Frameworks */,
+				D443205E15E653D300889F00 /* Twitter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -39,6 +52,9 @@
 		BFB44B5A15D3B60D003A6515 = {
 			isa = PBXGroup;
 			children = (
+				D48E7E9915E69A7600170ED0 /* FacebookSDK.framework */,
+				D443205F15E653DA00889F00 /* Accounts.framework */,
+				D443205D15E653D300889F00 /* Twitter.framework */,
 				BFB44B6A15D3B60D003A6515 /* ScmMads */,
 				BFB44B6915D3B60D003A6515 /* Products */,
 			);
@@ -55,6 +71,8 @@
 		BFB44B6A15D3B60D003A6515 /* ScmMads */ = {
 			isa = PBXGroup;
 			children = (
+				D443205815E6536100889F00 /* TwitterHandler.h */,
+				D443205915E6536100889F00 /* TwitterHandler.m */,
 				BFB44B7A15D3C333003A6515 /* ScmMads.h */,
 				BFB44B7B15D3C333003A6515 /* ScmMads.m */,
 				D4151BB815DE80740083D319 /* Utilities.h */,
@@ -83,6 +101,7 @@
 			files = (
 				BFB44B7C15D3C333003A6515 /* ScmMads.h in Headers */,
 				D4151BBA15DE80740083D319 /* Utilities.h in Headers */,
+				D443205A15E6536100889F00 /* TwitterHandler.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,6 +201,7 @@
 			files = (
 				BFB44B7D15D3C333003A6515 /* ScmMads.m in Sources */,
 				D4151BBB15DE80740083D319 /* Utilities.m in Sources */,
+				D443205B15E6536100889F00 /* TwitterHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,6 +273,10 @@
 				DEPLOYMENT_POSTPROCESSING = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/..\"",
+				);
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ScmMads/ScmMads-Prefix.pch";
@@ -276,6 +300,10 @@
 				DEPLOYMENT_POSTPROCESSING = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/..\"",
+				);
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ScmMads/ScmMads-Prefix.pch";
