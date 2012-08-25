@@ -21,8 +21,10 @@
 @property (nonatomic, strong) TWRequest *twRequest;
 @property (nonatomic, strong) ACAccountStore *accountStore;
 @property (nonatomic, strong) ACAccount *twAccount;
+@property (nonatomic, assign) BOOL isTwitterLogin;
 
-- (BOOL) twLogin;
+
+- (void) twLogin;
 - (void) twSendUpdate: (NSString *)twPost;
 - (void) twSendDirectMessage: (NSString *) twDirectMessage;
 

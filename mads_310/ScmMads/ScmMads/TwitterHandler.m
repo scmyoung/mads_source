@@ -15,6 +15,7 @@
 @synthesize twAccount;
 @synthesize twRequest;
 @synthesize accountStore;
+@synthesize isTwitterLogin;
 
 
 - (id) init
@@ -24,11 +25,12 @@
     self.twController = [[TWTweetComposeViewController alloc]init]; 
     self.accountStore = [[ACAccountStore alloc] init];
     self.twAccount = nil;
+    self.isTwitterLogin = NO;
     
     return self;
 }
 
-- (BOOL) twLogin
+- (void) twLogin
 {
     /*
     if (![TWTweetComposeViewController canSendTweet]) {
@@ -42,25 +44,20 @@
             if(granted) {
                 NSArray *accountsArray = [accountStore accountsWithAccountType:accountType];
                 if ([accountsArray count] > 0) {
-                   twAccount = [accountsArray objectAtIndex:0];
+                    NSLog(@"Granted and has account");
+                    twAccount = [accountsArray objectAtIndex:0];
+                    isTwitterLogin = YES;
                 }
             }
         }];
-    
-        if (twAccount) {
-            return YES;
-        } else {
-            return NO;
-        }
-    
-    /*
-    }
-    */
     
 }
 
 - (void) twSendUpdate: (NSString *)twPost
 {
+    
+    NSLog(@"send twitter message 2");
+    
     twRequest = [[TWRequest alloc]initWithURL:[NSURL URLWithString:@"http://api.twitter.com/1/statuses/update.json"] parameters:[NSDictionary dictionaryWithObject:twPost forKey:@"status"] requestMethod:TWRequestMethodPOST];
     
     [twRequest setAccount:twAccount];
