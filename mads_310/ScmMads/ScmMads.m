@@ -86,6 +86,9 @@
     ACAccount *twAccount;
     TwitterHandler *twHandler;
     
+    // Facebook Handler
+    FBSession *fbSession;
+    
     NSString *fb_email;
     NSString *fb_name;
     
@@ -126,7 +129,7 @@
 
 #define SCM_AD_XML              @"scmAdInfo.xml"
 #define SCM_AD_PLIST            @"scmAdPlist.plist"
-#define SCM_FB_PLIST            @"scmFbPlist.plist"
+#define SCM_SNS_PLIST            @"scmSnsPlist.plist"
 
 #define FB_APP_ID               @"196736437067322"
 
@@ -338,12 +341,35 @@
     
     // ------------- SNS Initiation -----------------
     
-    if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
-        isFacebookLogin = YES;
-    } else {
-        isFacebookLogin = NO;
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_SNS_PLIST];
+    if ([fileMgr fileExistsAtPath:filePath]) {
+        dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+        isFacebookLogin = [[dictXmlInfo objectForKey:@"isFacebookLogin"] boolValue];
+        isTwitterLogin = [[dictXmlInfo objectForKey:@"isTwitterLogin"] boolValue];
+        
+        if (isFacebookLogin) {
+            NSLog(@"is Facebook Login");
+        } else {
+            NSLog(@"is Facebook Login NO");
+        }
     }
     
+    if (isFacebookLogin == YES) {
+        NSArray *permissions = [NSArray arrayWithObjects:@"publish_stream", @"email", nil];
+        [FBSession sessionOpenWithPermissions:permissions
+                            completionHandler:
+         ^(FBSession *session,
+           FBSessionState status,
+           NSError *error) {
+             // if login fails for any reason, we alert
+             if (error) {
+                 // TODO: Handle Facebook Login Error
+                 NSLog(@"[scm]: Facebook Login Error!");
+             } else if (FB_ISSESSIONOPENWITHSTATE(status)) {
+             }
+         }];
+    }
+   
     
     [self createStampView];
     [self syncToServer];
@@ -699,49 +725,24 @@
     [request setHTTPBody:[params dataUsingEncoding:NSUTF8StringEncoding]];
     [request setTimeoutInterval:3.0f];
     
-    NSURLResponse *response = nil;
-    NSError *error = nil;
-    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    NSString *responseStr = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
-    if ([data length] > 0 && error == nil)
-    {
-        NSLog(@"[scm]: Send Email response: %@", responseStr);
-    } else {
-        NSLog(@"[scm]: Warning - Send email failed!");
-    }
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+        if ([data length] > 0 && error == nil)
+        {
+            NSString *responseStr = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            NSLog(@"[scm]: Send Email response: %@", responseStr);
+        } else {
+            NSLog(@"[scm]: Warning - Send email failed!");
+        }
+    }];
 }
 
 
 - (void)scmAdPostToFacebook
 {
-    // Get the user's info.
-    //[facebook requestWithGraphPath:@"me" andDelegate:self];
-    [FBRequestConnection startWithGraphPath:@"me" completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-        if ([result isKindOfClass:[NSDictionary class]])
-        {
-            fb_email = [result objectForKey: @"email"];
-            fb_name = [result objectForKey: @"name"];
-            //NSString *facebookId = [result objectForKey: @"id"];
-            //NSLog(@"Facebook Email: %@", fb_email);
-            //NSLog(@"Facebook Name: %@", fb_name);
-            //NSLog(@"FacebookID: %@", facebookId);
-            
-            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_FB_PLIST];
-            
-            NSMutableDictionary *fbContainer = [[NSMutableDictionary alloc] init];
-            if (fb_email && fb_name) {
-                //NSLog(@"Write FB Info");
-                [fbContainer setObject:fb_email forKey:@"fb_email"];
-                [fbContainer setObject:fb_name forKey:@"fb_name"];
-                [fbContainer writeToFile:filePath atomically:YES];
-            }
-            fbContainer = nil;
-        }
-        
-    }];
-    
-    // Post first feed
+        // Post first feed
     if (isMissedView == NO) {
         //NSLog(@"SCM - Post to Facebook!");
         NSString *fb_link = nil;
@@ -789,7 +790,7 @@
                 [dictXmlInfo writeToFile:filePath atomically:YES];
             }
             
-            NSString *filePathFB = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_FB_PLIST];
+            NSString *filePathFB = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_SNS_PLIST];
             if ([fileMgr fileExistsAtPath:filePathFB]) {
                 NSMutableDictionary *fbContainer = [[NSMutableDictionary alloc] initWithContentsOfFile:filePathFB];
                 fb_email = [fbContainer objectForKey:@"fb_email"];
@@ -803,10 +804,11 @@
                 
                 fbContainer = nil;
             }
+            
+            NSLog(@"Alert view -----------------");
             [utilities.alert_dv_fb show];
         }
     }
-
 }
 
 -(void)fbDidLogin
@@ -850,7 +852,36 @@
              // send our requests if we successfully logged in
              isFacebookLogin = YES;
              NSLog(@"Call back!");
-             [self fbDidLogin];
+             
+             // Get the user's info.
+             //[facebook requestWithGraphPath:@"me" andDelegate:self];
+             [FBRequestConnection startWithGraphPath:@"me" completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+                 if ([result isKindOfClass:[NSDictionary class]])
+                 {
+                     fb_email = [result objectForKey: @"email"];
+                     fb_name = [result objectForKey: @"name"];
+                     //NSString *facebookId = [result objectForKey: @"id"];
+                     //NSLog(@"Facebook Email: %@", fb_email);
+                     //NSLog(@"Facebook Name: %@", fb_name);
+                     //NSLog(@"FacebookID: %@", facebookId);
+                     
+                     NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_SNS_PLIST];
+                     
+                     NSMutableDictionary *fbContainer = [[NSMutableDictionary alloc] init];
+                     if (fb_email && fb_name) {
+                         //NSLog(@"Write FB Info");
+                         [fbContainer setObject:fb_email forKey:@"fb_email"];
+                         [fbContainer setObject:fb_name forKey:@"fb_name"];
+                         [fbContainer setObject:@"YES" forKey:@"isFacebookLogin"];
+                         [fbContainer writeToFile:filePath atomically:YES];
+                     }
+                     fbContainer = nil;
+                     [self fbDidLogin];
+
+                }
+             }];
+             
+
          }
      }];
 }
@@ -954,6 +985,10 @@
         [snsView_l setAlpha:0.0f];
         
         [UIView commitAnimations];
+        
+        dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:SCM_SNS_PLIST];
+        [dictXmlInfo setObject:@"YES" forKey:@"isTwitterLogin"];
+        [dictXmlInfo writeToFile:SCM_SNS_PLIST atomically:YES];
 
         [self scmAdPostToTwitter];
 
