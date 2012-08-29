@@ -7,6 +7,7 @@
 //
 
 #import "Utilities.h"
+#import "Macros.h"
 
 @implementation Utilities {
     NSString *currentElement;
@@ -25,6 +26,34 @@
     alert_dv_tw = [[UIAlertView alloc] initWithTitle:@"SecondCommercials" message:@"Congrats! We've just issued a digital coupon for you! Please check your Twitter Direct Message!" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:@"Redeem", nil];
     
     return self;
+}
+
+- (NSString *)stringByDecodingURLFormat:(NSString *)input
+{
+    return [[input stringByReplacingOccurrencesOfString:@"+" withString:@" "]
+            stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        
+    } else if (buttonIndex == 1) {
+        
+        NSString *redeemUrl = @"";
+        NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES)
+                               objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
+        if ([fileMgr fileExistsAtPath:filePath]) {
+            NSMutableDictionary *dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+            //redeemUrl = [dictXmlInfo objectForKey:@"redeem_link"];
+            redeemUrl = [self stringByDecodingURLFormat:[dictXmlInfo objectForKey:@"redeem_link"]];
+            dictXmlInfo = nil;
+        }
+
+        NSLog(@"URL: %@", redeemUrl);
+        NSURL *url = [NSURL URLWithString:[redeemUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        [[UIApplication sharedApplication] openURL:url];
+    }
 }
 
 - (NSString *)getCurrentDateTime

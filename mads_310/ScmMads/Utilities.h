@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@interface Utilities : NSObject <NSXMLParserDelegate>
+@interface Utilities : NSObject <NSXMLParserDelegate, UIAlertViewDelegate>
 
 
 @property (nonatomic, strong) NSXMLParser *xmlParser;
@@ -19,6 +19,7 @@
 
 - (NSString *)getCurrentDateTime;
 - (void)parseScmAdXmlFile: (NSData *)fileData;
+- (NSString *)stringByDecodingURLFormat:(NSString *)input;
 
 
 @end
