@@ -8,6 +8,7 @@
 
 #import "ScmMads.h"
 #import "Utilities.h"
+#import "Macros.h"
 #import "TwitterHandler.h"
 #import <FacebookSDK/FacebookSDK.h>
 
@@ -38,6 +39,9 @@
     
     // Utility Calss
     Utilities *utilities;
+    
+    // Orientation
+    UIDeviceOrientation currentOrientation;
     
     // campaign name
     NSString *campaignName;
@@ -110,30 +114,6 @@
 }
 
 @end
-
-#define SERVER_IP               @"http://211.115.71.69"
-#define LOCAL_SERVER_IP         @"http://localhost/"
-
-#define IMG_SNS_CONNECT_P       @"connect_portrait.png"
-#define IMG_STAMP_P             @"stamp_portrait.png"
-#define IMG_MISSED_P            @"missed_portrait.png"
-#define IMG_DEFAULT_P           @"scmdefault_portrait.png"
-
-#define IMG_SNS_CONNECT_L       @"connect_landscape.png"
-#define IMG_STAMP_L             @"stamp_landscape.png"
-#define IMG_MISSED_L            @"missed_landscape.png"
-#define IMG_DEFAULT_L           @"scmdefault_landscape.png"
-
-#define IMG_X_MARK              @"xmark.png"
-#define IMG_ARROW               @"arrow.png"
-
-#define SCM_AD_XML              @"scmAdInfo.xml"
-#define SCM_AD_PLIST            @"scmAdPlist.plist"
-#define SCM_SNS_PLIST            @"scmSnsPlist.plist"
-
-#define FB_APP_ID               @"196736437067322"
-
-#define PHP_LOGIC_FILE          @"mads_3_1_0.php"
 
 
 @implementation ScmMads
@@ -296,6 +276,9 @@
 {
     self=[super init];
     
+    self.view.frame = CGRectMake(0, -530, 480, 530);
+    [self.view setUserInteractionEnabled:YES];
+    
     // ------------- Initiate Properties ----------
     fileMgr = [[NSFileManager alloc] init];
     utilities = [[Utilities alloc] init];
@@ -323,20 +306,25 @@
 
     snsView_p = [[UIImageView alloc]init];
     snsView_l = [[UIImageView alloc]init];
-    
+     
     bannerButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
     bannerButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
 
     closeArrowButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
     closeArrowButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
     
-    closeXButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
     closeXButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
+    closeXButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
     
     twButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
     fbButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
     twButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
     fbButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    // ------------- Orientation Events Registration ------------------
+    
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(deviceOrientationDidChange:) name: UIDeviceOrientationDidChangeNotification object: nil];
     
     
     // ------------- SNS Initiation -----------------
@@ -377,11 +365,34 @@
     return self;
 }
 
+
+- (void)deviceOrientationDidChange:(NSNotification *)notification
+{
+    /*
+    //Obtaining the current device orientation
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    
+    //Ignoring specific orientations
+    if (orientation == UIDeviceOrientationFaceUp || orientation == UIDeviceOrientationFaceDown || orientation == UIDeviceOrientationUnknown || currentOrientation == orientation) {
+        return;
+    }
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(relayoutLayers) object:nil];
+    //Responding only to changes in landscape or portrait
+    currentOrientation = orientation;
+    NSLog(@"[scm]: Orientation Changed!");
+    
+    
+    [self createStampView];
+    [self hideScmMads];
+     */
+}
+
+
 - (void) showScmMads:(NSInteger)points
 {
     
     [[self scmMadsDelegate] scmAdBannerWillShow];
-    
+        
     // Check for Country Code First
     if (isCountryCodeMatch == NO) {
         NSLog(@"[scm]: Country Code doesn't match");
@@ -393,6 +404,7 @@
     }
 
     if (isDownloadOk == YES) {
+        
         // User Document Directory Path
         NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
         [snsView_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_SNS_CONNECT_P]]]];
@@ -414,19 +426,40 @@
                                                           [docPath stringByAppendingPathComponent:IMG_STAMP_P]]]];
             [stampView_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
                                                           [docPath stringByAppendingPathComponent:IMG_STAMP_L]]]];
+            
+            // Save stampsCounter to Plist file
+            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
+            if ([fileMgr fileExistsAtPath:filePath]) {
+                dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+                [dictXmlInfo setObject:[[NSString alloc] initWithFormat:@"%d", ++stamp_banner_counter] forKey:@"stamp_banner_imp"];
+                
+                [dictXmlInfo writeToFile:filePath atomically:YES];
+                dictXmlInfo = nil;
+            }
+
         } else {
             isMissedView = YES;
             [stampView_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
                                                           [docPath stringByAppendingPathComponent:IMG_MISSED_P]]]];
             [stampView_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
                                                           [docPath stringByAppendingPathComponent:IMG_MISSED_L]]]];
+            
+            // Save stampsCounter to Plist file
+            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
+            if ([fileMgr fileExistsAtPath:filePath]) {
+                dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+                [dictXmlInfo setObject:[[NSString alloc] initWithFormat:@"%d", ++missed_banner_counter] forKey:@"missed_banner_imp"];
+                
+                [dictXmlInfo writeToFile:filePath atomically:YES];
+                dictXmlInfo = nil;
+            }
         }
     
         isDownloading = NO;
     }
     
-    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-    if (orientation == UIDeviceOrientationPortrait) {
+     currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if (currentOrientation == UIDeviceOrientationPortrait) {
         stampView_p.hidden = NO;
         stampView_l.hidden = YES;
     } else  {
@@ -441,8 +474,8 @@
     // self.view.frame = CGRectMake(0, -480, 320, 550);
     // [UIImageView commitAnimations];
     
-    [UIView animateWithDuration:0.5 animations:^{ self.view.frame = CGRectMake(0, -470, 320, 530); } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.1 animations:^{ self.view.frame = CGRectMake (0, -480, 320, 530); } completion:^(BOOL finished) {
+    [UIView animateWithDuration:0.5 animations:^{ self.view.frame = CGRectMake(0, -470, 480, 530); } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.2 animations:^{ self.view.frame = CGRectMake (0, -480, 480, 530); } completion:^(BOOL finished) {
             /*NSLog(@"Animation Finished");*/}];
     }];
     [UIView commitAnimations];
@@ -452,7 +485,7 @@
 - (void) hideScmMads
 {
     [UIView beginAnimations:@"hideBanner" context:nil];
-    [UIView setAnimationDuration:1.0f];
+    [UIView setAnimationDuration:0.6f];
     [UIView setAnimationDelegate:self];
         
     self.view.frame = CGRectMake(0, -530, 320, 530);
@@ -474,9 +507,9 @@
 
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
     if (orientation == UIDeviceOrientationPortrait) {
-        self.view.frame = CGRectMake(0, 0, 320, 530);
+        self.view.frame = CGRectMake(0, 0, 480, 530);
     } else  {
-        self.view.frame = CGRectMake(0, -160, 320, 530);
+        self.view.frame = CGRectMake(0, -160, 480, 530);
     }
     
     [UIImageView commitAnimations];
@@ -506,7 +539,7 @@
         [UIView setAnimationDelegate:self];
         [UIView setAnimationDidStopSelector:@selector(scmAdAnimationFinished:finished:context:)];
         
-        self.view.frame = CGRectMake(0, -530, 320, 530);
+        self.view.frame = CGRectMake(0, -530, 480, 530);
         
         [UIView commitAnimations];
         
@@ -516,14 +549,21 @@
 
 }
 
+
 - (void) createStampView
-{
+{    
+    self.view.frame = CGRectMake(0, -530, 480, 530);
+    [self.view setUserInteractionEnabled:YES];
+    
+    [self.view addSubview:stampView_p];
+    [self.view addSubview:stampView_l];
     
     stampView_p.frame = CGRectMake(0, 0, 320, 530);
     [stampView_p setUserInteractionEnabled:YES];
     
     stampView_l.frame = CGRectMake(0, 160, 480, 370);
     [stampView_l setUserInteractionEnabled:YES];
+    
     
     // ---- SNS View and Buttons
     snsView_p.frame = CGRectMake(0, -480, 320, 480);
@@ -547,7 +587,6 @@
     [snsView_l addSubview:twButton_l];
     // ---- End of SNS View and Buttons
     
-    
     bannerButton_p.frame = CGRectMake(0, 480, 320, 50);
     bannerButton_l.frame = CGRectMake(0, 320, 480, 50);
 
@@ -555,6 +594,7 @@
     closeArrowButton_l.frame = CGRectMake(158, 272, 156, 48);
     closeXButton_p.frame = CGRectMake(270, 0, 50, 53);
     closeXButton_l.frame = CGRectMake(429, 0, 50, 53);
+    
     
     [bannerButton_p addTarget:self action:@selector(showStamp) forControlEvents:UIControlEventTouchUpInside];
     [bannerButton_l addTarget:self action:@selector(showStamp) forControlEvents:UIControlEventTouchUpInside];
@@ -574,9 +614,10 @@
     [stampView_l addSubview:closeArrowButton_l];
     [stampView_l addSubview:closeXButton_l];
     
-    self.view.frame = CGRectMake(0, -530, 320, 530);
-    [self.view addSubview:stampView_p];
-    [self.view addSubview:stampView_l];
+    [self.view bringSubviewToFront:stampView_l];
+    [stampView_l bringSubviewToFront:closeXButton_l];
+    
+    
     
 }
 

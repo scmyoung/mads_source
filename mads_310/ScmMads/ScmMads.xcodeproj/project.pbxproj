@@ -32,6 +32,7 @@
 		D443205915E6536100889F00 /* TwitterHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterHandler.m; sourceTree = "<group>"; };
 		D443205D15E653D300889F00 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		D443205F15E653DA00889F00 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		D4831E0915EE3C09002FCA82 /* Macros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
 		D48E7E9915E69A7600170ED0 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../FacebookSDK.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -71,6 +72,7 @@
 		BFB44B6A15D3B60D003A6515 /* ScmMads */ = {
 			isa = PBXGroup;
 			children = (
+				D4831E0915EE3C09002FCA82 /* Macros.h */,
 				D443205815E6536100889F00 /* TwitterHandler.h */,
 				D443205915E6536100889F00 /* TwitterHandler.m */,
 				BFB44B7A15D3C333003A6515 /* ScmMads.h */,

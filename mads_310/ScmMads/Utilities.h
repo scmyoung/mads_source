@@ -20,4 +20,5 @@
 - (NSString *)getCurrentDateTime;
 - (void)parseScmAdXmlFile: (NSData *)fileData;
 
+
 @end
