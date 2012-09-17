@@ -963,7 +963,13 @@
          } else if (FB_ISSESSIONOPENWITHSTATE(status)) {
              // send our requests if we successfully logged in
              isFacebookLogin = YES;
-             NSLog(@"Call back!");
+             isTwitterLogin = NO;
+             
+             NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
+             [twtIcon_l setImage:[UIImage imageWithData:nil] forState:UIControlStateNormal];
+             [twtIcon_p setImage:[UIImage imageWithData:nil] forState:UIControlStateNormal];
+             [fbIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_FB_MARK]]] forState:UIControlStateNormal];
+             [fbIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_FB_MARK]]] forState:UIControlStateNormal];
              
              // Get the user's info.
              //[facebook requestWithGraphPath:@"me" andDelegate:self];
@@ -985,6 +991,8 @@
                          [fbContainer setObject:fb_email forKey:@"fb_email"];
                          [fbContainer setObject:fb_name forKey:@"fb_name"];
                          [fbContainer setObject:@"YES" forKey:@"isFacebookLogin"];
+                         [fbContainer setObject:@"NO" forKey:@"isTwitterLogin"];
+
                          [fbContainer writeToFile:filePath atomically:YES];
                      }
                      fbContainer = nil;
@@ -1040,7 +1048,15 @@
         if(granted) {
             NSArray *accountsArray = [accountStore accountsWithAccountType:accountType];
             if ([accountsArray count] > 0) {
+                isFacebookLogin = NO;
                 isTwitterLogin = YES;
+                
+                NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
+                [twtIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_TWT_MARK]]] forState:UIControlStateNormal];
+                [twtIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_TWT_MARK]]] forState:UIControlStateNormal];
+                [fbIcon_l setImage:[UIImage imageWithData:nil] forState:UIControlStateNormal];
+                [fbIcon_p setImage:[UIImage imageWithData:nil] forState:UIControlStateNormal];
+                
                 NSLog(@"[scm]: access twitter account and publish tweet post with dm!");
                 twAccount = [accountsArray objectAtIndex:0];
                 
@@ -1100,6 +1116,8 @@
         
         dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:SCM_SNS_PLIST];
         [dictXmlInfo setObject:@"YES" forKey:@"isTwitterLogin"];
+        [dictXmlInfo setObject:@"NO" forKey:@"isFacebookLogin"];
+
         [dictXmlInfo writeToFile:SCM_SNS_PLIST atomically:YES];
 
         [self scmAdPostToTwitter];
