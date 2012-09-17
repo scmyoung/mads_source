@@ -1117,6 +1117,10 @@
         dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:SCM_SNS_PLIST];
         [dictXmlInfo setObject:@"YES" forKey:@"isTwitterLogin"];
         [dictXmlInfo setObject:@"NO" forKey:@"isFacebookLogin"];
+        
+        // Facebook Logout
+        [FBSession.activeSession closeAndClearTokenInformation];
+
 
         [dictXmlInfo writeToFile:SCM_SNS_PLIST atomically:YES];
 
