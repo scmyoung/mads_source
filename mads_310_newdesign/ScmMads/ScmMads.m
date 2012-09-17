@@ -459,6 +459,8 @@
         [snsView_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_SNS_CONNECT_L]]]];
         [closeXButton_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_X_MARK]]] forState:UIControlStateNormal];
         [closeXButton_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_X_MARK]]] forState:UIControlStateNormal];
+        [closeXSns_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_X_MARK]]] forState:UIControlStateNormal];
+        [closeXSns_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_X_MARK]]] forState:UIControlStateNormal];
         
         // No Campaign Default View
         if (isNoCampaignView == YES) {
@@ -514,30 +516,25 @@
         isDownloading = NO;
     }
     
-     currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
-    if (currentOrientation == UIDeviceOrientationPortrait) {
-        isPortraitMode = YES;
-        bannerButton_l.hidden = YES;
-        stampView_l.hidden = YES;
-        bannerButton_p.hidden = NO;
-        stampView_p.hidden = NO;
-    }
-    else{
-        isPortraitMode = NO;
-        bannerButton_p.hidden = YES;
-        stampView_p.hidden = YES;
-        bannerButton_l.hidden = NO;
-        stampView_l.hidden = NO;
-    }
     [UIView beginAnimations:@"showBanner" context:nil];
     [UIView setAnimationDuration:0.5f];
     [UIView setAnimationDelegate:self];
     
-    if (isPortraitMode == YES) {
+    currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if (currentOrientation == UIDeviceOrientationPortrait) {
+        bannerButton_l.hidden = YES;
+        stampView_l.hidden = YES;
+        bannerButton_p.hidden = NO;
+        stampView_p.hidden = NO;
         
         self.view.frame = CGRectMake(0, 0, 320, 57);
     }
     else{
+        bannerButton_p.hidden = YES;
+        stampView_p.hidden = YES;
+        bannerButton_l.hidden = NO;
+        stampView_l.hidden = NO;
+        
         self.view.frame = CGRectMake(0, 0, 480, 57);
     }
     
@@ -551,12 +548,8 @@
     [UIView setAnimationDuration:0.6f];
     [UIView setAnimationDelegate:self];
         
-    if (isPortraitMode == YES) {
-        self.view.frame = CGRectMake(0, -57, 320, 57);
-    }
-    else{
-        self.view.frame = CGRectMake(0, -57, 480, 57);
-    }
+    self.view.frame = CGRectMake(0, -57, 320, 57);
+
     
     [UIView commitAnimations];
 
@@ -590,51 +583,59 @@
 
 - (void) hideStamp
 {    
-    if (isSnsLoginView == YES) {
-        [UIView beginAnimations:@"HideSnsLoginView" context:nil];
-        [UIView setAnimationDuration:1.0f];
-        [UIView setAnimationDelegate:self];
-        
-        isSnsLoginView = NO;
-        
-        snsView_p.frame = CGRectMake(0, -480, 320, 480);
-        snsView_l.frame = CGRectMake(0, -320, 480, 320);
-        
-        [snsView_p setAlpha:0.0f];
-        [snsView_l setAlpha:0.0f];
-        
-        [UIView commitAnimations];
-        
-        
-    } else {
-        [UIView beginAnimations:@"hideStamp" context:nil];
-        [UIView setAnimationDuration:1.0f];
-        [UIView setAnimationDelegate:self];
-        [UIView setAnimationDidStopSelector:@selector(scmAdAnimationFinished:finished:context:)];
-        
-        self.view.frame = CGRectMake(0, -530, 480, 530);
-        
-        [UIView commitAnimations];
-        
-    }
+
+    [self buttonHidden:YES];
+    
+    [UIImageView beginAnimations:@"hideStamp" context:nil];
+    [UIImageView setAnimationDuration:1];
+    [UIImageView setAnimationDelegate:self];
+    [UIView setAnimationDidStopSelector:@selector(scmAdAnimationFinished:finished:context:)];
+
+    stampView_p.frame = CGRectMake(160, 0, 0, 0);
+    stampView_l.frame = CGRectMake(240, 0, 0, 0);
+    self.view.frame = CGRectMake(0, -57, 320, 57);
+    
+    [UIImageView commitAnimations];
     
     isNoCampaignView = NO;
 
+
 }
 
+-(void)hideSnsView
+{
+    [UIImageView beginAnimations:@"hideBanner" context:nil];
+    [UIImageView setAnimationDuration:0.5f];
+    [UIImageView setAnimationDelegate:self];
+
+    snsView_p.frame = CGRectMake(0, -480, 320, 480);
+    snsView_l.frame = CGRectMake(0, -320, 480, 320);
+    
+    [UIImageView commitAnimations];
+}
+
+- (void)buttonHidden:(BOOL)flag
+{
+    closeXButton_p.hidden = flag;
+    closeXButton_l.hidden = flag;
+    
+    twtIcon_p.hidden    = flag;
+    fbIcon_p.hidden     = flag;
+    twtIcon_l.hidden    = flag;
+    fbIcon_l.hidden     = flag;
+}
 
 - (void) createStampView
 {
     
-    [stampView_p setUserInteractionEnabled:YES];
     stampView_p.frame = CGRectMake(160, 0, 0, 0);
+    [stampView_p setUserInteractionEnabled:YES];
     
     bannerButton_p.frame = CGRectMake(0, 0, 320, 57);
     closeXButton_p.frame = CGRectMake(247, 32, 42, 42);
     
     [bannerButton_p addTarget:self action:@selector(showStamp) forControlEvents:UIControlEventTouchUpInside];
     [closeXButton_p addTarget:self action:@selector(hideStamp) forControlEvents:UIControlEventTouchUpInside];
-    closeXButton_p.hidden = YES;
     
     self.view.frame = CGRectMake(0, -57, 320, 57);
     [self.view addSubview:bannerButton_p];
@@ -659,9 +660,8 @@
     
     [bannerButton_l addTarget:self action:@selector(showStamp) forControlEvents:UIControlEventTouchUpInside];
     [closeXButton_l addTarget:self action:@selector(hideStamp) forControlEvents:UIControlEventTouchUpInside];
-    closeXButton_l.hidden = YES;
-    [closeXSns_p addTarget:self action:@selector(hidenSnsView) forControlEvents:UIControlEventTouchUpInside];
-    [closeXSns_l addTarget:self action:@selector(hidenSnsView) forControlEvents:UIControlEventTouchUpInside];
+    [closeXSns_p addTarget:self action:@selector(hideSnsView) forControlEvents:UIControlEventTouchUpInside];
+    [closeXSns_l addTarget:self action:@selector(hideSnsView) forControlEvents:UIControlEventTouchUpInside];
     closeXSns_p.frame = CGRectMake(247, 32, 42, 42);
     closeXSns_l.frame = CGRectMake(410, 32, 42, 42);
     
@@ -670,10 +670,7 @@
     [fbIcon_p addTarget:self action:@selector(scmFacebookLogin) forControlEvents:UIControlEventTouchUpInside];
     [fbIcon_l addTarget:self action:@selector(scmFacebookLogin) forControlEvents:UIControlEventTouchUpInside];
     
-    twtIcon_p.hidden = YES;
-    fbIcon_p.hidden = YES;
-    twtIcon_l.hidden = YES;
-    fbIcon_l.hidden = YES;
+    [self buttonHidden:YES];
     
     [stampView_p addSubview:twtIcon_p];
     [stampView_l addSubview:twtIcon_l];
@@ -737,7 +734,6 @@
         if (isMissedView)
             isMissedView = NO;
 
-        
         [self syncToServer];
         [[self scmMadsDelegate] scmAdViewDidFinish];
     }
@@ -802,7 +798,8 @@
                 [self scmAdPostToTwitter];
             }            
         }
-        
+            
+        [self buttonHidden:NO];
     }
 }
 
@@ -859,7 +856,7 @@
 {
         // Post first feed
     if (isMissedView == NO) {
-        //NSLog(@"SCM - Post to Facebook!");
+        NSLog(@"SCM - Post to Facebook!");
         NSString *fb_link = nil;
         NSString *fb_link_desc = nil;
         NSString *fb_ad_desc = nil;

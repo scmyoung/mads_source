@@ -16,6 +16,7 @@
 @property (nonatomic, strong) IBOutlet UITextField *textField;
 
 - (IBAction)show:(id)sender;
+- (IBAction)showMissed:(id)sender;
 - (IBAction)hide:(id)sender;
 
 @end

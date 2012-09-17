@@ -24,8 +24,14 @@
 
 - (IBAction)show:(id)sender
 {
-    [scmMads showScmMads:[textField.text intValue]];
+    [scmMads showScmMads:200];
 }
+
+- (IBAction)showMissed:(id)sender
+{
+    [scmMads showScmMads:20];
+}
+
 
 - (IBAction)hide:(id)sender
 {
