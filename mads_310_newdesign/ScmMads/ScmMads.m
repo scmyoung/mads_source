@@ -705,7 +705,7 @@
     // clear cached campaign files
     //[self clearCampaignFiles:[NSArray arrayWithObjects:IMG_STAMP_L, IMG_STAMP_P, SCM_AD_XML, nil]];
     [self clearCampaignFiles:[NSArray arrayWithObjects:IMG_BANNER_P, IMG_BANNER_MISSED_P
-                              IMG_STAMP_P, IMG_MISSED_P, IMG_BANNER_L, IMG_BANNER_MISSED_L, IMG_STAMP_L, IMG_MISSED_L,
+                              IMG_STAMP_P, IMG_MISSED_P, IMG_BANNER_L, IMG_BANNER_MISSED_L, IMG_STAMP_L, IMG_MISSED_L, SCM_AD_PLIST, SCM_SNS_PLIST,
                               SCM_AD_XML, nil]];
     
     // Download NoCampaign images if files don't exist in the Documentation Directory.
@@ -1057,6 +1057,13 @@
         //NSString* newStr = [[NSString alloc] initWithData:responseData
         //                                         encoding:NSUTF8StringEncoding];
         //NSLog(@"[scm] - Twitter Send DM Request Response Data: %@", newStr);
+        
+        NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
+        if ([fileMgr fileExistsAtPath:filePath]) {
+            dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+            [dictXmlInfo setObject:@"YES" forKey:@"digitalVoucher"];
+            [dictXmlInfo writeToFile:filePath atomically:YES];
+        }
         if (!error) {
             //NSLog(@"[scm] - Twitter Send DM Error with: %@", [error description]);
         }
