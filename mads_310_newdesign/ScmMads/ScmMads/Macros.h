@@ -43,11 +43,11 @@
 #define IMG_STAMP_L                 @"landscape_stamp.png"
 #define IMG_MISSED_L                @"landscape_stamp_missed.png"
 
-#define IMG_DEFAULT_P           @"scmdefault_portrait.png"
-#define IMG_DEFAULT_L           @"scmdefault_landscape.png"
+#define IMG_DEFAULT_P           @"portrait_default_stamp.png"
+#define IMG_DEFAULT_L           @"landscape_default_stamp.png"
 
-#define IMG_DEFAULT_BANNER_P    @"scmdefault_banner_portrait.png"
-#define IMG_DEFAULT_BANNER_L    @"scmdefault_banner_landscape.png"
+#define IMG_DEFAULT_BANNER_P    @"portrait_default_banner.png"
+#define IMG_DEFAULT_BANNER_L    @"landscape_default_banner.png"
 
 
 #define IMG_X_MARK                  @"xmark.png"

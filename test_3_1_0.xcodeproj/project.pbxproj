@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D4387F17160817DF0041F2BB /* ScmMads.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4387F16160817DF0041F2BB /* ScmMads.framework */; };
 		D443206915E676D000889F00 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D443206815E676D000889F00 /* Twitter.framework */; };
 		D443206C15E676D600889F00 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D443206B15E676D600889F00 /* Accounts.framework */; };
 		D470363615DD23DD000A287C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D470363515DD23DD000A287C /* UIKit.framework */; };
@@ -19,10 +20,10 @@
 		D470364C15DD23DD000A287C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D470364B15DD23DD000A287C /* ViewController.m */; };
 		D48E7EA015E6A29500170ED0 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D48E7E9F15E6A29500170ED0 /* libsqlite3.dylib */; };
 		E2172E9C16075C1700BA5923 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2172E9B16075C1700BA5923 /* FacebookSDK.framework */; };
-		E2172E9E16075D2400BA5923 /* ScmMads.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2172E9D16075D2400BA5923 /* ScmMads.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D4387F16160817DF0041F2BB /* ScmMads.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScmMads.framework; path = ../../../Desktop/ScmMads.framework; sourceTree = "<group>"; };
 		D443206815E676D000889F00 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		D443206B15E676D600889F00 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		D470363115DD23DD000A287C /* test_3_1_0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = test_3_1_0.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -40,7 +41,6 @@
 		D470364B15DD23DD000A287C /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		D48E7E9F15E6A29500170ED0 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		E2172E9B16075C1700BA5923 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = mads_310_newdesign/FacebookSDK.framework; sourceTree = "<group>"; };
-		E2172E9D16075D2400BA5923 /* ScmMads.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScmMads.framework; path = "../../../Library/Developer/Xcode/DerivedData/ScmMads-clxkzqqcwnvllrayvwlaowpepmat/Build/Products/Debug-iphoneos/ScmMads.embeddedframework/ScmMads.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,7 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2172E9E16075D2400BA5923 /* ScmMads.framework in Frameworks */,
+				D4387F17160817DF0041F2BB /* ScmMads.framework in Frameworks */,
 				E2172E9C16075C1700BA5923 /* FacebookSDK.framework in Frameworks */,
 				D48E7EA015E6A29500170ED0 /* libsqlite3.dylib in Frameworks */,
 				D443206C15E676D600889F00 /* Accounts.framework in Frameworks */,
@@ -65,7 +65,7 @@
 		D470362615DD23DD000A287C = {
 			isa = PBXGroup;
 			children = (
-				E2172E9D16075D2400BA5923 /* ScmMads.framework */,
+				D4387F16160817DF0041F2BB /* ScmMads.framework */,
 				E2172E9B16075C1700BA5923 /* FacebookSDK.framework */,
 				D48E7E9F15E6A29500170ED0 /* libsqlite3.dylib */,
 				D443206B15E676D600889F00 /* Accounts.framework */,
@@ -267,6 +267,8 @@
 					"\"$(SRCROOT)/../../FacebookSDK\"",
 					"\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/ScmMads-clxkzqqcwnvllrayvwlaowpepmat/Build/Products/Debug-iphoneos/ScmMads.embeddedframework\"",
 					"\"$(SRCROOT)/mads_310_newdesign\"",
+					"\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/ScmMads-cwlwlrfzrxkwlgbqlsjqdybcudpu/Build/Products/Debug-iphoneos/ScmMads.embeddedframework\"",
+					"\"$(SRCROOT)/../../../Desktop\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "test_3_1_0/test_3_1_0-Prefix.pch";
@@ -285,6 +287,8 @@
 					"\"$(SRCROOT)/../../FacebookSDK\"",
 					"\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/ScmMads-clxkzqqcwnvllrayvwlaowpepmat/Build/Products/Debug-iphoneos/ScmMads.embeddedframework\"",
 					"\"$(SRCROOT)/mads_310_newdesign\"",
+					"\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/ScmMads-cwlwlrfzrxkwlgbqlsjqdybcudpu/Build/Products/Debug-iphoneos/ScmMads.embeddedframework\"",
+					"\"$(SRCROOT)/../../../Desktop\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "test_3_1_0/test_3_1_0-Prefix.pch";

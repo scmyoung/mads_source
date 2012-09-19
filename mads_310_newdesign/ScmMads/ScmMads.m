@@ -275,7 +275,7 @@
             isNoCampaignView = YES;
             
             NSArray *defaultFiles = [[NSArray alloc] initWithObjects:IMG_DEFAULT_P, IMG_DEFAULT_L,
-                                     IMG_X_MARK, nil];
+                                     IMG_DEFAULT_BANNER_P, IMG_DEFAULT_BANNER_L, IMG_X_MARK, nil];
             [self downloadFiles:defaultFiles campaignPath:@"NoCampaign"];
         
         } else if ([responseStr isEqualToString:@"SameCampaign"]) {
@@ -303,6 +303,8 @@
 
 - (id) initScmMads
 {
+    NSLog(@"[scm]: Init ScmMads!");
+    
     self=[super init];
     
     self.view.frame = CGRectMake(0, -530, 480, 530);
@@ -468,9 +470,14 @@
                                                           [docPath stringByAppendingPathComponent:IMG_DEFAULT_P]]]];
             [stampView_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
                                                           [docPath stringByAppendingPathComponent:IMG_DEFAULT_L]]]];
+
+
+            
             [bannerButton_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_DEFAULT_BANNER_P]]] forState:UIControlStateNormal];
             
             [bannerButton_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_DEFAULT_BANNER_L]]] forState:UIControlStateNormal];
+            
+            
             
         } else if (points >= hurdlePoint) {
             [stampView_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
@@ -560,20 +567,24 @@
 }
 
 - (void) showStamp
-{    
+{
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if (orientation == UIDeviceOrientationPortrait) {
+        self.view.frame = CGRectMake(0, 0, 320, 480);
+    } else {
+        self.view.frame = CGRectMake(0, 0, 480, 320);
+    }
+    
     [UIImageView beginAnimations:@"showStamp" context:nil];
     [UIImageView setAnimationDuration:1];
     [UIImageView setAnimationDelegate:self];
     [UIView setAnimationDidStopSelector:@selector(scmAdAnimationFinished:finished:context:)];
 
-    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
     if (orientation == UIDeviceOrientationPortrait) {
         bannerButton_p.hidden = YES;
-        self.view.frame = CGRectMake(0, 0, 320, 480);
         stampView_p.frame = CGRectMake(0, 0, 320, 480);
     } else  {
         bannerButton_l.hidden = YES;
-        self.view.frame = CGRectMake(0, 0, 480, 320);
         stampView_l.frame = CGRectMake(0, 0, 480, 320);
     }
     
@@ -591,8 +602,8 @@
     [UIImageView setAnimationDelegate:self];
     [UIView setAnimationDidStopSelector:@selector(scmAdAnimationFinished:finished:context:)];
 
-    stampView_p.frame = CGRectMake(160, 0, 0, 0);
-    stampView_l.frame = CGRectMake(240, 0, 0, 0);
+    stampView_p.frame = CGRectMake(160, 240, 0, 0);
+    stampView_l.frame = CGRectMake(240, 160, 0, 0);
     self.view.frame = CGRectMake(0, -57, 320, 57);
     
     [UIImageView commitAnimations];
@@ -602,7 +613,7 @@
 
 }
 
--(void)hideSnsView
+-(void) hideSnsView
 {
     [UIImageView beginAnimations:@"hideBanner" context:nil];
     [UIImageView setAnimationDuration:0.5f];
@@ -614,7 +625,7 @@
     [UIImageView commitAnimations];
 }
 
-- (void)buttonHidden:(BOOL)flag
+- (void) buttonHidden:(BOOL)flag
 {
     closeXButton_p.hidden = flag;
     closeXButton_l.hidden = flag;
@@ -628,7 +639,7 @@
 - (void) createStampView
 {
     
-    stampView_p.frame = CGRectMake(160, 0, 0, 0);
+    stampView_p.frame = CGRectMake(160, 240, 0, 0);
     [stampView_p setUserInteractionEnabled:YES];
     
     bannerButton_p.frame = CGRectMake(0, 0, 320, 57);
@@ -647,7 +658,7 @@
     
     
     [stampView_l setUserInteractionEnabled:YES];
-    stampView_l.frame = CGRectMake(240, 0, 0, 0);
+    stampView_l.frame = CGRectMake(240, 160, 0, 0);
 
     bannerButton_l.frame = CGRectMake(0, 0, 480, 57);
     closeXButton_l.frame = CGRectMake(410, 32, 42, 42);
@@ -738,6 +749,14 @@
         [[self scmMadsDelegate] scmAdViewDidFinish];
     }
     
+    if ([animationID isEqualToString:@"showStamp"] && isNoCampaignView == YES) {
+        NSLog(@"[scm]: is No Campaign View");
+        [self buttonHidden:YES];
+        
+        closeXButton_p.hidden = NO;
+        closeXButton_l.hidden = NO;
+    }
+    
     if ([animationID isEqualToString:@"showStamp"] && isNoCampaignView == NO) {
         // Save click impressions
         // Save stampsCounter to Plist file
@@ -799,8 +818,13 @@
             }            
         }
             
+        NSLog(@"Button Hidden ========== NO");
         [self buttonHidden:NO];
+        
+        
     }
+    
+    
 }
 
 - (BOOL) checkForPreviouslySavedAccessTokenInfo
