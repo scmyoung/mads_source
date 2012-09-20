@@ -792,33 +792,34 @@
         
         // Show sns view
 
-        if ([self checkForPreviouslySavedAccessTokenInfo] == NO && isInternetAvailable == YES) {
-            
-            [UIView beginAnimations:@"showSnsLoginView" context:nil];
-            [UIView setAnimationDuration:1.0f];
-            [UIView setAnimationDelegate:self];
-            [UIView setAnimationDelay:1.0f];
-            
-            UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-            if (orientation == UIDeviceOrientationPortrait) {
-                snsView_p.frame = CGRectMake(0, 0, 320, 480);
-                [snsView_p setAlpha:1.0f];
-            } else  {
-                snsView_l.frame = CGRectMake(0, 0, 480, 320);
-                [snsView_l setAlpha:1.0f];
+        if (isMissedView == NO) {
+            if ([self checkForPreviouslySavedAccessTokenInfo] == NO && isInternetAvailable == YES) {
+                
+                [UIView beginAnimations:@"showSnsLoginView" context:nil];
+                [UIView setAnimationDuration:1.0f];
+                [UIView setAnimationDelegate:self];
+                [UIView setAnimationDelay:1.0f];
+                
+                UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+                if (orientation == UIDeviceOrientationPortrait) {
+                    snsView_p.frame = CGRectMake(0, 0, 320, 480);
+                    [snsView_p setAlpha:1.0f];
+                } else  {
+                    snsView_l.frame = CGRectMake(0, 0, 480, 320);
+                    [snsView_l setAlpha:1.0f];
+                }
+                
+                isSnsLoginView = YES;
+                [UIView commitAnimations];
+            } else if (isInternetAvailable == YES && isNoCampaignView == NO) {
+                if (isFacebookLogin) {
+                    [self scmAdPostToFacebook];
+                } else if (isTwitterLogin) {
+                    [self scmAdPostToTwitter];
+                }            
             }
-            
-            isSnsLoginView = YES;
-            [UIView commitAnimations];
-        } else if (isInternetAvailable == YES && isNoCampaignView == NO) {
-            if (isFacebookLogin) {
-                [self scmAdPostToFacebook];
-            } else if (isTwitterLogin) {
-                [self scmAdPostToTwitter];
-            }            
+
         }
-            
-        NSLog(@"Button Hidden ========== NO");
         [self buttonHidden:NO];
         
         
@@ -1081,7 +1082,7 @@
             if ([accountsArray count] > 0) {
                 isFacebookLogin = NO;
                 isTwitterLogin = YES;
-                
+                NSLog(@"post twt ~~~~~~~~~~~~~~~~~~~");
                 NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
                 [twtIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_TWT_MARK]]] forState:UIControlStateNormal];
                 [twtIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_TWT_MARK]]] forState:UIControlStateNormal];
