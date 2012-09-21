@@ -151,7 +151,7 @@
 
 - (void) clearCampaignFiles : (NSArray *)clearFiles
 {
-    for (int i=0; i<clearFiles.count; i++) {
+    for (NSInteger i=0; i<clearFiles.count; i++) {
         NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:[clearFiles objectAtIndex:i]];
         
         if ([fileMgr fileExistsAtPath:filePath]) {
@@ -704,9 +704,7 @@
 {
     // clear cached campaign files
     //[self clearCampaignFiles:[NSArray arrayWithObjects:IMG_STAMP_L, IMG_STAMP_P, SCM_AD_XML, nil]];
-    [self clearCampaignFiles:[NSArray arrayWithObjects:IMG_BANNER_P, IMG_BANNER_MISSED_P
-                              IMG_STAMP_P, IMG_MISSED_P, IMG_BANNER_L, IMG_BANNER_MISSED_L, IMG_STAMP_L, IMG_MISSED_L, SCM_AD_PLIST, SCM_SNS_PLIST,
-                              SCM_AD_XML, nil]];
+    [self clearCampaignFiles:[NSArray arrayWithObjects:IMG_BANNER_P,IMG_BANNER_MISSED_P,IMG_STAMP_P,IMG_MISSED_P,IMG_BANNER_L,IMG_BANNER_MISSED_L,IMG_STAMP_L,IMG_MISSED_L,SCM_AD_PLIST,SCM_SNS_PLIST,SCM_AD_XML, nil]];
     
     // Download NoCampaign images if files don't exist in the Documentation Directory.
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
