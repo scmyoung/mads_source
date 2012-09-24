@@ -519,34 +519,36 @@
                 dictXmlInfo = nil;
             }
         }
-    
+        
+        [UIView beginAnimations:@"showBanner" context:nil];
+        [UIView setAnimationDuration:0.5f];
+        [UIView setAnimationDelegate:self];
+        
+        currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+        if (currentOrientation == UIDeviceOrientationPortrait) {
+            bannerButton_l.hidden = YES;
+            stampView_l.hidden = YES;
+            bannerButton_p.hidden = NO;
+            stampView_p.hidden = NO;
+            
+            self.view.frame = CGRectMake(0, 0, 320, 57);
+        }
+        else{
+            bannerButton_p.hidden = YES;
+            stampView_p.hidden = YES;
+            bannerButton_l.hidden = NO;
+            stampView_l.hidden = NO;
+            
+            self.view.frame = CGRectMake(0, 0, 480, 57);
+        }
+        
+        [UIView commitAnimations];
+        
+        isDownloadOk = NO;
         isDownloading = NO;
     }
     
-    [UIView beginAnimations:@"showBanner" context:nil];
-    [UIView setAnimationDuration:0.5f];
-    [UIView setAnimationDelegate:self];
     
-    currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
-    if (currentOrientation == UIDeviceOrientationPortrait) {
-        bannerButton_l.hidden = YES;
-        stampView_l.hidden = YES;
-        bannerButton_p.hidden = NO;
-        stampView_p.hidden = NO;
-        
-        self.view.frame = CGRectMake(0, 0, 320, 57);
-    }
-    else{
-        bannerButton_p.hidden = YES;
-        stampView_p.hidden = YES;
-        bannerButton_l.hidden = NO;
-        stampView_l.hidden = NO;
-        
-        self.view.frame = CGRectMake(0, 0, 480, 57);
-    }
-    
-    [UIView commitAnimations];
-
 }
 
 - (void) hideScmMads
@@ -568,6 +570,9 @@
 
 - (void) showStamp
 {
+    [[self scmMadsDelegate] scmAdViewDidFinish];
+
+    
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
     if (orientation == UIDeviceOrientationPortrait) {
         self.view.frame = CGRectMake(0, 0, 320, 480);
