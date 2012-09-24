@@ -441,7 +441,7 @@
 - (void) showScmMads:(NSInteger)points
 {
     
-    [[self scmMadsDelegate] scmAdBannerWillShow];
+    [[self scmMadsDelegate] scmMadsBannerWillShow];
         
     // Check for Country Code First
     if (isCountryCodeMatch == NO) {
@@ -570,7 +570,7 @@
 
 - (void) showStamp
 {
-    [[self scmMadsDelegate] scmAdViewDidFinish];
+    [[self scmMadsDelegate] scmMadsViewWillShow];
 
     
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
@@ -749,7 +749,7 @@
             isMissedView = NO;
 
         [self syncToServer];
-        [[self scmMadsDelegate] scmAdViewDidFinish];
+        [[self scmMadsDelegate] scmMadsViewDidFinish];
     }
     
     if ([animationID isEqualToString:@"showStamp"] && isNoCampaignView == YES) {

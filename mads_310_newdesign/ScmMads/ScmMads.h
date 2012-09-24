@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @protocol ScmMadsDelegate <NSObject>
-- (void)scmAdViewWillShow;
-- (void)scmAdViewDidFinish;
-- (void)scmAdBannerWillShow;
+- (void)scmMadsViewWillShow;
+- (void)scmMadsViewDidFinish;
+- (void)scmMadsBannerWillShow;
 @end
 
 @interface ScmMads : UIViewController
