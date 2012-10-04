@@ -22,8 +22,8 @@
 - (id) init {
     
     self = [super init];
-    alert_dv_fb = [[UIAlertView alloc] initWithTitle:@"SecondCommercials" message:@"Congrats! We've just issued a digital coupon for you! Please check your Facebook account email!" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:@"Redeem", nil];
-    alert_dv_tw = [[UIAlertView alloc] initWithTitle:@"SecondCommercials" message:@"Congrats! We've just issued a digital coupon for you! Please check your Twitter Direct Message!" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:@"Redeem", nil];
+    alert_dv_fb = [[UIAlertView alloc] initWithTitle:@"SecondCommercials" message:@"Congrats! Just issued a digital coupon for you!!" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:@"Redeem", nil];
+    alert_dv_tw = [[UIAlertView alloc] initWithTitle:@"SecondCommercials" message:@"Congrats! Just issued a digital coupon for you!!" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:@"Redeem", nil];
     
     return self;
 }
