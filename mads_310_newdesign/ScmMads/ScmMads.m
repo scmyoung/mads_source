@@ -314,9 +314,6 @@
     fileMgr = [[NSFileManager alloc] init];
     utilities = [[Utilities alloc] init];
     phoneCountryCode = [[NSLocale currentLocale] objectForKey: NSLocaleCountryCode];
-    // Twitter Initiation
-    twHandler = [[TwitterHandler alloc] init];
-    twController = [[TWTweetComposeViewController alloc]init];
     accountStore = [[ACAccountStore alloc] init];
     
     isCountryCodeMatch  = YES;
@@ -347,10 +344,7 @@
     
     closeXSns_p = [UIButton buttonWithType:UIButtonTypeCustom];
     closeXSns_l = [UIButton buttonWithType:UIButtonTypeCustom];
-    
-    twController = [[TWTweetComposeViewController alloc]init];
-    accountStore = [[ACAccountStore alloc] init];
-    
+        
     twtButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
     fbButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
     twtButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
