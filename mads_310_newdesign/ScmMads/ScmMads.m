@@ -36,6 +36,9 @@
     UIButton *closeArrowButton_l;
      */
     
+    UIAlertView *alert_dv_fb;
+    UIAlertView *alert_dv_tw;
+    
     UIImageView *stampView_p;
     UIImageView *stampView_l;
     UIImageView *snsView_p;
@@ -306,6 +309,11 @@
     NSLog(@"[scm]: Init ScmMads!");
     
     self=[super init];
+    
+    // *** really temp, it doesn't work on iOS6
+    alert_dv_fb = [[UIAlertView alloc] initWithTitle:@"SecondCommercials" message:@"Congrats! Just issued a digital coupon for you!!" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:@"Redeem", nil];
+    alert_dv_tw = [[UIAlertView alloc] initWithTitle:@"SecondCommercials" message:@"Congrats! Just issued a digital coupon for you!!" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:@"Redeem", nil];
+    // *** TODO Fix it
     
     self.view.frame = CGRectMake(0, -530, 480, 530);
     [self.view setUserInteractionEnabled:YES];
@@ -933,14 +941,14 @@
                 if (fb_email && fb_name) {
                     digitalVoucher = @"YES";
                     [self sendMailToServer:fb_email withName:fb_name];
-                    [utilities.alert_dv_fb show];
+                    [alert_dv_fb show];
                 }
                 
                 fbContainer = nil;
             }
             
             NSLog(@"Alert view -----------------");
-            [utilities.alert_dv_fb show];
+            [alert_dv_fb show];
         }
     }
 }
@@ -1104,7 +1112,7 @@
                         NSString *dmText = [[dictXmlInfo objectForKey:@"tw_dm"]
                                             stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                         [self twSendDirectMessage:dmText];
-                        [utilities.alert_dv_tw show];
+                        [alert_dv_tw show];
                         
                         dictXmlInfo = nil;
                     }

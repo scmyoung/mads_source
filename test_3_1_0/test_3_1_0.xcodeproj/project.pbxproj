@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2C2BF900161D611A000610F4 /* ScmMads.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2BF8FF161D611A000610F4 /* ScmMads.framework */; };
 		2C2BF902161D6174000610F4 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2BF901161D6174000610F4 /* FacebookSDK.framework */; };
+		2CB8EB1E161DFDBD003FADA6 /* ScmMads.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CB8EB1D161DFDBD003FADA6 /* ScmMads.framework */; };
 		D443206915E676D000889F00 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D443206815E676D000889F00 /* Twitter.framework */; };
 		D443206C15E676D600889F00 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D443206B15E676D600889F00 /* Accounts.framework */; };
 		D470363615DD23DD000A287C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D470363515DD23DD000A287C /* UIKit.framework */; };
@@ -23,8 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2C2BF8FF161D611A000610F4 /* ScmMads.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScmMads.framework; path = ../../../../Desktop/ScmMads.framework; sourceTree = "<group>"; };
 		2C2BF901161D6174000610F4 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		2CB8EB1D161DFDBD003FADA6 /* ScmMads.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScmMads.framework; path = ../../../../../Desktop/ScmMads.framework; sourceTree = "<group>"; };
 		D443206815E676D000889F00 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		D443206B15E676D600889F00 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		D470363115DD23DD000A287C /* test_3_1_0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = test_3_1_0.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -48,8 +48,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CB8EB1E161DFDBD003FADA6 /* ScmMads.framework in Frameworks */,
 				2C2BF902161D6174000610F4 /* FacebookSDK.framework in Frameworks */,
-				2C2BF900161D611A000610F4 /* ScmMads.framework in Frameworks */,
 				D48E7EA015E6A29500170ED0 /* libsqlite3.dylib in Frameworks */,
 				D443206C15E676D600889F00 /* Accounts.framework in Frameworks */,
 				D443206915E676D000889F00 /* Twitter.framework in Frameworks */,
@@ -65,8 +65,8 @@
 		D470362615DD23DD000A287C = {
 			isa = PBXGroup;
 			children = (
+				2CB8EB1D161DFDBD003FADA6 /* ScmMads.framework */,
 				2C2BF901161D6174000610F4 /* FacebookSDK.framework */,
-				2C2BF8FF161D611A000610F4 /* ScmMads.framework */,
 				D48E7E9F15E6A29500170ED0 /* libsqlite3.dylib */,
 				D443206B15E676D600889F00 /* Accounts.framework */,
 				D443206815E676D000889F00 /* Twitter.framework */,
@@ -273,6 +273,7 @@
 					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/ScmMads-clxkzqqcwnvllrayvwlaowpepmat/Build/Products/Debug-iphoneos/ScmMads.embeddedframework\"",
 					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/ScmMads-bteeknbdivridehhybvmgwxvammv/Build/Products/Debug-iphoneos/ScmMads.embeddedframework\"",
 					"\"$(SRCROOT)/../../../../Desktop\"",
+					"\"$(SRCROOT)/../../../../../Desktop\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "test_3_1_0/test_3_1_0-Prefix.pch";
@@ -297,6 +298,7 @@
 					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/ScmMads-clxkzqqcwnvllrayvwlaowpepmat/Build/Products/Debug-iphoneos/ScmMads.embeddedframework\"",
 					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/ScmMads-bteeknbdivridehhybvmgwxvammv/Build/Products/Debug-iphoneos/ScmMads.embeddedframework\"",
 					"\"$(SRCROOT)/../../../../Desktop\"",
+					"\"$(SRCROOT)/../../../../../Desktop\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "test_3_1_0/test_3_1_0-Prefix.pch";
