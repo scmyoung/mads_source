@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <PassKit/PassKit.h>
 
 @protocol ScmMadsDelegate <NSObject>
 - (void)scmMadsViewWillShow;
@@ -14,7 +15,7 @@
 - (void)scmMadsBannerWillShow;
 @end
 
-@interface ScmMads : UIViewController
+@interface ScmMads : UIViewController<PKAddPassesViewControllerDelegate>
 
 
 @property (strong,nonatomic) id<ScmMadsDelegate> scmMadsDelegate;

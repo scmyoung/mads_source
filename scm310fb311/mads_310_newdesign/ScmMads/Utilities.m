@@ -18,13 +18,15 @@
 @synthesize xmlContainer;
 @synthesize alert_dv_fb;
 @synthesize alert_dv_tw;
+@synthesize alert_logPs;
 
 - (id) init {
     
     self = [super init];
     alert_dv_fb = [[UIAlertView alloc] initWithTitle:@"SecondCommercials" message:@"Congrats! Just issued a digital coupon for you!!" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:@"Redeem", nil];
     alert_dv_tw = [[UIAlertView alloc] initWithTitle:@"SecondCommercials" message:@"Congrats! Just issued a digital coupon for you!!" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:@"Redeem", nil];
-    
+    alert_logPs = [[UIAlertView alloc] initWithTitle:@"secondCommercials" message:@"passbook" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:nil, nil];
+
     return self;
 }
 
@@ -36,23 +38,33 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == 0) {
+    if (alertView == alert_dv_fb || alert_dv_tw ==alertView)
+    {
         
-    } else if (buttonIndex == 1) {
+    
+        if (buttonIndex == 0) {
         
-        NSString *redeemUrl = @"";
-        NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES)
+        } else if (buttonIndex == 1) {
+        
+            NSString *redeemUrl = @"";
+            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES)
                                objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
-        if ([fileMgr fileExistsAtPath:filePath]) {
-            NSMutableDictionary *dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
-            //redeemUrl = [dictXmlInfo objectForKey:@"redeem_link"];
-            redeemUrl = [self stringByDecodingURLFormat:[dictXmlInfo objectForKey:@"redeem_link"]];
-            dictXmlInfo = nil;
-        }
+            if ([fileMgr fileExistsAtPath:filePath]) {
+                NSMutableDictionary *dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+                //redeemUrl = [dictXmlInfo objectForKey:@"redeem_link"];
+                redeemUrl = [self stringByDecodingURLFormat:[dictXmlInfo objectForKey:@"redeem_link"]];
+                dictXmlInfo = nil;
+            }
 
-        NSLog(@"URL: %@", redeemUrl);
-        NSURL *url = [NSURL URLWithString:[redeemUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-        [[UIApplication sharedApplication] openURL:url];
+            NSLog(@"URL: %@", redeemUrl);
+            NSURL *url = [NSURL URLWithString:[redeemUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+            [[UIApplication sharedApplication] openURL:url];
+        }
+    }
+    
+    if (alertView == alert_logPs) {
+        NSLog(@"alert_logPs");
+        
     }
 }
 

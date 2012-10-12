@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSMutableDictionary *xmlContainer;
 @property (nonatomic, strong) UIAlertView *alert_dv_fb;
 @property (nonatomic, strong) UIAlertView *alert_dv_tw;
+@property (nonatomic, strong) UIAlertView *alert_logPs;
 
 - (NSString *)getCurrentDateTime;
 - (void)parseScmAdXmlFile: (NSData *)fileData;

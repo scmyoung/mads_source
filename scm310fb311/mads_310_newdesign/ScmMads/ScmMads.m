@@ -13,6 +13,7 @@
 #import <FacebookSDK/FacebookSDK.h>
 
 
+
 @interface ScmMads ()
 {
     /*
@@ -60,6 +61,10 @@
     UIButton *twtIcon_l;
     UIButton *fbIcon_p;
     UIButton *fbIcon_l;
+    
+    UIButton *PassBook_p;
+    UIButton *passBook_l;
+    
     
     
     // ------------------------
@@ -289,7 +294,8 @@
             
         } else {
             NSLog(@"[scm]: New Campaign ---- %@", responseStr);
-            NSArray *campaignFiles = [[NSArray alloc] initWithObjects:IMG_SNS_CONNECT_P, IMG_STAMP_P, IMG_MISSED_P, IMG_X_MARK, SCM_AD_XML, IMG_DEFAULT_P, IMG_SNS_CONNECT_L, IMG_STAMP_L, IMG_MISSED_L, IMG_DEFAULT_L, IMG_TWT_MARK, IMG_FB_MARK, IMG_BANNER_MISSED_L, IMG_BANNER_MISSED_P, IMG_BANNER_L, IMG_BANNER_P, nil];
+            NSArray *campaignFiles = [[NSArray alloc] initWithObjects:IMG_SNS_CONNECT_P, IMG_STAMP_P, IMG_MISSED_P, IMG_X_MARK, SCM_AD_XML, IMG_DEFAULT_P, IMG_SNS_CONNECT_L, IMG_STAMP_L, IMG_MISSED_L, IMG_DEFAULT_L, IMG_TWT_MARK, IMG_FB_MARK, IMG_BANNER_MISSED_L, IMG_BANNER_MISSED_P, IMG_BANNER_L, IMG_BANNER_P,
+                                      PASSBOOK_PKG, IMG_PB_BADGE, IMG_Q10_BADGE, nil];
             [self downloadFiles:campaignFiles campaignPath:responseStr];
         }
         isInternetAvailable = YES;
@@ -303,7 +309,8 @@
 
 - (id) initScmMads
 {
-    NSLog(@"[scm]: Init ScmMads!");
+    NSLog(@"[scm]: Init ScmMads!!!!!");
+    NSLog(@"scm init");
     
     self=[super init];
     
@@ -349,10 +356,23 @@
     fbButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
     twtButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
     fbButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    PassBook_p = [UIButton buttonWithType:UIButtonTypeCustom];
+    passBook_l = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    
     twtButton_p.frame = CGRectMake(36, 297, 245, 42);
     twtButton_l.frame = CGRectMake(124, 204, 245, 42);
     fbButton_p.frame = CGRectMake(36, 254, 245, 42);
     fbButton_l.frame = CGRectMake(124, 162, 245, 42);
+    
+    
+    PassBook_p.frame = CGRectMake(54, 330, 123, 40);
+    passBook_l.frame = CGRectMake(0, 0, 0, 0);
+    
+    
+    [PassBook_p addTarget:self action:@selector(showPassbook) forControlEvents:UIControlEventTouchUpInside];
+    [passBook_l addTarget:self action:@selector(showPassbook) forControlEvents:UIControlEventTouchUpInside];
     
     twtIcon_p = [[UIButton alloc]initWithFrame:CGRectMake(229, 386, 42, 42)];
     twtIcon_l = [[UIButton alloc]initWithFrame:CGRectMake(388, 246, 42, 42)];
@@ -467,6 +487,12 @@
         [closeXButton_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_X_MARK]]] forState:UIControlStateNormal];
         [closeXSns_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_X_MARK]]] forState:UIControlStateNormal];
         [closeXSns_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_X_MARK]]] forState:UIControlStateNormal];
+        if ([PKPassLibrary isPassLibraryAvailable]) {
+            [PassBook_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_PB_BADGE]]] forState:UIControlStateNormal];
+        }else{
+            
+            [PassBook_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_Q10_BADGE]]] forState:UIControlStateNormal];
+        }
         
         // No Campaign Default View
         if (isNoCampaignView == YES) {
@@ -486,6 +512,8 @@
         } else if (points >= hurdlePoint) {
             [stampView_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
                                                           [docPath stringByAppendingPathComponent:IMG_STAMP_P]]]];
+            
+            
             [stampView_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
                                                           [docPath stringByAppendingPathComponent:IMG_STAMP_L]]]];
             [bannerButton_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_BANNER_P]]] forState:UIControlStateNormal];
@@ -643,6 +671,9 @@
     fbIcon_p.hidden     = flag;
     twtIcon_l.hidden    = flag;
     fbIcon_l.hidden     = flag;
+    PassBook_p.hidden   = flag;
+    passBook_l.hidden   = flag;
+    
 }
 
 - (void) createStampView
@@ -696,6 +727,8 @@
     [stampView_l addSubview:twtIcon_l];
     [stampView_p addSubview:fbIcon_p];
     [stampView_l addSubview:fbIcon_l];
+    [stampView_p addSubview:PassBook_p];
+    [stampView_l addSubview:passBook_l];
     
     [snsView_p addSubview:closeXSns_p];
     [snsView_l addSubview:closeXSns_l];
@@ -713,7 +746,7 @@
 {
     // clear cached campaign files
     //[self clearCampaignFiles:[NSArray arrayWithObjects:IMG_STAMP_L, IMG_STAMP_P, SCM_AD_XML, nil]];
-    [self clearCampaignFiles:[NSArray arrayWithObjects:IMG_BANNER_P,IMG_BANNER_MISSED_P,IMG_STAMP_P,IMG_MISSED_P,IMG_BANNER_L,IMG_BANNER_MISSED_L,IMG_STAMP_L,IMG_MISSED_L,SCM_AD_PLIST,SCM_AD_XML, nil]];
+    [self clearCampaignFiles:[NSArray arrayWithObjects:IMG_BANNER_P,IMG_BANNER_MISSED_P,IMG_STAMP_P,IMG_MISSED_P,IMG_BANNER_L,IMG_BANNER_MISSED_L,IMG_STAMP_L,IMG_MISSED_L,SCM_AD_PLIST,SCM_AD_XML, PASSBOOK_PKG, nil]];
     
     // Download NoCampaign images if files don't exist in the Documentation Directory.
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -1233,6 +1266,38 @@
 
     }
 }
+
+
+
+
+- (void)showPassbook
+{
+    
+    if ([PKPassLibrary isPassLibraryAvailable]) {
+        
+        NSString* passFile = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
+        NSData *passData = [NSData dataWithContentsOfFile:[passFile stringByAppendingPathComponent:PASSBOOK_PKG]];
+        PKPass *pass = [[PKPass alloc] initWithData:passData error:nil];
+        
+        PKAddPassesViewController *addPassViewController =
+        [[PKAddPassesViewController alloc] initWithPass:pass];
+        addPassViewController.delegate = self;
+        
+        [self presentViewController:addPassViewController
+                           animated:YES
+                         completion:nil];
+    }
+    else{
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"http://Qoo10.com"]];
+
+    }
+}
+-(void)addPassesViewControllerDidFinish:(PKAddPassesViewController *)controller
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+
 
 
 @end
