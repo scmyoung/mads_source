@@ -17,8 +17,6 @@
 @synthesize scmMads;
 @synthesize textField;
 
-
-
 -(IBAction)textFieldReturn:(id)sender
 {
     [sender resignFirstResponder];
@@ -27,7 +25,6 @@
 - (IBAction)show:(id)sender
 {
     [scmMads showScmMads:200];
-    
 }
 
 - (IBAction)showMissed:(id)sender
@@ -46,7 +43,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
-    
+
     
     scmMads = [[ScmMads alloc] initScmMads];
     [self.view addSubview:scmMads.view];
