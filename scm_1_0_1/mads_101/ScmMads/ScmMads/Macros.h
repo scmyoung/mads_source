@@ -54,6 +54,10 @@
 #define IMG_TWT_MARK                    @"twt_pink.png"
 #define IMG_FB_MARK                     @"fb_blue.png"
 
+#define PASSBOOK_PKG                @"coupon.pkpass"
+#define IMG_PB_BADGE                @"pkbadge.png"
+#define IMG_Q10_BADGE               @"q10badge.png"
+
 // **** End of Images ****
 
 #define SCM_AD_XML              @"scmAdInfo.xml"
