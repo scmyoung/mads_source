@@ -165,10 +165,10 @@
     }
     
     // Remove PLIST too
-    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
+   /* NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
     if ([fileMgr fileExistsAtPath:filePath]) {
         [fileMgr removeItemAtPath:filePath error:nil];
-    }
+    }*/
 }
 
 
@@ -285,6 +285,7 @@
         
         } else if ([responseStr isEqualToString:@"SameCampaign"]) {
             NSLog(@"[scm]: Same Campaign!");
+            NSLog(@"same campaign!!!!!!!!!!!!!!!");
             isDownloadOk = YES;
         } else if ([responseStr isEqualToString:@"NoCountryCodeMatch"]) {
             NSLog(@"[scm]: Country Code Doesn't Match!");
@@ -368,7 +369,7 @@
     
     
     PassBook_p.frame = CGRectMake(53, 330, 160, 50);
-    passBook_l.frame = CGRectMake(53, 200, 160, 50);
+    passBook_l.frame = CGRectMake(300, 173, 160, 50);
     
     
     [PassBook_p addTarget:self action:@selector(showPassbook) forControlEvents:UIControlEventTouchUpInside];
@@ -475,10 +476,13 @@
     
     if (isDownloading == NO) {
         [self syncToServer];
+        if (isDownloadOk) {
+            NSLog(@"11111");
+        }
     }
 
     if (isDownloadOk == YES) {
-        
+        NSLog(@"ok into ");
         // User Document Directory Path
         NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
         [snsView_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_SNS_CONNECT_P]]]];
@@ -490,6 +494,7 @@
         
         // No Campaign Default View
         if (isNoCampaignView == YES) {
+            
             [stampView_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
                                                           [docPath stringByAppendingPathComponent:IMG_DEFAULT_P]]]];
             [stampView_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
@@ -516,8 +521,13 @@
             
             [stampView_p addSubview:PassBook_p];
             [stampView_l addSubview:passBook_l];
+            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES)
+                                   objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
+            dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
             
-            if ([PKPassLibrary isPassLibraryAvailable]) {
+            if ([[dictXmlInfo objectForKey:@"passbook"] isEqualToString:@"Y"]&&[PKPassLibrary isPassLibraryAvailable]) {
+        
+                
                 [PassBook_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_PB_BADGE]]] forState:UIControlStateNormal];
                 
                 [passBook_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_PB_BADGE]]] forState:UIControlStateNormal];
@@ -528,7 +538,7 @@
             }
             
             // Save stampsCounter to Plist file
-            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
+            filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
             if ([fileMgr fileExistsAtPath:filePath]) {
                 dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
                 [dictXmlInfo setObject:[[NSString alloc] initWithFormat:@"%d", ++stamp_banner_counter] forKey:@"stamp_banner_imp"];
@@ -605,7 +615,7 @@
 
     
     isNoCampaignView = NO;
-    isDownloadOk = NO;
+    //isDownloadOk = NO;
     isMissedView = NO;
 }
 
@@ -772,7 +782,8 @@
                 NSData *fileData = [NSData dataWithContentsOfURL:[NSURL URLWithString:strUrl]];
                 [fileData writeToFile:filePath atomically:YES];
                 
-                if ([fileMgr fileExistsAtPath:filePath] && [fileObject isEqualToString:SCM_AD_XML]) {
+                if ([fileMgr fileExistsAtPath:filePath] && [fileObject isEqualToString:SCM_AD_XML])
+                {
                     [utilities parseScmAdXmlFile:fileData];
                 }
             }
@@ -781,6 +792,9 @@
             isDownloading = NO;
             isDownloadOk = YES;
             isInternetAvailable = YES;
+            if (isDownloadOk) {
+                NSLog(@"downloadOK !!!!!!!");
+            }
         });
     });
 }
@@ -1281,8 +1295,12 @@
 
 - (void)showPassbook
 {
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES)
+                           objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
+    dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+
     
-    if ([PKPassLibrary isPassLibraryAvailable]) {
+    if ([[dictXmlInfo objectForKey:@"passbook"] isEqualToString:@"Y"]&&[PKPassLibrary isPassLibraryAvailable]) {
         
         NSString* passFile = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
         NSData *passData = [NSData dataWithContentsOfFile:[passFile stringByAppendingPathComponent:PASSBOOK_PKG]];
