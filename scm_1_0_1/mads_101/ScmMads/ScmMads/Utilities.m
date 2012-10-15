@@ -16,6 +16,7 @@
 
 @synthesize xmlParser;
 @synthesize xmlContainer;
+/*
 @synthesize alert_dv_fb;
 @synthesize alert_dv_tw;
 @synthesize alert_logPs;
@@ -28,12 +29,6 @@
     alert_logPs = [[UIAlertView alloc] initWithTitle:@"secondCommercials" message:@"passbook" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:nil, nil];
 
     return self;
-}
-
-- (NSString *)stringByDecodingURLFormat:(NSString *)input
-{
-    return [[input stringByReplacingOccurrencesOfString:@"+" withString:@" "]
-            stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -66,6 +61,11 @@
         NSLog(@"alert_logPs");
         
     }
+}*/
+- (NSString *)stringByDecodingURLFormat:(NSString *)input
+{
+    return [[input stringByReplacingOccurrencesOfString:@"+" withString:@" "]
+            stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 }
 
 - (NSString *)getCurrentDateTime

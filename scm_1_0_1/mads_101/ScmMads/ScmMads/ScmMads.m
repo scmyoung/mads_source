@@ -999,14 +999,14 @@
                 if (fb_email && fb_name) {
                     digitalVoucher = @"YES";
                     [self sendMailToServer:fb_email withName:fb_name];
-                    [utilities.alert_dv_fb show];
+                    //[utilities.alert_dv_fb show];
                 }
                 
                 fbContainer = nil;
             }
             
-            NSLog(@"Alert view -----------------");
-            [utilities.alert_dv_fb show];
+            //NSLog(@"Alert view -----------------");
+            //[utilities.alert_dv_fb show];
         }
     }
 }
@@ -1165,12 +1165,12 @@
     }];
     
 }
-
+/*
 - (void) showAlertView: (id)sns
 {
 
     [utilities.alert_dv_tw show];
-}
+}*/
 
 - (void) twSendDirectMessage: (NSString *) twDirectMessage
 {
@@ -1240,9 +1240,9 @@
                 }
                 
             }
-            [self performSelectorOnMainThread:@selector(showAlertView:)
+            /*[self performSelectorOnMainThread:@selector(showAlertView:)
                                    withObject:@"twitter"
-                                waitUntilDone:NO];
+                                waitUntilDone:NO];*/
             
         }
     }];
