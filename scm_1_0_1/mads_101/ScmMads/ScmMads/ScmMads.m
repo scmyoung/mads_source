@@ -301,9 +301,9 @@
         }
         isInternetAvailable = YES;
     } else if ([data length] ==0 && error == nil) {
-        NSLog(@"No Data");
+        NSLog(@"[scm]: No Data");
     } else if  (error) {
-        NSLog(@"Error: %@", error.description);
+        NSLog(@"[scm]: Error: %@", error.description);
     }
 
 }
@@ -311,7 +311,6 @@
 - (id) initScmMads
 {
     NSLog(@"[scm]: Init ScmMads!!!!!");
-    NSLog(@"scm init");
     
     self=[super init];
     
@@ -400,11 +399,6 @@
         isFacebookLogin = [[dictXmlInfo objectForKey:@"isFacebookLogin"] boolValue];
         isTwitterLogin = [[dictXmlInfo objectForKey:@"isTwitterLogin"] boolValue];
         
-        if (isFacebookLogin) {
-            NSLog(@"is Facebook Login");
-        } else {
-            NSLog(@"is Facebook Login NO");
-        }
     }
     if (isFacebookLogin == YES) {
         NSArray *permissions = [NSArray arrayWithObjects:@"publish_stream", @"email", nil];
@@ -476,13 +470,9 @@
     
     if (isDownloading == NO) {
         [self syncToServer];
-        if (isDownloadOk) {
-            NSLog(@"11111");
-        }
     }
 
     if (isDownloadOk == YES) {
-        NSLog(@"ok into ");
         // User Document Directory Path
         NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
         [snsView_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_SNS_CONNECT_P]]]];
@@ -792,9 +782,6 @@
             isDownloading = NO;
             isDownloadOk = YES;
             isInternetAvailable = YES;
-            if (isDownloadOk) {
-                NSLog(@"downloadOK !!!!!!!");
-            }
         });
     });
 }
@@ -944,7 +931,7 @@
 {
         // Post first feed
     if (isMissedView == NO) {
-        NSLog(@"SCM - Post to Facebook!");
+        NSLog(@"[scm]: Post to Facebook!");
         NSString *fb_link = nil;
         NSString *fb_link_desc = nil;
         NSString *fb_ad_desc = nil;
@@ -1005,7 +992,6 @@
                 fbContainer = nil;
             }
             
-            NSLog(@"Alert view -----------------");
             [utilities.alert_dv_fb show];
         }
     }
@@ -1208,7 +1194,7 @@
             if ([accountsArray count] > 0) {
                 isFacebookLogin = NO;
                 isTwitterLogin = YES;
-                NSLog(@"post twt ~~~~~~~~~~~~~~~~~~~");
+                NSLog(@"[scm]: Post to twitter");
                 NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
                 [twtIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_TWT_MARK]]] forState:UIControlStateNormal];
                 [twtIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_TWT_MARK]]] forState:UIControlStateNormal];
@@ -1227,7 +1213,6 @@
                         
                         NSString *stampText = [[dictXmlInfo objectForKey:@"tw_post"]
                                                stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-                        NSLog(@"twitter message: %@", stampText);
                         [self twSendUpdate:stampText];
                         
                         NSString *dmText = [[dictXmlInfo objectForKey:@"tw_dm"]
