@@ -31,13 +31,11 @@
 
 */
  
-#define IMG_SNS_CONNECT_P           @"portrait_connect.png"
 #define IMG_BANNER_P                @"portrait_banner.png"
 #define IMG_BANNER_MISSED_P         @"portrait_banner_missed.png"
 #define IMG_STAMP_P                 @"portrait_stamp.png"
 #define IMG_MISSED_P                @"portrait_stamp_missed.png"
 
-#define IMG_SNS_CONNECT_L           @"landscape_connect.png"
 #define IMG_BANNER_L                @"landscape_banner.png"
 #define IMG_BANNER_MISSED_L         @"landscape_banner_missed.png"
 #define IMG_STAMP_L                 @"landscape_stamp.png"
@@ -51,12 +49,21 @@
 
 
 #define IMG_X_MARK                  @"xmark.png"
-#define IMG_TWT_MARK                    @"twt_pink.png"
-#define IMG_FB_MARK                     @"fb_blue.png"
 
 #define PASSBOOK_PKG                @"coupon.pkpass"
 #define IMG_PB_BADGE                @"pkbadge.png"
 #define IMG_Q10_BADGE               @"q10badge.png"
+
+#define IMG_CONNECTED_FB_A                    @"connected_a_FB.png"
+#define IMG_CONNECTED_FB_B                    @"connected_b_FB.png"
+#define IMG_CONNECTED_TW_A                    @"connected_a_TWT.png"
+#define IMG_CONNECTED_TW_B                    @"connected_b_TWT.png"
+
+#define IMG_GET_FB                            @"get_FB.png"
+#define IMG_GET_TW                            @"get_TWT.png"
+
+
+
 
 // **** End of Images ****
 

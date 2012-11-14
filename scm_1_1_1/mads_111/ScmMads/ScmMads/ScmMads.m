@@ -16,31 +16,10 @@
 
 @interface ScmMads ()
 {
-    /*
-    UIImageView *stampView_p;   // portrait stamp view
-    UIImageView *stampView_l;   // landscape stamp view
-    
-    UIImageView *snsView_p;     // portrait sns view
-    UIImageView *snsView_l;     // landscape sns view
-    
-    UIButton *twButton_p;
-    UIButton *fbButton_p;
-    UIButton *twButton_l;
-    UIButton *fbButton_l;
-    
-    UIButton *bannerButton_p;   // portrait banner button
-    UIButton *bannerButton_l;   // landscape banner button
-    
-    UIButton *closeXButton_p;
-    UIButton *closeArrowButton_p;
-    UIButton *closeXButton_l;
-    UIButton *closeArrowButton_l;
-     */
+
     
     UIImageView *stampView_p;
     UIImageView *stampView_l;
-    UIImageView *snsView_p;
-    UIImageView *snsView_l;
     
     UIButton *bannerButton_p;
     UIButton *bannerButton_l;
@@ -48,21 +27,14 @@
     
     UIButton *closeXButton_p;
     UIButton *closeXButton_l;
-    UIButton *closeXSns_p;
-    UIButton *closeXSns_l;
-    
-    
-    UIButton *twtButton_p;
-    UIButton *fbButton_p;
-    UIButton *twtButton_l;
-    UIButton *fbButton_l;
+
     
     UIButton *twtIcon_p;
     UIButton *twtIcon_l;
     UIButton *fbIcon_p;
     UIButton *fbIcon_l;
     
-    UIButton *PassBook_p;
+    UIButton *passBook_p;
     UIButton *passBook_l;
     
     
@@ -140,7 +112,6 @@
     BOOL isNoCampaignView;
     BOOL isMissedView;
     
-    BOOL isSnsLoginView;
     BOOL isFacebookLogin;
     BOOL isTwitterLogin;
     
@@ -240,7 +211,7 @@
     NSString* appId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
     NSString* deviceId = [[UIDevice currentDevice] uniqueIdentifier];
     
-    NSString *baseUrl = @"http://211.115.71.69/logic/mads_3_1_0.php";
+    NSString *baseUrl = @"http://211.115.71.69/logic/mads_1_1_1.php";
     baseUrl = [baseUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSURL *url = [NSURL URLWithString:baseUrl];
             
@@ -295,7 +266,8 @@
             
         } else {
             NSLog(@"[scm]: New Campaign ---- %@", responseStr);
-            NSArray *campaignFiles = [[NSArray alloc] initWithObjects:IMG_SNS_CONNECT_P, IMG_STAMP_P, IMG_MISSED_P, IMG_X_MARK, SCM_AD_XML, IMG_DEFAULT_P, IMG_SNS_CONNECT_L, IMG_STAMP_L, IMG_MISSED_L, IMG_DEFAULT_L, IMG_TWT_MARK, IMG_FB_MARK, IMG_BANNER_MISSED_L, IMG_BANNER_MISSED_P, IMG_BANNER_L, IMG_BANNER_P,
+            NSArray *campaignFiles = [[NSArray alloc] initWithObjects: IMG_STAMP_P, IMG_MISSED_P, IMG_X_MARK, SCM_AD_XML, IMG_STAMP_L, IMG_MISSED_L,  IMG_BANNER_MISSED_L, IMG_BANNER_MISSED_P, IMG_BANNER_L, IMG_BANNER_P,
+                IMG_CONNECTED_FB_A, IMG_CONNECTED_FB_B, IMG_CONNECTED_TW_A, IMG_CONNECTED_TW_B, IMG_GET_FB, IMG_GET_TW, 
                                       PASSBOOK_PKG, IMG_PB_BADGE, IMG_Q10_BADGE, nil];
             [self downloadFiles:campaignFiles campaignPath:responseStr];
         }
@@ -330,7 +302,6 @@
     isNoCampaignView    = NO;
     isMissedView        = NO;
     
-    isSnsLoginView      = NO;
     isFacebookLogin     = NO;
     isTwitterLogin      = NO;
     isPortraitMode      = YES;
@@ -339,9 +310,6 @@
     
     stampView_p = [[UIImageView alloc]init];
     stampView_l = [[UIImageView alloc]init];
-
-    snsView_l = [[UIImageView alloc]init];
-    snsView_p = [[UIImageView alloc]init];
     
     bannerButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
     bannerButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -349,41 +317,18 @@
     closeXButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
     closeXButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
     
-    closeXSns_p = [UIButton buttonWithType:UIButtonTypeCustom];
-    closeXSns_l = [UIButton buttonWithType:UIButtonTypeCustom];
-        
-    twtButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
-    fbButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
-    twtButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
-    fbButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
-    
-    PassBook_p = [UIButton buttonWithType:UIButtonTypeCustom];
+    passBook_p = [UIButton buttonWithType:UIButtonTypeCustom];
     passBook_l = [UIButton buttonWithType:UIButtonTypeCustom];
     
     
-    twtButton_p.frame = CGRectMake(36, 297, 245, 42);
-    twtButton_l.frame = CGRectMake(124, 204, 245, 42);
-    fbButton_p.frame = CGRectMake(36, 254, 245, 42);
-    fbButton_l.frame = CGRectMake(124, 162, 245, 42);
-    
-    
-    PassBook_p.frame = CGRectMake(53, 330, 160, 50);
-    passBook_l.frame = CGRectMake(300, 173, 160, 50);
-    
-    
-    [PassBook_p addTarget:self action:@selector(showPassbook) forControlEvents:UIControlEventTouchUpInside];
+    [passBook_p addTarget:self action:@selector(showPassbook) forControlEvents:UIControlEventTouchUpInside];
     [passBook_l addTarget:self action:@selector(showPassbook) forControlEvents:UIControlEventTouchUpInside];
     
-    twtIcon_p = [[UIButton alloc]initWithFrame:CGRectMake(229, 386, 42, 42)];
-    twtIcon_l = [[UIButton alloc]initWithFrame:CGRectMake(388, 246, 42, 42)];
-    fbIcon_p = [[UIButton alloc]initWithFrame:CGRectMake(187, 386, 42, 42)];
-    fbIcon_l = [[UIButton alloc]initWithFrame:CGRectMake(346, 246, 42, 42)];
+    twtIcon_p = [[UIButton alloc]initWithFrame:CGRectMake(96, 334, 174, 42)];
+    twtIcon_l = [[UIButton alloc]initWithFrame:CGRectMake(175, 232, 174, 42)];
+    fbIcon_p = [[UIButton alloc]initWithFrame:CGRectMake(50, 334, 42, 42)];
+    fbIcon_l = [[UIButton alloc]initWithFrame:CGRectMake(128, 232, 42, 42)];
     
-    [twtButton_p addTarget:self action:@selector(scmTwitterLogin) forControlEvents:UIControlEventTouchUpInside];
-    [twtButton_l addTarget:self action:@selector(scmTwitterLogin) forControlEvents:UIControlEventTouchUpInside];
-    [fbButton_p addTarget:self action:@selector(scmFacebookLogin) forControlEvents:UIControlEventTouchUpInside];
-    [fbButton_l addTarget:self action:@selector(scmFacebookLogin) forControlEvents:UIControlEventTouchUpInside];
-
     
     // ------------- Orientation Events Registration ------------------
     
@@ -475,12 +420,9 @@
     if (isDownloadOk == YES) {
         // User Document Directory Path
         NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
-        [snsView_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_SNS_CONNECT_P]]]];
-        [snsView_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_SNS_CONNECT_L]]]];
+        
         [closeXButton_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_X_MARK]]] forState:UIControlStateNormal];
         [closeXButton_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_X_MARK]]] forState:UIControlStateNormal];
-        [closeXSns_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_X_MARK]]] forState:UIControlStateNormal];
-        [closeXSns_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_X_MARK]]] forState:UIControlStateNormal];
         
         // No Campaign Default View
         if (isNoCampaignView == YES) {
@@ -509,7 +451,7 @@
             
             [bannerButton_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_BANNER_L]]] forState:UIControlStateNormal];
             
-            [stampView_p addSubview:PassBook_p];
+            [stampView_p addSubview:passBook_p];
             [stampView_l addSubview:passBook_l];
             NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES)
                                    objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
@@ -518,14 +460,60 @@
             if ([[dictXmlInfo objectForKey:@"passbook"] isEqualToString:@"Y"]&&[PKPassLibrary isPassLibraryAvailable]) {
         
                 
-                [PassBook_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_PB_BADGE]]] forState:UIControlStateNormal];
+                [passBook_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_PB_BADGE]]] forState:UIControlStateNormal];
                 
                 [passBook_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_PB_BADGE]]] forState:UIControlStateNormal];
             }else{
                 
-                [PassBook_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_Q10_BADGE]]] forState:UIControlStateNormal];
+                [passBook_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_Q10_BADGE]]] forState:UIControlStateNormal];
                 [passBook_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_Q10_BADGE]]] forState:UIControlStateNormal];
             }
+            
+            // Rearrange view
+            passBook_p.frame = CGRectMake(99, 314, 122, 40);
+            passBook_l.frame = CGRectMake(61, 232, 120, 36);
+            
+            if ([self checkForPreviouslySavedAccessTokenInfo] == NO) {
+                NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
+                
+                [fbIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_GET_FB]]] forState:UIControlStateNormal];
+                [fbIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_GET_FB]]] forState:UIControlStateNormal];
+                [twtIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_GET_TW]]] forState:UIControlStateNormal];
+                [twtIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_GET_TW]]] forState:UIControlStateNormal];
+                
+                fbIcon_p.frame = CGRectMake(50, 383, 174, 42);
+                fbIcon_l.frame = CGRectMake(200, 232, 174, 42);
+                twtIcon_p.frame = CGRectMake(227, 383, 42, 42);
+                twtIcon_l.frame = CGRectMake(377, 232, 42, 42);
+            } else if (isFacebookLogin == YES) {
+                NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
+                
+                [fbIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_FB_A]]] forState:UIControlStateNormal];
+                [fbIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_FB_A]]] forState:UIControlStateNormal];
+                [twtIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_TW_A]]] forState:UIControlStateNormal];
+                [twtIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_TW_A]]] forState:UIControlStateNormal];
+                
+                
+                fbIcon_p.frame = CGRectMake(50, 383, 174, 42);
+                fbIcon_l.frame = CGRectMake(200, 232, 174, 42);
+                twtIcon_p.frame = CGRectMake(227, 383, 42, 42);
+                twtIcon_l.frame = CGRectMake(377, 232, 42, 42);
+                
+            } else if (isTwitterLogin == YES) {
+                NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
+                [twtIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_TW_B]]] forState:UIControlStateNormal];
+                [twtIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_TW_B]]] forState:UIControlStateNormal];
+                [fbIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_FB_B]]] forState:UIControlStateNormal];
+                [fbIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_FB_B]]] forState:UIControlStateNormal];
+                
+               
+                fbIcon_p.frame = CGRectMake(50, 383, 42, 42);
+                fbIcon_l.frame = CGRectMake(200, 232, 42, 42);
+                twtIcon_p.frame = CGRectMake(96, 383, 174, 42);
+                twtIcon_l.frame = CGRectMake(246, 232, 174, 42);
+            }
+            
+            
             
             // Save stampsCounter to Plist file
             filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
@@ -548,8 +536,51 @@
             
             [bannerButton_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_BANNER_MISSED_L]]] forState:UIControlStateNormal];
             
-            [PassBook_p removeFromSuperview];
+            [passBook_p removeFromSuperview];
             [passBook_l removeFromSuperview];
+            
+            if ([self checkForPreviouslySavedAccessTokenInfo] == NO) {
+                NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
+                
+                [fbIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_GET_FB]]] forState:UIControlStateNormal];
+                [fbIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_GET_FB]]] forState:UIControlStateNormal];
+                [twtIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_GET_TW]]] forState:UIControlStateNormal];
+                [twtIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_GET_TW]]] forState:UIControlStateNormal];
+                
+                fbIcon_p.frame = CGRectMake(50, 334, 174, 42);
+                fbIcon_l.frame = CGRectMake(128, 232, 174, 42);
+                twtIcon_p.frame = CGRectMake(228, 334, 42, 42);
+                twtIcon_l.frame = CGRectMake(305, 232, 42, 42);
+            } else if (isFacebookLogin == YES) {
+                NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
+                
+                [fbIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_FB_A]]] forState:UIControlStateNormal];
+                [fbIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_FB_A]]] forState:UIControlStateNormal];
+                [twtIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_TW_A]]] forState:UIControlStateNormal];
+                [twtIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_TW_A]]] forState:UIControlStateNormal];
+                
+                
+                fbIcon_p.frame = CGRectMake(50, 334, 174, 42);
+                fbIcon_l.frame = CGRectMake(128, 232, 174, 42);
+                twtIcon_p.frame = CGRectMake(228, 334, 42, 42);
+                twtIcon_l.frame = CGRectMake(305, 232, 42, 42);
+                
+            } else if (isTwitterLogin == YES) {
+                NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
+                [twtIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_TW_B]]] forState:UIControlStateNormal];
+                [twtIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_TW_B]]] forState:UIControlStateNormal];
+                [fbIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_FB_B]]] forState:UIControlStateNormal];
+                [fbIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_FB_B]]] forState:UIControlStateNormal];
+                
+                
+                fbIcon_p.frame = CGRectMake(50, 334, 42, 42);
+                fbIcon_l.frame = CGRectMake(128, 232, 42, 42);
+                twtIcon_p.frame = CGRectMake(96, 334, 174, 42);
+                twtIcon_l.frame = CGRectMake(175, 232, 174, 42);
+            }
+            
+            
+            
             // Save stampsCounter to Plist file
             NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
             if ([fileMgr fileExistsAtPath:filePath]) {
@@ -633,7 +664,7 @@
         bannerButton_l.hidden = YES;
         stampView_l.frame = CGRectMake(0, 0, 480, 320);
     }
-    
+    [self buttonHidden:NO];
     [UIImageView commitAnimations];
     
 }
@@ -659,17 +690,6 @@
 
 }
 
--(void) hideSnsView
-{
-    [UIImageView beginAnimations:@"hideBanner" context:nil];
-    [UIImageView setAnimationDuration:0.5f];
-    [UIImageView setAnimationDelegate:self];
-
-    snsView_p.frame = CGRectMake(0, -480, 320, 480);
-    snsView_l.frame = CGRectMake(0, -320, 480, 320);
-    
-    [UIImageView commitAnimations];
-}
 
 - (void) buttonHidden:(BOOL)flag
 {
@@ -680,7 +700,7 @@
     fbIcon_p.hidden     = flag;
     twtIcon_l.hidden    = flag;
     fbIcon_l.hidden     = flag;
-    PassBook_p.hidden   = flag;
+    passBook_p.hidden   = flag;
     passBook_l.hidden   = flag;
     
 }
@@ -692,7 +712,7 @@
     [stampView_p setUserInteractionEnabled:YES];
     
     bannerButton_p.frame = CGRectMake(0, 0, 320, 57);
-    closeXButton_p.frame = CGRectMake(247, 32, 42, 42);
+    closeXButton_p.frame = CGRectMake(270, 12, 36, 37);
     
     [bannerButton_p addTarget:self action:@selector(showStamp) forControlEvents:UIControlEventTouchUpInside];
     [closeXButton_p addTarget:self action:@selector(hideStamp) forControlEvents:UIControlEventTouchUpInside];
@@ -701,29 +721,17 @@
     [self.view addSubview:bannerButton_p];
     [self.view addSubview:stampView_p];
     [stampView_p addSubview:closeXButton_p];
-    [snsView_p addSubview:twtButton_p];
-    [snsView_p addSubview:fbButton_p];
-    
-    
     
     [stampView_l setUserInteractionEnabled:YES];
     stampView_l.frame = CGRectMake(240, 160, 0, 0);
 
     bannerButton_l.frame = CGRectMake(0, 0, 480, 57);
-    closeXButton_l.frame = CGRectMake(410, 32, 42, 42);
-    
-    snsView_p.frame = CGRectMake(0, -480, 320, 480);
-    snsView_l.frame = CGRectMake(0, -320, 480, 320);
-    snsView_p.userInteractionEnabled = YES;
-    snsView_l.userInteractionEnabled = YES;
+    closeXButton_l.frame = CGRectMake(434, 14, 36, 37);
     
     
     [bannerButton_l addTarget:self action:@selector(showStamp) forControlEvents:UIControlEventTouchUpInside];
     [closeXButton_l addTarget:self action:@selector(hideStamp) forControlEvents:UIControlEventTouchUpInside];
-    [closeXSns_p addTarget:self action:@selector(hideSnsView) forControlEvents:UIControlEventTouchUpInside];
-    [closeXSns_l addTarget:self action:@selector(hideSnsView) forControlEvents:UIControlEventTouchUpInside];
-    closeXSns_p.frame = CGRectMake(247, 32, 42, 42);
-    closeXSns_l.frame = CGRectMake(410, 32, 42, 42);
+    
     
     [twtIcon_p addTarget:self action:@selector(scmTwitterLogin) forControlEvents:UIControlEventTouchUpInside];
     [twtIcon_l addTarget:self action:@selector(scmTwitterLogin) forControlEvents:UIControlEventTouchUpInside];
@@ -739,15 +747,10 @@
     //[stampView_p addSubview:PassBook_p];
     //[stampView_l addSubview:passBook_l];
     
-    [snsView_p addSubview:closeXSns_p];
-    [snsView_l addSubview:closeXSns_l];
     [self.view addSubview:bannerButton_l];
     [self.view addSubview:stampView_l];
     [stampView_l addSubview:closeXButton_l];
-    [snsView_l addSubview:twtButton_l];
-    [snsView_l addSubview:fbButton_l];
-    [self.view addSubview:snsView_p];
-    [self.view addSubview:snsView_l];
+
     
 }
 
@@ -768,7 +771,7 @@
                 NSLog(@"[scm]: Download ... %@", fileObject);
                 
                 NSString *strUrl = [[NSString alloc] initWithFormat:@"%@/%@/%@/%@/%@", SERVER_IP,
-                                    @"campaign", @"310_campaign", campaign, fileObject];
+                                    @"campaign", @"111_campaign", campaign, fileObject];
                 NSData *fileData = [NSData dataWithContentsOfURL:[NSURL URLWithString:strUrl]];
                 [fileData writeToFile:filePath atomically:YES];
                 
@@ -844,23 +847,8 @@
 
         if (isMissedView == NO) {
             if ([self checkForPreviouslySavedAccessTokenInfo] == NO && isInternetAvailable == YES) {
-                
-                [UIView beginAnimations:@"showSnsLoginView" context:nil];
-                [UIView setAnimationDuration:1.0f];
-                [UIView setAnimationDelegate:self];
-                [UIView setAnimationDelay:1.0f];
-                
-                UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-                if (orientation == UIDeviceOrientationPortrait) {
-                    snsView_p.frame = CGRectMake(0, 0, 320, 480);
-                    [snsView_p setAlpha:1.0f];
-                } else  {
-                    snsView_l.frame = CGRectMake(0, 0, 480, 320);
-                    [snsView_l setAlpha:1.0f];
-                }
-                
-                isSnsLoginView = YES;
-                [UIView commitAnimations];
+                // TODO: fill something here
+
             } else if (isInternetAvailable == YES && isNoCampaignView == NO) {
                 if (isFacebookLogin) {
                     [self scmAdPostToFacebook];
@@ -893,7 +881,7 @@
     NSLog(@"[scm]: send email to facebook account!");
     NSString* appId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
     NSString* deviceId = [[UIDevice currentDevice] uniqueIdentifier];
-    NSString* phpFile = [[NSString alloc] initWithFormat:@"%@/logic/facebook_email_logic/sendMailToFacebook_3_1_0.php", SERVER_IP];
+    NSString* phpFile = [[NSString alloc] initWithFormat:@"%@/logic/facebook_email_logic/sendMailToFacebook_1_1_1.php", SERVER_IP];
     NSURL *url = [NSURL URLWithString:phpFile];
 
         
@@ -907,6 +895,8 @@
     params = [params stringByAppendingFormat:@"&campaign=%@", campaignName];
     params = [params stringByAppendingFormat:@"&email=%@", email_address];
     params = [params stringByAppendingFormat:@"&name=%@", user_name];
+    
+    NSLog(@"[scm]: email - %@, user_name - %@", email_address, user_name);
     
     
     [request setHTTPBody:[params dataUsingEncoding:NSUTF8StringEncoding]];
@@ -999,20 +989,6 @@
 -(void)fbDidLogin
 {
     NSLog(@"[scm]: - facebook login OK!");
-    
-    [UIView beginAnimations:@"HideSnsLoginView" context:nil];
-    [UIView setAnimationDuration:1.0f];
-    [UIView setAnimationDelegate:self];
-    
-    isSnsLoginView = NO;
-    
-    snsView_p.frame = CGRectMake(0, -480, 320, 480);
-    snsView_l.frame = CGRectMake(0, -320, 480, 320);
-    
-    [snsView_p setAlpha:0.0f];
-    [snsView_l setAlpha:0.0f];
-    
-    [UIView commitAnimations];
 
     [self scmAdPostToFacebook];
 }
@@ -1023,8 +999,8 @@
 {
     NSLog(@"[scm]: Facebook Login");
     
-    NSArray *permissions = [NSArray arrayWithObjects:@"publish_stream", @"email", nil];
-    [FBSession openActiveSessionWithPublishPermissions:permissions defaultAudience:FBSessionDefaultAudienceOnlyMe allowLoginUI:YES completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+    //NSArray *permissions = [NSArray arrayWithObjects:@"publish_stream", nil];
+    [FBSession openActiveSessionWithPublishPermissions:nil defaultAudience:FBSessionDefaultAudienceOnlyMe allowLoginUI:YES completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
         
         
     
@@ -1032,16 +1008,38 @@
         if (error) {
             // TODO: Handle Facebook Login Error
             NSLog(@"[scm]: Facebook Login Error!");
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                            message:error.localizedDescription
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+
         } else if (FB_ISSESSIONOPENWITHSTATE(status)){
             // send our requests if we successfully logged in
             isFacebookLogin = YES;
             isTwitterLogin = NO;
             
             NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
-            [twtIcon_l setImage:[UIImage imageWithData:nil] forState:UIControlStateNormal];
-            [twtIcon_p setImage:[UIImage imageWithData:nil] forState:UIControlStateNormal];
-            [fbIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_FB_MARK]]] forState:UIControlStateNormal];
-            [fbIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_FB_MARK]]] forState:UIControlStateNormal];
+
+            [fbIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_FB_A]]] forState:UIControlStateNormal];
+            [fbIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_FB_A]]] forState:UIControlStateNormal];
+            [twtIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_TW_A]]] forState:UIControlStateNormal];
+            [twtIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_TW_A]]] forState:UIControlStateNormal];
+            
+            if (isMissedView == YES) {
+                fbIcon_p.frame = CGRectMake(50, 334, 174, 42);
+                fbIcon_l.frame = CGRectMake(128, 232, 174, 42);
+                twtIcon_p.frame = CGRectMake(228, 334, 42, 42);
+                twtIcon_l.frame = CGRectMake(305, 232, 42, 42);
+            } else {
+                fbIcon_p.frame = CGRectMake(50, 383, 174, 42);
+                fbIcon_l.frame = CGRectMake(200, 232, 174, 42);
+                twtIcon_p.frame = CGRectMake(227, 383, 42, 42);
+                twtIcon_l.frame = CGRectMake(377, 232, 42, 42);
+            }
+            
+            
             
             // Get the user's info.
             //[facebook requestWithGraphPath:@"me" andDelegate:self];
@@ -1194,11 +1192,7 @@
                 isFacebookLogin = NO;
                 isTwitterLogin = YES;
                 NSLog(@"[scm]: Post to twitter");
-                NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
-                [twtIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_TWT_MARK]]] forState:UIControlStateNormal];
-                [twtIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_TWT_MARK]]] forState:UIControlStateNormal];
-                [fbIcon_l setImage:[UIImage imageWithData:nil] forState:UIControlStateNormal];
-                [fbIcon_p setImage:[UIImage imageWithData:nil] forState:UIControlStateNormal];
+                
                 
                 NSLog(@"[scm]: access twitter account and publish tweet post with dm!");
                 twAccount = [accountsArray objectAtIndex:0];
@@ -1228,6 +1222,26 @@
                                    withObject:@"twitter"
                                 waitUntilDone:NO];*/
             
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
+                [twtIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_TW_B]]] forState:UIControlStateNormal];
+                [twtIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_TW_B]]] forState:UIControlStateNormal];
+                [fbIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_FB_B]]] forState:UIControlStateNormal];
+                [fbIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_FB_B]]] forState:UIControlStateNormal];
+                
+                if (isMissedView == YES) {
+                    fbIcon_p.frame = CGRectMake(50, 334, 42, 42);
+                    fbIcon_l.frame = CGRectMake(128, 232, 42, 42);
+                    twtIcon_p.frame = CGRectMake(96, 334, 174, 42);
+                    twtIcon_l.frame = CGRectMake(175, 232, 174, 42);
+                } else {
+                    fbIcon_p.frame = CGRectMake(50, 383, 42, 42);
+                    fbIcon_l.frame = CGRectMake(200, 232, 42, 42);
+                    twtIcon_p.frame = CGRectMake(96, 383, 174, 42);
+                    twtIcon_l.frame = CGRectMake(246, 232, 174, 42);
+                }
+            });
+        
         }
     }];
 }
@@ -1245,20 +1259,7 @@
         [twController.view endEditing:YES];
         
     } else {
-        [UIView beginAnimations:@"HideSnsLoginView" context:nil];
-        [UIView setAnimationDuration:1.0f];
-        [UIView setAnimationDelegate:self];
-        
-        isSnsLoginView = NO;
-        
-        snsView_p.frame = CGRectMake(0, -480, 320, 480);
-        snsView_l.frame = CGRectMake(0, -320, 480, 320);
-        
-        [snsView_p setAlpha:0.0f];
-        [snsView_l setAlpha:0.0f];
-        
-        [UIView commitAnimations];
-        
+    
         dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:SCM_SNS_PLIST];
         [dictXmlInfo setObject:@"YES" forKey:@"isTwitterLogin"];
         [dictXmlInfo setObject:@"NO" forKey:@"isFacebookLogin"];
