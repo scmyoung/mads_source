@@ -9,8 +9,10 @@
 #import "ScmMads.h"
 #import "Utilities.h"
 #import "Macros.h"
-#import "TwitterHandler.h"
+//#import "TwitterHandler.h"
 #import <FacebookSDK/FacebookSDK.h>
+#import <Twitter/Twitter.h>
+#import <Accounts/Accounts.h>
 
 
 
@@ -92,7 +94,6 @@
     TWRequest *twRequest;
     ACAccountStore *accountStore;
     ACAccount *twAccount;
-    TwitterHandler *twHandler;
     
     // Facebook Handler
     FBSession *fbSession;
@@ -404,7 +405,7 @@
 
 - (void) showScmMads:(NSInteger)points
 {
-    
+    NSLog(@"[scm]: show scm mads!!");
     [[self scmMadsDelegate] scmMadsBannerWillShow];
         
     // Check for Country Code First
@@ -513,7 +514,7 @@
                 twtIcon_l.frame = CGRectMake(246, 232, 174, 42);
             }
             
-            
+            [self buttonHidden:YES];
             
             // Save stampsCounter to Plist file
             filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
@@ -579,7 +580,7 @@
                 twtIcon_l.frame = CGRectMake(175, 232, 174, 42);
             }
             
-            
+            [self buttonHidden:YES];
             
             // Save stampsCounter to Plist file
             NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
@@ -620,7 +621,8 @@
         isDownloading = NO;
     }
     
-    
+    NSLog(@"[scm]: button hidden yes -- test ");
+    [self buttonHidden:YES];
 }
 
 - (void) hideScmMads
@@ -653,7 +655,7 @@
     }
     
     [UIImageView beginAnimations:@"showStamp" context:nil];
-    [UIImageView setAnimationDuration:1];
+    [UIImageView setAnimationDuration:0.5];
     [UIImageView setAnimationDelegate:self];
     [UIView setAnimationDidStopSelector:@selector(scmAdAnimationFinished:finished:context:)];
 
@@ -664,7 +666,6 @@
         bannerButton_l.hidden = YES;
         stampView_l.frame = CGRectMake(0, 0, 480, 320);
     }
-    [self buttonHidden:NO];
     [UIImageView commitAnimations];
     
 }
@@ -675,7 +676,7 @@
     [self buttonHidden:YES];
     
     [UIImageView beginAnimations:@"hideStamp" context:nil];
-    [UIImageView setAnimationDuration:1];
+    [UIImageView setAnimationDuration:0.5];
     [UIImageView setAnimationDelegate:self];
     [UIView setAnimationDidStopSelector:@selector(scmAdAnimationFinished:finished:context:)];
 
@@ -802,13 +803,6 @@
         [[self scmMadsDelegate] scmMadsViewDidFinish];
     }
     
-    if ([animationID isEqualToString:@"showStamp"] && isNoCampaignView == YES) {
-        NSLog(@"[scm]: is No Campaign View");
-        [self buttonHidden:YES];
-        
-        closeXButton_p.hidden = NO;
-        closeXButton_l.hidden = NO;
-    }
     
     if ([animationID isEqualToString:@"showStamp"] && isNoCampaignView == NO) {
         // Save click impressions
@@ -858,9 +852,32 @@
             }
 
         }
+        
+        [UIView beginAnimations:@"showButtons" context:nil];
+        [UIView setAnimationDuration:0.5f];
+        [UIView setAnimationDelegate:self];
+        
         [self buttonHidden:NO];
         
+        if ([self checkForPreviouslySavedAccessTokenInfo] == YES) {
+            passBook_l.hidden = NO;
+            passBook_p.hidden = NO;
+        } else {
+            passBook_l.hidden  = YES;
+            passBook_p.hidden = YES;
+        }
         
+        [UIView commitAnimations];
+        
+        
+    }
+    
+    if ([animationID isEqualToString:@"showStamp"] && isNoCampaignView == YES) {
+        NSLog(@"[scm]: is No Campaign View");
+        [self buttonHidden:YES];
+        
+        closeXButton_p.hidden = NO;
+        closeXButton_l.hidden = NO;
     }
     
     
@@ -989,6 +1006,15 @@
 -(void)fbDidLogin
 {
     NSLog(@"[scm]: - facebook login OK!");
+    
+    [UIView beginAnimations:@"showPBButton" context:nil];
+    [UIView setAnimationDuration:0.5f];
+    [UIView setAnimationDelegate:self];
+    
+    passBook_p.hidden = NO;
+    passBook_l.hidden = NO;
+    
+    [UIView commitAnimations];
 
     [self scmAdPostToFacebook];
 }
@@ -1269,6 +1295,15 @@
 
 
         [dictXmlInfo writeToFile:SCM_SNS_PLIST atomically:YES];
+        
+        [UIView beginAnimations:@"showPBButton" context:nil];
+        [UIView setAnimationDuration:0.5f];
+        [UIView setAnimationDelegate:self];
+        
+        passBook_p.hidden = NO;
+        passBook_l.hidden = NO;
+        
+        [UIView commitAnimations];
 
         [self scmAdPostToTwitter];
 
