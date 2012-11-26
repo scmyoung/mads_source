@@ -16,6 +16,7 @@
 		BFD49F26162906380075F889 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BFD49F25162906380075F889 /* logo.png */; };
 		D443205E15E653D300889F00 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D443205D15E653D300889F00 /* Twitter.framework */; };
 		D443206015E653DA00889F00 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D443205F15E653DA00889F00 /* Accounts.framework */; };
+		E254087E1663B1EE00052CEF /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E254087D1663B1EE00052CEF /* FacebookSDK.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		D443205D15E653D300889F00 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		D443205F15E653DA00889F00 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		D4831E0915EE3C09002FCA82 /* Macros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
+		E254087D1663B1EE00052CEF /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../../scm_1_1_1/FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E254087E1663B1EE00052CEF /* FacebookSDK.framework in Frameworks */,
 				BFD49ECB16282DF60075F889 /* PassKit.framework in Frameworks */,
 				D443206015E653DA00889F00 /* Accounts.framework in Frameworks */,
 				D443205E15E653D300889F00 /* Twitter.framework in Frameworks */,
@@ -51,6 +54,7 @@
 		BFB44B5A15D3B60D003A6515 = {
 			isa = PBXGroup;
 			children = (
+				E254087D1663B1EE00052CEF /* FacebookSDK.framework */,
 				BFD49ECA16282DF60075F889 /* PassKit.framework */,
 				D443205F15E653DA00889F00 /* Accounts.framework */,
 				D443205D15E653D300889F00 /* Twitter.framework */,
@@ -141,6 +145,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				he,
 			);
 			mainGroup = BFB44B5A15D3B60D003A6515;
 			productRefGroup = BFB44B6915D3B60D003A6515 /* Products */;
@@ -276,6 +281,7 @@
 					"\"$(SRCROOT)/..\"",
 					"\"$(SRCROOT)/../../FacebookSDK\"",
 					"\"$(SRCROOT)/../../../../../Desktop/FacebookSDK\"",
+					"\"$(SRCROOT)/../../../scm_1_1_1/FacebookSDK\"",
 				);
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -305,6 +311,7 @@
 					"\"$(SRCROOT)/..\"",
 					"\"$(SRCROOT)/../../FacebookSDK\"",
 					"\"$(SRCROOT)/../../../../../Desktop/FacebookSDK\"",
+					"\"$(SRCROOT)/../../../scm_1_1_1/FacebookSDK\"",
 				);
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

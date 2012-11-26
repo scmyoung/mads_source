@@ -9,7 +9,6 @@
 #import "ScmMads.h"
 #import "Utilities.h"
 #import "Macros.h"
-//#import "TwitterHandler.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import <Twitter/Twitter.h>
 #import <Accounts/Accounts.h>
@@ -212,7 +211,7 @@
     NSString* appId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
     NSString* deviceId = [[UIDevice currentDevice] uniqueIdentifier];
     
-    NSString *baseUrl = @"http://211.115.71.69/logic/mads_1_1_1.php";
+    NSString *baseUrl = [[NSString alloc] initWithFormat:@"http://211.115.71.69/logic/%@", PHP_LOGIC_FILE];
     baseUrl = [baseUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSURL *url = [NSURL URLWithString:baseUrl];
             
@@ -604,7 +603,7 @@
             bannerButton_p.hidden = NO;
             stampView_p.hidden = NO;
             
-            self.view.frame = CGRectMake(0, 0, 320, 57);
+            self.view.frame = CGRectMake(0, -480, 480, 537);
         }
         else{
             bannerButton_p.hidden = YES;
@@ -612,7 +611,7 @@
             bannerButton_l.hidden = NO;
             stampView_l.hidden = NO;
             
-            self.view.frame = CGRectMake(0, 0, 480, 57);
+            self.view.frame = CGRectMake(0, -480, 480, 537);
         }
         
         [UIView commitAnimations];
@@ -621,7 +620,6 @@
         isDownloading = NO;
     }
     
-    NSLog(@"[scm]: button hidden yes -- test ");
     [self buttonHidden:YES];
 }
 
@@ -631,7 +629,7 @@
     [UIView setAnimationDuration:0.6f];
     [UIView setAnimationDelegate:self];
         
-    self.view.frame = CGRectMake(0, -57, 320, 57);
+    self.view.frame = CGRectMake(0, -537, 320, 537);
 
     
     [UIView commitAnimations];
@@ -648,11 +646,13 @@
 
     
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    /*
     if (orientation == UIDeviceOrientationPortrait) {
-        self.view.frame = CGRectMake(0, 0, 320, 480);
+        self.view.frame = CGRectMake(0, 0, 320, 537);
     } else {
         self.view.frame = CGRectMake(0, 0, 480, 320);
     }
+     */
     
     [UIImageView beginAnimations:@"showStamp" context:nil];
     [UIImageView setAnimationDuration:0.5];
@@ -660,11 +660,9 @@
     [UIView setAnimationDidStopSelector:@selector(scmAdAnimationFinished:finished:context:)];
 
     if (orientation == UIDeviceOrientationPortrait) {
-        bannerButton_p.hidden = YES;
-        stampView_p.frame = CGRectMake(0, 0, 320, 480);
+        self.view.frame = CGRectMake(0, 0, 480, 537);
     } else  {
-        bannerButton_l.hidden = YES;
-        stampView_l.frame = CGRectMake(0, 0, 480, 320);
+        self.view.frame = CGRectMake(0, -160, 480, 537);
     }
     [UIImageView commitAnimations];
     
@@ -680,9 +678,7 @@
     [UIImageView setAnimationDelegate:self];
     [UIView setAnimationDidStopSelector:@selector(scmAdAnimationFinished:finished:context:)];
 
-    stampView_p.frame = CGRectMake(160, 240, 0, 0);
-    stampView_l.frame = CGRectMake(240, 160, 0, 0);
-    self.view.frame = CGRectMake(0, -57, 320, 57);
+    self.view.frame = CGRectMake(0, -537, 480, 537);
     
     [UIImageView commitAnimations];
     
@@ -708,25 +704,26 @@
 
 - (void) createStampView
 {
+    self.view.frame = CGRectMake(0, -537, 480, 537);
+
     
-    stampView_p.frame = CGRectMake(160, 240, 0, 0);
+    stampView_p.frame = CGRectMake(0, 0, 320, 480);
     [stampView_p setUserInteractionEnabled:YES];
     
-    bannerButton_p.frame = CGRectMake(0, 0, 320, 57);
+    bannerButton_p.frame = CGRectMake(0, 480, 320, 57);
     closeXButton_p.frame = CGRectMake(270, 12, 36, 37);
     
     [bannerButton_p addTarget:self action:@selector(showStamp) forControlEvents:UIControlEventTouchUpInside];
     [closeXButton_p addTarget:self action:@selector(hideStamp) forControlEvents:UIControlEventTouchUpInside];
     
-    self.view.frame = CGRectMake(0, -57, 320, 57);
     [self.view addSubview:bannerButton_p];
     [self.view addSubview:stampView_p];
     [stampView_p addSubview:closeXButton_p];
     
     [stampView_l setUserInteractionEnabled:YES];
-    stampView_l.frame = CGRectMake(240, 160, 0, 0);
+    stampView_l.frame = CGRectMake(0, 160, 480, 320);
 
-    bannerButton_l.frame = CGRectMake(0, 0, 480, 57);
+    bannerButton_l.frame = CGRectMake(0, 480, 480, 57);
     closeXButton_l.frame = CGRectMake(434, 14, 36, 37);
     
     
@@ -772,7 +769,7 @@
                 NSLog(@"[scm]: Download ... %@", fileObject);
                 
                 NSString *strUrl = [[NSString alloc] initWithFormat:@"%@/%@/%@/%@/%@", SERVER_IP,
-                                    @"campaign", @"111_campaign", campaign, fileObject];
+                                    @"campaign", @"11_26_campaign", campaign, fileObject];
                 NSData *fileData = [NSData dataWithContentsOfURL:[NSURL URLWithString:strUrl]];
                 [fileData writeToFile:filePath atomically:YES];
                 
@@ -1339,6 +1336,7 @@
 
     }
 }
+
 -(void)addPassesViewControllerDidFinish:(PKAddPassesViewController *)controller
 {
     [self dismissViewControllerAnimated:YES completion:nil];
