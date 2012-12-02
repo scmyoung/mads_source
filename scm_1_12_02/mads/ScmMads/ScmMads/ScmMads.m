@@ -256,7 +256,6 @@
         
         } else if ([responseStr isEqualToString:@"SameCampaign"]) {
             NSLog(@"[scm]: Same Campaign!");
-            NSLog(@"same campaign!!!!!!!!!!!!!!!");
             isDownloadOk = YES;
         } else if ([responseStr isEqualToString:@"NoCountryCodeMatch"]) {
             NSLog(@"[scm]: Country Code Doesn't Match!");
@@ -625,6 +624,9 @@
 
 - (void) hideScmMads
 {
+    bannerButton_p.hidden = NO;
+    bannerButton_l.hidden = NO;
+    
     [UIView beginAnimations:@"hideBanner" context:nil];
     [UIView setAnimationDuration:0.6f];
     [UIView setAnimationDelegate:self];
@@ -643,7 +645,8 @@
 - (void) showStamp
 {
     [[self scmMadsDelegate] scmMadsViewWillShow];
-
+    bannerButton_p.hidden = YES;
+    bannerButton_l.hidden = YES;
     
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
     /*
@@ -1098,62 +1101,6 @@
         }
 
     }];
-
-
-
-    /*[FBSession sessionOpenWithPermissions:permissions
-                        completionHandler:
-     ^(FBSession *session,
-       FBSessionState status,
-       NSError *error) {
-         // if login fails for any reason, we alert
-         if (error) {
-             // TODO: Handle Facebook Login Error
-             NSLog(@"[scm]: Facebook Login Error!");
-         } else if (FB_ISSESSIONOPENWITHSTATE(status)) {
-             // send our requests if we successfully logged in
-             isFacebookLogin = YES;
-             isTwitterLogin = NO;
-             
-             NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
-             [twtIcon_l setImage:[UIImage imageWithData:nil] forState:UIControlStateNormal];
-             [twtIcon_p setImage:[UIImage imageWithData:nil] forState:UIControlStateNormal];
-             [fbIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_FB_MARK]]] forState:UIControlStateNormal];
-             [fbIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_FB_MARK]]] forState:UIControlStateNormal];
-             
-             // Get the user's info.
-             //[facebook requestWithGraphPath:@"me" andDelegate:self];
-             [FBRequestConnection startWithGraphPath:@"me" completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-                 if ([result isKindOfClass:[NSDictionary class]])
-                 {
-                     fb_email = [result objectForKey: @"email"];
-                     fb_name = [result objectForKey: @"name"];
-                     //NSString *facebookId = [result objectForKey: @"id"];
-                     //NSLog(@"Facebook Email: %@", fb_email);
-                     //NSLog(@"Facebook Name: %@", fb_name);
-                     //NSLog(@"FacebookID: %@", facebookId);
-                     
-                     NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_SNS_PLIST];
-                     
-                     NSMutableDictionary *fbContainer = [[NSMutableDictionary alloc] init];
-                     if (fb_email && fb_name) {
-                         //NSLog(@"Write FB Info");
-                         [fbContainer setObject:fb_email forKey:@"fb_email"];
-                         [fbContainer setObject:fb_name forKey:@"fb_name"];
-                         [fbContainer setObject:@"YES" forKey:@"isFacebookLogin"];
-                         [fbContainer setObject:@"NO" forKey:@"isTwitterLogin"];
-
-                         [fbContainer writeToFile:filePath atomically:YES];
-                     }
-                     fbContainer = nil;
-                     [self fbDidLogin];
-
-                }
-             }];
-             
-
-         }
-     }];*/
 }
 
 - (void) twSendUpdate: (NSString *)twPost
