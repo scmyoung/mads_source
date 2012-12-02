@@ -51,6 +51,9 @@
     // campaign name
     NSString *campaignName;
     
+    // ad_count_unit
+    NSInteger adCountUnit;
+    
     /**** Globals ****/
     NSFileManager *fileMgr;
     
@@ -149,9 +152,10 @@
     if ([fileMgr fileExistsAtPath:filePath]) {
         dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
         campaignName = [dictXmlInfo objectForKey:@"campaign"];
-        digitalVoucher = [dictXmlInfo objectForKey:@"digitalVoucher"];
-        hurdlePoint = [[dictXmlInfo objectForKey:@"hurdle"] intValue];;
         
+        digitalVoucher = [dictXmlInfo objectForKey:@"digitalVoucher"];
+        hurdlePoint = [[dictXmlInfo objectForKey:@"hurdle"] intValue];
+        adCountUnit = [[dictXmlInfo objectForKey:@"ad_count_unit"] intValue];
         missed_banner_counter   = [[dictXmlInfo objectForKey:@"missed_banner_imp"] intValue];
         missed_ad_counter       = [[dictXmlInfo objectForKey:@"missed_banner_click"] intValue];
         first_missed_time       = [dictXmlInfo objectForKey:@"first_missed_time"];
@@ -180,6 +184,7 @@
         hurdlePoint = 0;
         digitalVoucher = @"NO";
         campaignName = @"NoCampaign";
+        adCountUnit = 0;
         
         missed_banner_counter   = 0;
         missed_ad_counter       = 0;
@@ -222,6 +227,7 @@
     params = [params stringByAppendingFormat:@"&DeviceID=%@", deviceId];
     params = [params stringByAppendingFormat:@"&AppID=%@", appId];
     params = [params stringByAppendingFormat:@"&campaignName=%@", campaignName];
+    params = [params stringByAppendingFormat:@"&adCountUnit=%@", [NSNumber numberWithInteger:adCountUnit]];
     params = [params stringByAppendingFormat:@"&digitalVoucher=%@", digitalVoucher];
     params = [params stringByAppendingFormat:@"&hurdle=%@", [NSNumber numberWithInteger:hurdlePoint]];
     params = [params stringByAppendingFormat:@"&CountryCode=%@", phoneCountryCode];
@@ -705,6 +711,19 @@
     
 }
 
+- (void) buttonAlpha:(NSInteger)flag
+{
+    closeXButton_p.alpha = flag;
+    closeXButton_l.alpha = flag;
+    
+    twtIcon_p.alpha    = flag;
+    fbIcon_p.alpha     = flag;
+    twtIcon_l.alpha    = flag;
+    fbIcon_l.alpha     = flag;
+    passBook_p.alpha   = flag;
+    passBook_l.alpha   = flag;
+}
+
 - (void) createStampView
 {
     self.view.frame = CGRectMake(0, -537, 480, 537);
@@ -853,11 +872,13 @@
 
         }
         
+        [self buttonAlpha:0];
         [UIView beginAnimations:@"showButtons" context:nil];
-        [UIView setAnimationDuration:0.5f];
+        [UIView setAnimationDuration:1.0f];
         [UIView setAnimationDelegate:self];
         
         [self buttonHidden:NO];
+        [self buttonAlpha:1];
         
         if ([self checkForPreviouslySavedAccessTokenInfo] == YES) {
             passBook_l.hidden = NO;
