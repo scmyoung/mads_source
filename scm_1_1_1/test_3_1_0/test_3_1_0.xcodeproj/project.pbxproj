@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2CFAF8151680635500112EE9 /* ScmMads.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CFAF8141680635500112EE9 /* ScmMads.framework */; };
+		2CFAF81A168066E000112EE9 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CFAF819168066E000112EE9 /* FacebookSDK.framework */; };
 		BFD49EC416282C940075F889 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFD49EC316282C940075F889 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		BFD49EC616282CC10075F889 /* PassKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFD49EC516282CC10075F889 /* PassKit.framework */; };
-		BFD49F06162844980075F889 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFD49F05162844980075F889 /* FacebookSDK.framework */; };
-		BFD49F221629045D0075F889 /* ScmMads.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFD49F211629045D0075F889 /* ScmMads.framework */; };
 		D443206915E676D000889F00 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D443206815E676D000889F00 /* Twitter.framework */; };
 		D443206C15E676D600889F00 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D443206B15E676D600889F00 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		D470363615DD23DD000A287C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D470363515DD23DD000A287C /* UIKit.framework */; };
@@ -25,10 +25,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2CFAF8141680635500112EE9 /* ScmMads.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ScmMads.framework; sourceTree = "<group>"; };
+		2CFAF819168066E000112EE9 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../../../../work/FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		BFD49EC316282C940075F889 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		BFD49EC516282CC10075F889 /* PassKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PassKit.framework; path = System/Library/Frameworks/PassKit.framework; sourceTree = SDKROOT; };
-		BFD49F05162844980075F889 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
-		BFD49F211629045D0075F889 /* ScmMads.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScmMads.framework; path = "../../../../Library/Developer/Xcode/DerivedData/ScmMads-fwqoqdfmnwqyilcxtgvczoghmfuf/Build/Products/Debug-iphoneos/ScmMads.embeddedframework/ScmMads.framework"; sourceTree = "<group>"; };
 		D443206815E676D000889F00 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		D443206B15E676D600889F00 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		D470363115DD23DD000A287C /* test_3_1_0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = test_3_1_0.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,8 +52,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BFD49F221629045D0075F889 /* ScmMads.framework in Frameworks */,
-				BFD49F06162844980075F889 /* FacebookSDK.framework in Frameworks */,
+				2CFAF81A168066E000112EE9 /* FacebookSDK.framework in Frameworks */,
+				2CFAF8151680635500112EE9 /* ScmMads.framework in Frameworks */,
 				BFD49EC616282CC10075F889 /* PassKit.framework in Frameworks */,
 				BFD49EC416282C940075F889 /* AdSupport.framework in Frameworks */,
 				D48E7EA015E6A29500170ED0 /* libsqlite3.dylib in Frameworks */,
@@ -71,8 +71,8 @@
 		D470362615DD23DD000A287C = {
 			isa = PBXGroup;
 			children = (
-				BFD49F211629045D0075F889 /* ScmMads.framework */,
-				BFD49F05162844980075F889 /* FacebookSDK.framework */,
+				2CFAF819168066E000112EE9 /* FacebookSDK.framework */,
+				2CFAF8141680635500112EE9 /* ScmMads.framework */,
 				BFD49EC516282CC10075F889 /* PassKit.framework */,
 				BFD49EC316282C940075F889 /* AdSupport.framework */,
 				D48E7E9F15E6A29500170ED0 /* libsqlite3.dylib */,
@@ -284,6 +284,7 @@
 					"\"$(SRCROOT)/../../../../../Desktop\"",
 					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/ScmMads-fwqoqdfmnwqyilcxtgvczoghmfuf/Build/Products/Debug-iphoneos/ScmMads.embeddedframework\"",
 					"\"$(SRCROOT)/../FacebookSDK\"",
+					"\"$(SRCROOT)/../../../../../work/FacebookSDK\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "test_3_1_0/test_3_1_0-Prefix.pch";
@@ -311,6 +312,7 @@
 					"\"$(SRCROOT)/../../../../../Desktop\"",
 					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/ScmMads-fwqoqdfmnwqyilcxtgvczoghmfuf/Build/Products/Debug-iphoneos/ScmMads.embeddedframework\"",
 					"\"$(SRCROOT)/../FacebookSDK\"",
+					"\"$(SRCROOT)/../../../../../work/FacebookSDK\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "test_3_1_0/test_3_1_0-Prefix.pch";

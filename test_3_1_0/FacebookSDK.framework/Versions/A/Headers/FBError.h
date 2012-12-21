@@ -17,7 +17,7 @@
 #import <Foundation/Foundation.h>
 
 /// The error domain of all error codes returned by the Facebook SDK
-extern NSString *const FBiOSSDKDomain;
+extern NSString *const FacebookSDKDomain;
 
 // ----------------------------------------------------------------------------
 // Keys in the userInfo NSDictionary of NSError where you can find additional
@@ -26,7 +26,8 @@ extern NSString *const FBiOSSDKDomain;
 /// The key for an inner NSError.
 extern NSString *const FBErrorInnerErrorKey;
 
-/// The key for parsed JSON response from the server.
+/// The key for parsed JSON response from the server. In case of a batch, 
+/// includes the JSON for a single FBRequest.
 extern NSString *const FBErrorParsedJSONResponseKey;
 
 /// The key for HTTP status code.
@@ -37,7 +38,7 @@ extern NSString *const FBErrorHTTPStatusCodeKey;
  @abstract Error codes returned by the Facebook SDK in NSError.  
  
  @discussion
- These are valid only in the scope of FBiOSSDKDomain.
+ These are valid only in the scope of FacebookSDKDomain.
  */
 typedef enum FBErrorCode {
     /*! 
@@ -73,6 +74,8 @@ typedef enum FBErrorCode {
     /// endpoints that return image/jpg, etc. should be accessed using NSURLRequest
     FBErrorNonTextMimeTypeReturned,
 
+    /// An error occurred while trying to display a native dialog
+    FBErrorNativeDialog,
 } FBErrorCode;
 
 /*!
@@ -97,6 +100,15 @@ extern NSString *const FBErrorReauthorizeFailedReasonSessionClosed;
 extern NSString *const FBErrorReauthorizeFailedReasonUserCancelled;
 extern NSString *const FBErrorReauthorizeFailedReasonWrongUser;
 
+/// The key to retrieve the reason for a native dialog error
+extern NSString *const FBErrorNativeDialogReasonKey;
+
+/// indicates that a native dialog is not supported in the current OS
+extern NSString *const FBErrorNativeDialogNotSupported;
+/// indicates that a native dialog can't be displayed because it is not appropriate for the current session
+extern NSString *const FBErrorNativeDialogInvalidForSession;
+/// indicates that a native dialog can't be displayed for some other reason
+extern NSString *const FBErrorNativeDialogCantBeDisplayed;
 
 // Exception strings raised by the Facebook SDK
 

@@ -56,10 +56,10 @@
 			children = (
 				E254087D1663B1EE00052CEF /* FacebookSDK.framework */,
 				BFD49ECA16282DF60075F889 /* PassKit.framework */,
-				D443205F15E653DA00889F00 /* Accounts.framework */,
 				D443205D15E653D300889F00 /* Twitter.framework */,
 				BFB44B6A15D3B60D003A6515 /* ScmMads */,
 				BFB44B6915D3B60D003A6515 /* Products */,
+				D443205F15E653DA00889F00 /* Accounts.framework */,
 			);
 			sourceTree = "<group>";
 		};

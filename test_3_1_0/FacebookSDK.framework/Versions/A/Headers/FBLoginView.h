@@ -15,29 +15,10 @@
  */
 
 #import <UIKit/UIKit.h>
+#import "FBSession.h"
 #import "FBGraphUser.h"
 
 @protocol FBLoginViewDelegate;
-
-/*! 
- @typedef FBLoginViewLoggedInDisplayStyle enum
- 
- @abstract 
- Type used to specify the display style of the button.
- 
- @discussion
- */
-typedef enum {
-    /*! Small square profile image and facebook icon overlayed */
-    FBLoginViewStyleSquareSmall     = 0,
-    
-    /*! Large square profile image and facebook icon overlayed */
-    FBLoginViewStyleSquareLarge     = 1,
-    
-    /*! Facebook image and profile image side-by-side */
-    FBLoginViewStyleHorizontal      = 2,
-        
-} FBLoginViewStyle;
 
 /*!
  @class
@@ -47,16 +28,38 @@ typedef enum {
 
 /*!
  @abstract
- The display style for the login view.
+ The permissions to login with.  Defaults to nil, meaning basic permissions.
+ 
+ @discussion Methods and properties that specify permissions without a read or publish
+ qualification are deprecated; use of a read-qualified or publish-qualified alternative is preferred.
  */
-@property (nonatomic) FBLoginViewStyle style;
+@property (readwrite, copy) NSArray *permissions __attribute__((deprecated));
 
 /*!
  @abstract
- The permissions to login with.  Defaults to nil, meaning basic permissions.@property (readwrite, copy)   NSArray *permissions;
-
+ The read permissions to request if the user logs in via this view.
+ 
+ @discussion
+ Note, that if read permissions are specified, then publish permissions should not be specified.
  */
-@property (readwrite, copy) NSArray *permissions;
+@property (nonatomic, copy) NSArray *readPermissions;
+
+/*!
+ @abstract
+ The publish permissions to request if the user logs in via this view.
+ 
+ @discussion
+ Note, that a defaultAudience value of FBSessionDefaultAudienceOnlyMe, FBSessionDefaultAudienceEveryone, or
+ FBSessionDefaultAudienceFriends should be set if publish permissions are specified. Additionally, when publish
+ permissions are specified, then read should not be specified.
+ */
+@property (nonatomic, copy) NSArray *publishPermissions;
+
+/*!
+ @abstract
+ The default audience to use, if publish permissions are requested at login time.
+ */
+@property (nonatomic, assign) FBSessionDefaultAudience defaultAudience;
 
 
 /*!
@@ -74,14 +77,44 @@ typedef enum {
  @param permissions  An array of strings representing the permissions to request during the
  authentication flow. A value of nil will indicates basic permissions. 
  
+ @discussion Methods and properties that specify permissions without a read or publish
+ qualification are deprecated; use of a read-qualified or publish-qualified alternative is preferred.
  */
-- (id)initWithPermissions:(NSArray *)permissions;
+- (id)initWithPermissions:(NSArray *)permissions __attribute__((deprecated));
+
+/*!
+ @method
+ 
+ @abstract
+ Initializes and returns an `FBLoginView` object constructed with the specified permissions.
+ 
+ @param readPermissions  An array of strings representing the read permissions to request during the
+ authentication flow. A value of nil will indicates basic permissions.
+ 
+ */
+- (id)initWithReadPermissions:(NSArray *)readPermissions;
+
+/*!
+ @method
+ 
+ @abstract
+ Initializes and returns an `FBLoginView` object constructed with the specified permissions.
+ 
+ @param publishPermissions  An array of strings representing the publish permissions to request during the
+ authentication flow. 
+ 
+ @param defaultAudience  An audience for published posts; note that FBSessionDefaultAudienceNone is not valid
+ for permission requests that include publish or manage permissions.
+ 
+ */
+- (id)initWithPublishPermissions:(NSArray *)publishPermissions
+                 defaultAudience:(FBSessionDefaultAudience)defaultAudience;
 
 /*!
  @abstract
  The delegate object that receives updates for selection and display control.
  */
-@property (nonatomic, assign) id<FBLoginViewDelegate> delegate;
+@property (nonatomic, assign) IBOutlet id<FBLoginViewDelegate> delegate;
 
 @end
 
