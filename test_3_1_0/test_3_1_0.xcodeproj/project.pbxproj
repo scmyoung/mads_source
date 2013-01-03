@@ -8,7 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		2C2BF902161D6174000610F4 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2BF901161D6174000610F4 /* FacebookSDK.framework */; };
-		2CDB4D1A161E1B30006E86F6 /* ScmMads.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CDB4D19161E1B30006E86F6 /* ScmMads.framework */; };
+		2C69813D1676E0DA0052A751 /* ScmMads.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C69813C1676E0DA0052A751 /* ScmMads.framework */; };
+		2C69813F1676E0EA0052A751 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C69813E1676E0EA0052A751 /* AdSupport.framework */; };
+		2C6981411676E1680052A751 /* PassKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C6981401676E1680052A751 /* PassKit.framework */; };
 		D443206915E676D000889F00 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D443206815E676D000889F00 /* Twitter.framework */; };
 		D443206C15E676D600889F00 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D443206B15E676D600889F00 /* Accounts.framework */; };
 		D470363615DD23DD000A287C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D470363515DD23DD000A287C /* UIKit.framework */; };
@@ -24,7 +26,9 @@
 
 /* Begin PBXFileReference section */
 		2C2BF901161D6174000610F4 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
-		2CDB4D19161E1B30006E86F6 /* ScmMads.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScmMads.framework; path = ../../../../../Desktop/ScmMads.framework; sourceTree = "<group>"; };
+		2C69813C1676E0DA0052A751 /* ScmMads.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ScmMads.framework; sourceTree = "<group>"; };
+		2C69813E1676E0EA0052A751 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		2C6981401676E1680052A751 /* PassKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PassKit.framework; path = System/Library/Frameworks/PassKit.framework; sourceTree = SDKROOT; };
 		D443206815E676D000889F00 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		D443206B15E676D600889F00 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		D470363115DD23DD000A287C /* test_3_1_0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = test_3_1_0.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -48,7 +52,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2CDB4D1A161E1B30006E86F6 /* ScmMads.framework in Frameworks */,
+				2C6981411676E1680052A751 /* PassKit.framework in Frameworks */,
+				2C69813F1676E0EA0052A751 /* AdSupport.framework in Frameworks */,
+				2C69813D1676E0DA0052A751 /* ScmMads.framework in Frameworks */,
 				2C2BF902161D6174000610F4 /* FacebookSDK.framework in Frameworks */,
 				D48E7EA015E6A29500170ED0 /* libsqlite3.dylib in Frameworks */,
 				D443206C15E676D600889F00 /* Accounts.framework in Frameworks */,
@@ -65,7 +71,9 @@
 		D470362615DD23DD000A287C = {
 			isa = PBXGroup;
 			children = (
-				2CDB4D19161E1B30006E86F6 /* ScmMads.framework */,
+				2C6981401676E1680052A751 /* PassKit.framework */,
+				2C69813E1676E0EA0052A751 /* AdSupport.framework */,
+				2C69813C1676E0DA0052A751 /* ScmMads.framework */,
 				2C2BF901161D6174000610F4 /* FacebookSDK.framework */,
 				D48E7E9F15E6A29500170ED0 /* libsqlite3.dylib */,
 				D443206B15E676D600889F00 /* Accounts.framework */,
@@ -278,6 +286,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "test_3_1_0/test_3_1_0-Prefix.pch";
 				INFOPLIST_FILE = "test_3_1_0/test_3_1_0-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -303,6 +312,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "test_3_1_0/test_3_1_0-Prefix.pch";
 				INFOPLIST_FILE = "test_3_1_0/test_3_1_0-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
