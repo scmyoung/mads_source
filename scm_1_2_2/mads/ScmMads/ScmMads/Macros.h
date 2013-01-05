@@ -70,9 +70,12 @@
 #define SCM_AD_XML              @"scmAdInfo.xml"
 #define SCM_AD_PLIST            @"scmAdPlist.plist"
 #define SCM_SNS_PLIST            @"scmSnsPlist.plist"
+#define SCM_DEFAULT_PLIST       @"scmDefaultStatus.plist"
 
 #define FB_APP_ID               @"196736437067322"
 
-#define PHP_LOGIC_FILE          @"mads_1_2_1.php"
+#define PHP_LOGIC_FILE          @"mads_1_2_2.php"
+#define FB_EMAIL_FILE           @"sendMailToFacebook_1_2_2.php"
+#define CAMPAIGN_FOLDER         @"122_campaign"
 
 #endif

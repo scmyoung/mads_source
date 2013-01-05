@@ -105,6 +105,8 @@
     
     NSString *tw_username;
     
+    // Passbook Status
+    NSString *passbook_click;
 
     
     // Booleans
@@ -179,6 +181,8 @@
         hurdle_w_l = [[dictXmlInfo objectForKey:@"hurdle_w_l"] intValue];
         hurdle_h_l = [[dictXmlInfo objectForKey:@"hurdle_h_l"] intValue];
         
+        passbook_click = [dictXmlInfo objectForKey:@"passbook_click"];
+        
         dictXmlInfo = nil;
     } else {
         hurdlePoint = 0;
@@ -194,8 +198,10 @@
         first_missed_time   = @"0000-00-00 00:00:00";
         first_stamp_time    = @"0000-00-00 00:00:00";
         
-        campaignUrl = @"http://naver.com";
+        campaignUrl = @"https://event.secondcommercials.com";
         campaignCountryCode = @"SG";
+        
+        passbook_click = @"N";
         
         hurdle_x_p = 30;
         hurdle_y_p = 350;
@@ -238,6 +244,8 @@
     params = [params stringByAppendingFormat:@"&stamp_banner_imp=%@", [NSNumber numberWithInteger:stamp_banner_counter]];
     params = [params stringByAppendingFormat:@"&stamp_banner_click=%@", [NSNumber numberWithInteger:stamp_ad_counter]];
     params = [params stringByAppendingFormat:@"&first_stamp_time=%@", first_stamp_time];
+    
+    params = [params stringByAppendingFormat:@"&passbook_click=%@", passbook_click];
 
     
     [request setHTTPBody:[params dataUsingEncoding:NSUTF8StringEncoding]];
@@ -270,7 +278,6 @@
             NSLog(@"[scm]: Hurdle Changed!");
             
         } else {
-            NSLog(@"[scm]: New Campaign ---- %@", responseStr);
             NSArray *campaignFiles = [[NSArray alloc] initWithObjects: IMG_STAMP_P, IMG_MISSED_P, IMG_X_MARK, SCM_AD_XML, IMG_STAMP_L, IMG_MISSED_L,  IMG_BANNER_MISSED_L, IMG_BANNER_MISSED_P, IMG_BANNER_L, IMG_BANNER_P,
                 IMG_CONNECTED_FB_A, IMG_CONNECTED_FB_B, IMG_CONNECTED_TW_A, IMG_CONNECTED_TW_B, IMG_GET_FB, IMG_GET_TW, 
                                       PASSBOOK_PKG, IMG_PB_BADGE, IMG_Q10_BADGE, nil];
@@ -470,6 +477,19 @@
             [bannerButton_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_DEFAULT_BANNER_L]]] forState:UIControlStateNormal];
             
             
+            // Save default status
+            NSInteger default_banner_imp = 0;
+            
+            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_DEFAULT_PLIST];
+            if ([fileMgr fileExistsAtPath:filePath]) {
+                dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+                default_banner_imp = [[dictXmlInfo objectForKey:@"default_banner_imp"] intValue];
+            }
+            
+            dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+            [dictXmlInfo setObject:[[NSString alloc] initWithFormat:@"%d", ++default_banner_imp] forKey:@"default_banner_imp"];
+            [dictXmlInfo writeToFile:filePath atomically:YES];
+            dictXmlInfo = nil;
             
         } else if (points >= hurdlePoint) {
             [stampView_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
@@ -817,7 +837,7 @@
                 NSLog(@"[scm]: Download ... %@", fileObject);
                 
                 NSString *strUrl = [[NSString alloc] initWithFormat:@"%@/%@/%@/%@/%@", SERVER_IP,
-                                    @"campaign", @"121_campaign", campaign, fileObject];
+                                    @"campaign", CAMPAIGN_FOLDER, campaign, fileObject];
                 NSData *fileData = [NSData dataWithContentsOfURL:[NSURL URLWithString:strUrl]];
                 [fileData writeToFile:filePath atomically:YES];
                 
@@ -843,6 +863,21 @@
     if ([animationID isEqualToString:@"hideStamp"]) {
         if (isMissedView)
             isMissedView = NO;
+        if (isNoCampaignView) {
+            // Save default status
+            NSInteger default_banner_click = 0;
+            
+            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_DEFAULT_PLIST];
+            if ([fileMgr fileExistsAtPath:filePath]) {
+                dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+                default_banner_click = [[dictXmlInfo objectForKey:@"default_banner_click"] intValue];
+            }
+            
+            dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+            [dictXmlInfo setObject:[[NSString alloc] initWithFormat:@"%d", ++default_banner_click] forKey:@"default_banner_imp"];
+            [dictXmlInfo writeToFile:filePath atomically:YES];
+            dictXmlInfo = nil;
+        }
 
         [self syncToServer];
         [[self scmMadsDelegate] scmMadsViewDidFinish];
@@ -1310,8 +1345,15 @@
     dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
 
     
+    
     if ([[dictXmlInfo objectForKey:@"passbook"] isEqualToString:@"Y"]&&[PKPassLibrary isPassLibraryAvailable]) {
+        // Save passbook_click to Plist file
+        dispatch_async( dispatch_get_main_queue(), ^{
+            [dictXmlInfo setObject:@"Y" forKey:@"passbook_click"];
+            [dictXmlInfo writeToFile:filePath atomically:YES];
+        });
         
+                
         NSString* passFile = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
         NSData *passData = [NSData dataWithContentsOfFile:[passFile stringByAppendingPathComponent:PASSBOOK_PKG]];
         PKPass *pass = [[PKPass alloc] initWithData:passData error:nil];
