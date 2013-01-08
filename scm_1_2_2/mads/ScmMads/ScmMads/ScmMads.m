@@ -107,6 +107,10 @@
     
     // Passbook Status
     NSString *passbook_click;
+    
+    // Default Value
+    NSInteger default_banner_imp;
+    NSInteger default_banner_click;
 
     
     // Booleans
@@ -183,6 +187,7 @@
         
         passbook_click = [dictXmlInfo objectForKey:@"passbook_click"];
         
+        
         dictXmlInfo = nil;
     } else {
         hurdlePoint = 0;
@@ -202,6 +207,7 @@
         campaignCountryCode = @"SG";
         
         passbook_click = @"N";
+
         
         hurdle_x_p = 30;
         hurdle_y_p = 350;
@@ -246,6 +252,8 @@
     params = [params stringByAppendingFormat:@"&first_stamp_time=%@", first_stamp_time];
     
     params = [params stringByAppendingFormat:@"&passbook_click=%@", passbook_click];
+    params = [params stringByAppendingFormat:@"&default_banner_imp=%@", [NSNumber numberWithInteger:default_banner_imp]];
+    params = [params stringByAppendingFormat:@"&default_banner_click=%@", [NSNumber numberWithInteger:default_banner_click]];
 
     
     [request setHTTPBody:[params dataUsingEncoding:NSUTF8StringEncoding]];
@@ -263,6 +271,9 @@
         if ([responseStr isEqualToString:@"NoCampaign"]) {
             NSLog(@"[scm]: No Campaign Available!");
             isNoCampaignView = YES;
+            
+            default_banner_imp = 0;
+            default_banner_click = 0;
             
             NSArray *defaultFiles = [[NSArray alloc] initWithObjects:IMG_DEFAULT_P, IMG_DEFAULT_L,
                                      IMG_DEFAULT_BANNER_P, IMG_DEFAULT_BANNER_L, IMG_X_MARK, nil];
@@ -317,6 +328,9 @@
     isFacebookLogin     = NO;
     isTwitterLogin      = NO;
     isPortraitMode      = YES;
+    
+    default_banner_imp = 0;
+    default_banner_click = 0;
     
     // ------------- Initiate UI ------------------
     
@@ -477,19 +491,8 @@
             [bannerButton_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_DEFAULT_BANNER_L]]] forState:UIControlStateNormal];
             
             
-            // Save default status
-            NSInteger default_banner_imp = 0;
-            
-            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_DEFAULT_PLIST];
-            if ([fileMgr fileExistsAtPath:filePath]) {
-                dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
-                default_banner_imp = [[dictXmlInfo objectForKey:@"default_banner_imp"] intValue];
-            }
-            
-            dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
-            [dictXmlInfo setObject:[[NSString alloc] initWithFormat:@"%d", ++default_banner_imp] forKey:@"default_banner_imp"];
-            [dictXmlInfo writeToFile:filePath atomically:YES];
-            dictXmlInfo = nil;
+            // Save default status            
+            default_banner_imp++;
             
         } else if (points >= hurdlePoint) {
             [stampView_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
@@ -682,8 +685,22 @@
     [UIView beginAnimations:@"hideBanner" context:nil];
     [UIView setAnimationDuration:0.6f];
     [UIView setAnimationDelegate:self];
-        
-    self.view.frame = CGRectMake(0, -537, 320, 537);
+    
+    currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if (currentOrientation == UIDeviceOrientationPortrait) {
+        bannerButton_l.hidden = YES;
+        stampView_l.hidden = YES;
+        bannerButton_p.hidden = NO;
+        stampView_p.hidden = NO;
+    }
+    else{
+        bannerButton_p.hidden = YES;
+        stampView_p.hidden = YES;
+        bannerButton_l.hidden = NO;
+        stampView_l.hidden = NO;
+    }
+    
+    self.view.frame = CGRectMake(0, -537, 480, 537);
 
     
     [UIView commitAnimations];
@@ -737,8 +754,6 @@
     
     [UIImageView commitAnimations];
     
-    isNoCampaignView = NO;
-
 
 }
 
@@ -859,24 +874,14 @@
 #pragma - animation callback methods
 - (void)scmAdAnimationFinished:(NSString *)animationID finished:(BOOL)finished context:(void *)context
 {
-    
+
     if ([animationID isEqualToString:@"hideStamp"]) {
         if (isMissedView)
             isMissedView = NO;
         if (isNoCampaignView) {
             // Save default status
-            NSInteger default_banner_click = 0;
-            
-            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_DEFAULT_PLIST];
-            if ([fileMgr fileExistsAtPath:filePath]) {
-                dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
-                default_banner_click = [[dictXmlInfo objectForKey:@"default_banner_click"] intValue];
-            }
-            
-            dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
-            [dictXmlInfo setObject:[[NSString alloc] initWithFormat:@"%d", ++default_banner_click] forKey:@"default_banner_imp"];
-            [dictXmlInfo writeToFile:filePath atomically:YES];
-            dictXmlInfo = nil;
+            default_banner_click++;
+            isNoCampaignView = NO;
         }
 
         [self syncToServer];
@@ -994,9 +999,6 @@
     params = [params stringByAppendingFormat:@"&campaign=%@", campaignName];
     params = [params stringByAppendingFormat:@"&email=%@", email_address];
     params = [params stringByAppendingFormat:@"&name=%@", user_name];
-    
-    NSLog(@"[scm]: email - %@, user_name - %@", email_address, user_name);
-    
     
     [request setHTTPBody:[params dataUsingEncoding:NSUTF8StringEncoding]];
     [request setTimeoutInterval:3.0f];

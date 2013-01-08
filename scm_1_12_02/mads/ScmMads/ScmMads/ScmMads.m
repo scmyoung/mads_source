@@ -919,7 +919,7 @@
     NSLog(@"[scm]: send email to facebook account!");
     NSString* appId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
     NSString* deviceId = [[UIDevice currentDevice] uniqueIdentifier];
-    NSString* phpFile = [[NSString alloc] initWithFormat:@"%@/logic/facebook_email_logic/sendMailToFacebook_1_1_1.php", SERVER_IP];
+    NSString* phpFile = [[NSString alloc] initWithFormat:@"%@/logic/facebook_email_logic/%@", SERVER_IP, FB_EMAIL_FILE];
     NSURL *url = [NSURL URLWithString:phpFile];
 
         

@@ -238,6 +238,7 @@
     params = [params stringByAppendingFormat:@"&stamp_banner_imp=%@", [NSNumber numberWithInteger:stamp_banner_counter]];
     params = [params stringByAppendingFormat:@"&stamp_banner_click=%@", [NSNumber numberWithInteger:stamp_ad_counter]];
     params = [params stringByAppendingFormat:@"&first_stamp_time=%@", first_stamp_time];
+    
 
     
     [request setHTTPBody:[params dataUsingEncoding:NSUTF8StringEncoding]];
