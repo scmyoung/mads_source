@@ -9,10 +9,11 @@
 #import "ScmMads.h"
 #import "Utilities.h"
 #import "Macros.h"
+/* disable SNS
 #import <FacebookSDK/FacebookSDK.h>
 #import <Twitter/Twitter.h>
 #import <Accounts/Accounts.h>
-
+*/
 
 
 @interface ScmMads ()
@@ -90,7 +91,7 @@
     
     // hurdle point for a game
     NSInteger hurdlePoint;
-    
+    /* disable SNS
     // Twitter Handler
     TWTweetComposeViewController *twController;
     TWRequest *twRequest;
@@ -104,7 +105,7 @@
     NSString *fb_name;
     
     NSString *tw_username;
-    
+    */
     // Passbook Status
     NSString *passbook_click;
     
@@ -316,7 +317,7 @@
     fileMgr = [[NSFileManager alloc] init];
     utilities = [[Utilities alloc] init];
     phoneCountryCode = [[NSLocale currentLocale] objectForKey: NSLocaleCountryCode];
-    accountStore = [[ACAccountStore alloc] init];
+    //accountStore = [[ACAccountStore alloc] init];
     
     isCountryCodeMatch  = YES;
     isDownloading       = NO;
@@ -362,6 +363,7 @@
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(deviceOrientationDidChange:) name: UIDeviceOrientationDidChangeNotification object: nil];
     
     
+    /*
     // ------------- SNS Initiation -----------------
     
     NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_SNS_PLIST];
@@ -372,24 +374,6 @@
         
     }
     if (isFacebookLogin == YES) {
-        /*
-        if (!fbSession.isOpen) {
-            // create a fresh session object
-            fbSession = [[FBSession alloc] init];
-            
-            // if we don't have a cached token, a call to open here would cause UX for login to
-            // occur; we don't want that to happen unless the user clicks the login button, and so
-            // we check here to make sure we have a token before calling open
-            if (fbSession.state == FBSessionStateCreatedTokenLoaded) {
-                // even though we had a cached token, we need to login to make the session usable
-                [fbSession openWithCompletionHandler:^(FBSession *session,
-                                                       FBSessionState status,
-                                                       NSError *error) {
-                    
-                }];
-            }
-        }
-        */
         
         [FBSession openActiveSessionWithReadPermissions:nil allowLoginUI:YES completionHandler:
          ^(FBSession *session, FBSessionState state, NSError *error) {
@@ -399,31 +383,8 @@
              }
              
          }];
-        /*
-        if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
-            
-        } else {
-            
-        }
-        */
     }
-    /*
-    if (isFacebookLogin == YES) {
-        NSArray *permissions = [NSArray arrayWithObjects:@"publish_stream", @"email", nil];
-        [FBSession sessionOpenWithPermissions:permissions
-                            completionHandler:
-         ^(FBSession *session,
-           FBSessionState status,
-           NSError *error) {
-             // if login fails for any reason, we alert
-             if (error) {
-                 // TODO: Handle Facebook Login Error
-                 NSLog(@"[scm]: Facebook Login Error!");
-             } else if (FB_ISSESSIONOPENWITHSTATE(status)) {
-             }
-         }];
-    }*/
-   
+    */
     
     [self createStampView];
     [self syncToServer];
@@ -527,6 +488,7 @@
             passBook_p.frame = CGRectMake(99, 314, 122, 40);
             passBook_l.frame = CGRectMake(61, 232, 120, 36);
             
+            /* disable SNS
             if ([self checkForPreviouslySavedAccessTokenInfo] == NO) {
                 NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
                 
@@ -566,6 +528,7 @@
                 twtIcon_p.frame = CGRectMake(96, 383, 174, 42);
                 twtIcon_l.frame = CGRectMake(246, 232, 174, 42);
             }
+            */
             
             [self buttonHidden:YES];
             
@@ -593,6 +556,7 @@
             [passBook_p removeFromSuperview];
             [passBook_l removeFromSuperview];
             
+            /* disable SNS
             if ([self checkForPreviouslySavedAccessTokenInfo] == NO) {
                 NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
                 
@@ -632,6 +596,7 @@
                 twtIcon_p.frame = CGRectMake(96, 334, 174, 42);
                 twtIcon_l.frame = CGRectMake(175, 232, 174, 42);
             }
+            */
             
             [self buttonHidden:YES];
             
@@ -762,11 +727,12 @@
 {
     closeXButton_p.hidden = flag;
     closeXButton_l.hidden = flag;
-    
+    /* disable SNS
     twtIcon_p.hidden    = flag;
     fbIcon_p.hidden     = flag;
     twtIcon_l.hidden    = flag;
     fbIcon_l.hidden     = flag;
+    */
     passBook_p.hidden   = flag;
     passBook_l.hidden   = flag;
     
@@ -776,11 +742,12 @@
 {
     closeXButton_p.alpha = flag;
     closeXButton_l.alpha = flag;
-    
+    /* disable SNS
     twtIcon_p.alpha    = flag;
     fbIcon_p.alpha     = flag;
     twtIcon_l.alpha    = flag;
     fbIcon_l.alpha     = flag;
+     */
     passBook_p.alpha   = flag;
     passBook_l.alpha   = flag;
 }
@@ -813,18 +780,20 @@
     [bannerButton_l addTarget:self action:@selector(showStamp) forControlEvents:UIControlEventTouchUpInside];
     [closeXButton_l addTarget:self action:@selector(hideStamp) forControlEvents:UIControlEventTouchUpInside];
     
-    
+    /* disable SNS
     [twtIcon_p addTarget:self action:@selector(scmTwitterLogin) forControlEvents:UIControlEventTouchUpInside];
     [twtIcon_l addTarget:self action:@selector(scmTwitterLogin) forControlEvents:UIControlEventTouchUpInside];
     [fbIcon_p addTarget:self action:@selector(scmFacebookLogin) forControlEvents:UIControlEventTouchUpInside];
     [fbIcon_l addTarget:self action:@selector(scmFacebookLogin) forControlEvents:UIControlEventTouchUpInside];
-    
+    */
+     
     [self buttonHidden:YES];
-    
+    /* disable SNS
     [stampView_p addSubview:twtIcon_p];
     [stampView_l addSubview:twtIcon_l];
     [stampView_p addSubview:fbIcon_p];
     [stampView_l addSubview:fbIcon_l];
+     */
     //[stampView_p addSubview:PassBook_p];
     //[stampView_l addSubview:passBook_l];
     
@@ -924,6 +893,7 @@
         
         // Show sns view
 
+        /* disable SNS
         if (isMissedView == NO) {
             if ([self checkForPreviouslySavedAccessTokenInfo] == NO && isInternetAvailable == YES) {
                 // TODO: fill something here
@@ -937,6 +907,7 @@
             }
 
         }
+         */
         
         [self buttonAlpha:0];
         [UIView beginAnimations:@"showButtons" context:nil];
@@ -945,7 +916,7 @@
         
         [self buttonHidden:NO];
         [self buttonAlpha:1];
-        
+        /* disable SNS
         if ([self checkForPreviouslySavedAccessTokenInfo] == YES) {
             passBook_l.hidden = NO;
             passBook_p.hidden = NO;
@@ -953,6 +924,7 @@
             passBook_l.hidden  = YES;
             passBook_p.hidden = YES;
         }
+        */
         
         [UIView commitAnimations];
         
@@ -979,6 +951,7 @@
     }
 }
 
+/* diable SNS
 #pragma - send email for facebook user
 - (void) sendMailToServer : (NSString *)email_address withName:(NSString *)user_name
 {
@@ -1201,12 +1174,7 @@
     }];
     
 }
-/*
-- (void) showAlertView: (id)sns
-{
 
-    [utilities.alert_dv_tw show];
-}*/
 
 - (void) twSendDirectMessage: (NSString *) twDirectMessage
 {
@@ -1271,9 +1239,7 @@
                 }
                 
             }
-            /*[self performSelectorOnMainThread:@selector(showAlertView:)
-                                   withObject:@"twitter"
-                                waitUntilDone:NO];*/
+
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
@@ -1336,7 +1302,7 @@
 
     }
 }
-
+*/
 
 
 
@@ -1345,16 +1311,15 @@
     NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES)
                            objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
     dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
-
     
+    // Save passbook_click to Plist file
+    dispatch_async( dispatch_get_main_queue(), ^{
+        [dictXmlInfo setObject:@"Y" forKey:@"passbook_click"];
+        [dictXmlInfo writeToFile:filePath atomically:YES];
+    });
     
     if ([[dictXmlInfo objectForKey:@"passbook"] isEqualToString:@"Y"]&&[PKPassLibrary isPassLibraryAvailable]) {
-        // Save passbook_click to Plist file
-        dispatch_async( dispatch_get_main_queue(), ^{
-            [dictXmlInfo setObject:@"Y" forKey:@"passbook_click"];
-            [dictXmlInfo writeToFile:filePath atomically:YES];
-        });
-        
+                
                 
         NSString* passFile = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
         NSData *passData = [NSData dataWithContentsOfFile:[passFile stringByAppendingPathComponent:PASSBOOK_PKG]];
