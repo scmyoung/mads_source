@@ -121,7 +121,7 @@
     currentElement = nil;
     fileMgr = [NSFileManager defaultManager];
 
-    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:@"scmAdPlist.plist"];
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"scmAdPlist.plist"];
     
     if ([fileMgr fileExistsAtPath:filePath]) {
         [fileMgr removeItemAtPath:filePath error:nil];

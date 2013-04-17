@@ -11,6 +11,7 @@
 
 #define SERVER_IP               @"http://211.115.71.69"
 #define LOCAL_SERVER_IP         @"http://localhost/"
+#define AWS_SERVER              @"http://mads.secondcommercials.com/mads_server/"
 
 // **** Images ****
 

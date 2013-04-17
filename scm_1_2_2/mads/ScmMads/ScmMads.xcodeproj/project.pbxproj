@@ -14,6 +14,7 @@
 		BFD49F0D162845C60075F889 /* Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = BFD49F09162845C60075F889 /* Utilities.h */; };
 		BFD49F0E162845C60075F889 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD49F0A162845C60075F889 /* Utilities.m */; };
 		BFD49F26162906380075F889 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BFD49F25162906380075F889 /* logo.png */; };
+		E2E38EC7171EBC7B005DC8E6 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2E38EC6171EBC7B005DC8E6 /* AdSupport.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		BFD49F0A162845C60075F889 /* Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utilities.m; sourceTree = "<group>"; };
 		BFD49F25162906380075F889 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		D4831E0915EE3C09002FCA82 /* Macros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
+		E2E38EC6171EBC7B005DC8E6 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2E38EC7171EBC7B005DC8E6 /* AdSupport.framework in Frameworks */,
 				BFD49ECB16282DF60075F889 /* PassKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -45,6 +48,7 @@
 		BFB44B5A15D3B60D003A6515 = {
 			isa = PBXGroup;
 			children = (
+				E2E38EC6171EBC7B005DC8E6 /* AdSupport.framework */,
 				BFD49ECA16282DF60075F889 /* PassKit.framework */,
 				BFB44B6A15D3B60D003A6515 /* ScmMads */,
 				BFB44B6915D3B60D003A6515 /* Products */,
@@ -124,7 +128,7 @@
 		BFB44B5C15D3B60D003A6515 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0440;
+				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = SecondCommercials;
 			};
 			buildConfigurationList = BFB44B5F15D3B60D003A6515 /* Build configuration list for PBXProject "ScmMads" */;
@@ -217,6 +221,9 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -243,6 +250,9 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -267,9 +277,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/..\"",
-					"\"$(SRCROOT)/../../FacebookSDK\"",
-					"\"$(SRCROOT)/../../../../../Desktop/FacebookSDK\"",
-					"\"$(SRCROOT)/../../../scm_1_1_1/FacebookSDK\"",
 				);
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -297,9 +304,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/..\"",
-					"\"$(SRCROOT)/../../FacebookSDK\"",
-					"\"$(SRCROOT)/../../../../../Desktop/FacebookSDK\"",
-					"\"$(SRCROOT)/../../../scm_1_1_1/FacebookSDK\"",
 				);
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

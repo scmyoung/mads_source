@@ -9,6 +9,9 @@
 #import "ScmMads.h"
 #import "Utilities.h"
 #import "Macros.h"
+#import <AdSupport/AdSupport.h>
+
+
 /* disable SNS
 #import <FacebookSDK/FacebookSDK.h>
 #import <Twitter/Twitter.h>
@@ -138,7 +141,7 @@
 - (void) clearCampaignFiles : (NSArray *)clearFiles
 {
     for (NSInteger i=0; i<clearFiles.count; i++) {
-        NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:[clearFiles objectAtIndex:i]];
+        NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:[clearFiles objectAtIndex:i]];
         
         if ([fileMgr fileExistsAtPath:filePath]) {
             [fileMgr removeItemAtPath:filePath error:nil];
@@ -155,7 +158,7 @@
 
 - (void) parseScmPlistFile
 {
-    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
     if ([fileMgr fileExistsAtPath:filePath]) {
         dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
         campaignName = [dictXmlInfo objectForKey:@"campaign"];
@@ -227,7 +230,14 @@
     [self parseScmPlistFile];
     
     NSString* appId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
-    NSString* deviceId = [[UIDevice currentDevice] uniqueIdentifier];
+    
+    // UDID deprecated
+    //NSString* deviceId = [[UIDevice currentDevice] uniqueIdentifier];
+    
+    // use ad support framework instead
+    ASIdentifierManager *adManager = [ASIdentifierManager sharedManager];
+    NSUUID *adId = adManager.advertisingIdentifier;
+    NSString *deviceId = adId.UUIDString;
     
     NSString *baseUrl = [[NSString alloc] initWithFormat:@"http://211.115.71.69/logic/%@", PHP_LOGIC_FILE];
     baseUrl = [baseUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -432,7 +442,7 @@
 
     if (isDownloadOk == YES) {
         // User Document Directory Path
-        NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
+        NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
         
         [closeXButton_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_X_MARK]]] forState:UIControlStateNormal];
         [closeXButton_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_X_MARK]]] forState:UIControlStateNormal];
@@ -468,7 +478,7 @@
             
             [stampView_p addSubview:passBook_p];
             [stampView_l addSubview:passBook_l];
-            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES)
+            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)
                                    objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
             dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
             
@@ -533,7 +543,7 @@
             [self buttonHidden:YES];
             
             // Save stampsCounter to Plist file
-            filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
+            filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
             if ([fileMgr fileExistsAtPath:filePath]) {
                 dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
                 [dictXmlInfo setObject:[[NSString alloc] initWithFormat:@"%d", ++stamp_banner_counter] forKey:@"stamp_banner_imp"];
@@ -601,7 +611,7 @@
             [self buttonHidden:YES];
             
             // Save stampsCounter to Plist file
-            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
+            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
             if ([fileMgr fileExistsAtPath:filePath]) {
                 dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
                 [dictXmlInfo setObject:[[NSString alloc] initWithFormat:@"%d", ++missed_banner_counter] forKey:@"missed_banner_imp"];
@@ -615,7 +625,7 @@
         [UIView setAnimationDuration:0.5f];
         [UIView setAnimationDelegate:self];
         
-        currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+        currentOrientation = [[UIDevice currentDevice] orientation] ;
         if (currentOrientation == UIDeviceOrientationPortrait) {
             bannerButton_l.hidden = YES;
             stampView_l.hidden = YES;
@@ -651,7 +661,7 @@
     [UIView setAnimationDuration:0.6f];
     [UIView setAnimationDelegate:self];
     
-    currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+    currentOrientation = [[UIDevice currentDevice] orientation] ;
     if (currentOrientation == UIDeviceOrientationPortrait) {
         bannerButton_l.hidden = YES;
         stampView_l.hidden = YES;
@@ -814,7 +824,7 @@
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         isDownloading = YES;
         for (id fileObject in fileArray) {
-            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:fileObject];
+            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:fileObject];
                         
             // If check for file existance
             if ([fileMgr fileExistsAtPath:filePath] == NO) {
@@ -861,7 +871,7 @@
     if ([animationID isEqualToString:@"showStamp"] && isNoCampaignView == NO) {
         // Save click impressions
         // Save stampsCounter to Plist file
-        NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
+        NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
         if ([fileMgr fileExistsAtPath:filePath]) {
             dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
             
@@ -1308,7 +1318,7 @@
 
 - (void)showPassbook
 {
-    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES)
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)
                            objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
     dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
     
@@ -1321,7 +1331,7 @@
     if ([[dictXmlInfo objectForKey:@"passbook"] isEqualToString:@"Y"]&&[PKPassLibrary isPassLibraryAvailable]) {
                 
                 
-        NSString* passFile = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
+        NSString* passFile = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
         NSData *passData = [NSData dataWithContentsOfFile:[passFile stringByAppendingPathComponent:PASSBOOK_PKG]];
         PKPass *pass = [[PKPass alloc] initWithData:passData error:nil];
         
