@@ -63,8 +63,12 @@
 #define IMG_GET_FB                            @"get_FB.png"
 #define IMG_GET_TW                            @"get_TWT.png"
 
+#define IMG_CUSTOM_1            @"btn_custom_1.png"
+#define IMG_CUSTOM_2            @"btn_custom_2.png"
+#define IMG_CUSTOM_3            @"btn_custom_3.png"
+#define IMG_CUSTOM_4            @"btn_custom_4.png"
 
-
+#define IMG_COUPON_TO_SAVE      @"coupon_to_save.png"
 
 // **** End of Images ****
 

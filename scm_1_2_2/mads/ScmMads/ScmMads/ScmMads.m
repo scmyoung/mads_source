@@ -29,20 +29,100 @@
     UIButton *bannerButton_p;
     UIButton *bannerButton_l;
     
-    
+    // Close btn
     UIButton *closeXButton_p;
     UIButton *closeXButton_l;
-
     
+    NSInteger close_p_x;
+    NSInteger close_p_y;
+    NSInteger close_p_w;
+    NSInteger close_p_h;
+    
+    NSInteger close_l_x;
+    NSInteger close_l_y;
+    NSInteger close_l_w;
+    NSInteger close_l_h;
+    
+    // SNS btn
     UIButton *twtIcon_p;
     UIButton *twtIcon_l;
     UIButton *fbIcon_p;
     UIButton *fbIcon_l;
-    
+
+    // Passbook Btn
     UIButton *passBook_p;
     UIButton *passBook_l;
     
+    NSInteger passbook_p_x;
+    NSInteger passbook_p_y;
+    NSInteger passbook_p_w;
+    NSInteger passbook_p_h;
     
+    NSInteger passbook_l_x;
+    NSInteger passbook_l_y;
+    NSInteger passbook_l_w;
+    NSInteger passbook_l_h;
+    
+    // Custom Btn
+    UIButton *custom_btn_p_1; // save image
+    UIButton *custom_btn_p_2; // link 1
+    UIButton *custom_btn_p_3; // link 2
+    UIButton *custom_btn_p_4; // TBD
+    
+    UIButton *custom_btn_l_1;
+    UIButton *custom_btn_l_2;
+    UIButton *custom_btn_l_3;
+    UIButton *custom_btn_l_4;
+    
+    NSInteger custom_btn_1_p_x;
+    NSInteger custom_btn_1_p_y;
+    NSInteger custom_btn_1_p_w;
+    NSInteger custom_btn_1_p_h;
+    
+    NSInteger custom_btn_1_l_x;
+    NSInteger custom_btn_1_l_y;
+    NSInteger custom_btn_1_l_w;
+    NSInteger custom_btn_1_l_h;
+    
+    NSInteger custom_btn_2_p_x;
+    NSInteger custom_btn_2_p_y;
+    NSInteger custom_btn_2_p_w;
+    NSInteger custom_btn_2_p_h;
+    
+    NSInteger custom_btn_2_l_x;
+    NSInteger custom_btn_2_l_y;
+    NSInteger custom_btn_2_l_w;
+    NSInteger custom_btn_2_l_h;
+    
+    NSInteger custom_btn_3_p_x;
+    NSInteger custom_btn_3_p_y;
+    NSInteger custom_btn_3_p_w;
+    NSInteger custom_btn_3_p_h;
+    
+    NSInteger custom_btn_3_l_x;
+    NSInteger custom_btn_3_l_y;
+    NSInteger custom_btn_3_l_w;
+    NSInteger custom_btn_3_l_h;
+    
+    NSInteger custom_btn_4_p_x;
+    NSInteger custom_btn_4_p_y;
+    NSInteger custom_btn_4_p_w;
+    NSInteger custom_btn_4_p_h;
+    
+    NSInteger custom_btn_4_l_x;
+    NSInteger custom_btn_4_l_y;
+    NSInteger custom_btn_4_l_w;
+    NSInteger custom_btn_4_l_h;
+    
+    // Check if only show success
+    NSString *onlyShowSuccess;
+    
+    // Check campaign info
+    NSString *btn_save_img;
+    NSString *btn_link_1;
+    NSString *btn_link_2;
+    NSString *link_1;
+    NSString *link_2;
     
     // ------------------------
     
@@ -189,8 +269,81 @@
         hurdle_w_l = [[dictXmlInfo objectForKey:@"hurdle_w_l"] intValue];
         hurdle_h_l = [[dictXmlInfo objectForKey:@"hurdle_h_l"] intValue];
         
+        // check if only show success
+        onlyShowSuccess = [dictXmlInfo objectForKey:@"onlySuccess"];
+        
+        // Passbook Info
         passbook_click = [dictXmlInfo objectForKey:@"passbook_click"];
         
+        passbook_p_x   = [[dictXmlInfo objectForKey:@"btn_passbook_p_x"] intValue];
+        passbook_p_y   = [[dictXmlInfo objectForKey:@"btn_passbook_p_y"] intValue];
+        passbook_p_w   = [[dictXmlInfo objectForKey:@"btn_passbook_p_w"] intValue];
+        passbook_p_h   = [[dictXmlInfo objectForKey:@"btn_passbook_p_h"] intValue];
+
+        passbook_l_x   = [[dictXmlInfo objectForKey:@"btn_passbook_l_x"] intValue];
+        passbook_l_y   = [[dictXmlInfo objectForKey:@"btn_passbook_l_y"] intValue];
+        passbook_l_w   = [[dictXmlInfo objectForKey:@"btn_passbook_l_w"] intValue];
+        passbook_l_h   = [[dictXmlInfo objectForKey:@"btn_passbook_l_h"] intValue];
+        
+        // Close X Coordinate
+        close_p_x = [[dictXmlInfo objectForKey:@"btn_x_p_x"] intValue];
+        close_p_y = [[dictXmlInfo objectForKey:@"btn_x_p_y"] intValue];
+        close_p_w = [[dictXmlInfo objectForKey:@"btn_x_p_w"] intValue];
+        close_p_h = [[dictXmlInfo objectForKey:@"btn_x_p_h"] intValue];
+        
+        close_l_x = [[dictXmlInfo objectForKey:@"btn_x_l_x"] intValue];
+        close_l_y = [[dictXmlInfo objectForKey:@"btn_x_l_y"] intValue];
+        close_l_w = [[dictXmlInfo objectForKey:@"btn_x_l_w"] intValue];
+        close_l_h = [[dictXmlInfo objectForKey:@"btn_x_l_h"] intValue];
+        
+        // Custom Btns
+        custom_btn_1_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_1_p_x"] intValue];
+        custom_btn_1_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_1_p_x"] intValue];
+        custom_btn_1_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_1_p_x"] intValue];
+        custom_btn_1_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_1_p_x"] intValue];
+        
+        custom_btn_1_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_1_l_x"] intValue];
+        custom_btn_1_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_1_l_x"] intValue];
+        custom_btn_1_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_1_l_x"] intValue];
+        custom_btn_1_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_1_l_x"] intValue];
+        
+        custom_btn_2_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_2_p_x"] intValue];
+        custom_btn_2_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_2_p_x"] intValue];
+        custom_btn_2_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_2_p_x"] intValue];
+        custom_btn_2_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_2_p_x"] intValue];
+        
+        custom_btn_2_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_2_l_x"] intValue];
+        custom_btn_2_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_2_l_x"] intValue];
+        custom_btn_2_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_2_l_x"] intValue];
+        custom_btn_2_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_2_l_x"] intValue];
+        
+        custom_btn_3_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_3_p_x"] intValue];
+        custom_btn_3_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_3_p_x"] intValue];
+        custom_btn_3_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_3_p_x"] intValue];
+        custom_btn_3_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_3_p_x"] intValue];
+        
+        custom_btn_3_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_3_l_x"] intValue];
+        custom_btn_3_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_3_l_x"] intValue];
+        custom_btn_3_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_3_l_x"] intValue];
+        custom_btn_3_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_3_l_x"] intValue];
+
+        custom_btn_4_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_4_p_x"] intValue];
+        custom_btn_4_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_4_p_x"] intValue];
+        custom_btn_4_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_4_p_x"] intValue];
+        custom_btn_4_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_4_p_x"] intValue];
+        
+        custom_btn_4_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_4_l_x"] intValue];
+        custom_btn_4_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_4_l_x"] intValue];
+        custom_btn_4_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_4_l_x"] intValue];
+        custom_btn_4_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_4_l_x"] intValue];
+        
+
+        btn_save_img    = [dictXmlInfo objectForKey:@"btn_save_img"];
+        btn_link_1      = [dictXmlInfo objectForKey:@"btn_link_1"];
+        btn_link_2      = [dictXmlInfo objectForKey:@"btn_link_2"];
+        
+        link_1          = [dictXmlInfo objectForKey:@"link_1"];
+        link_2          = [dictXmlInfo objectForKey:@"link_2"];
         
         dictXmlInfo = nil;
     } else {
@@ -211,17 +364,8 @@
         campaignCountryCode = @"SG";
         
         passbook_click = @"N";
-
         
-        hurdle_x_p = 30;
-        hurdle_y_p = 350;
-        hurdle_w_p = 260;
-        hurdle_h_p = 20;
         
-        hurdle_x_l = 108;
-        hurdle_y_l = 240;
-        hurdle_w_l = 264;
-        hurdle_h_l = 20;
     }
 }
 
@@ -239,7 +383,7 @@
     NSUUID *adId = adManager.advertisingIdentifier;
     NSString *deviceId = adId.UUIDString;
     
-    NSString *baseUrl = [[NSString alloc] initWithFormat:@"http://211.115.71.69/logic/%@", PHP_LOGIC_FILE];
+    NSString *baseUrl = [[NSString alloc] initWithFormat:@"http://%@/%@", AWS_SERVER, PHP_LOGIC_FILE];
     baseUrl = [baseUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSURL *url = [NSURL URLWithString:baseUrl];
             
@@ -302,7 +446,7 @@
         } else {
             NSArray *campaignFiles = [[NSArray alloc] initWithObjects: IMG_STAMP_P, IMG_MISSED_P, IMG_X_MARK, SCM_AD_XML, IMG_STAMP_L, IMG_MISSED_L,  IMG_BANNER_MISSED_L, IMG_BANNER_MISSED_P, IMG_BANNER_L, IMG_BANNER_P,
                 IMG_CONNECTED_FB_A, IMG_CONNECTED_FB_B, IMG_CONNECTED_TW_A, IMG_CONNECTED_TW_B, IMG_GET_FB, IMG_GET_TW, 
-                                      PASSBOOK_PKG, IMG_PB_BADGE, IMG_Q10_BADGE, nil];
+                                      PASSBOOK_PKG, IMG_PB_BADGE, IMG_Q10_BADGE, IMG_COUPON_TO_SAVE, nil];
             [self downloadFiles:campaignFiles campaignPath:responseStr];
         }
         isInternetAvailable = YES;
@@ -343,29 +487,14 @@
     default_banner_imp = 0;
     default_banner_click = 0;
     
-    // ------------- Initiate UI ------------------
+
     
-    stampView_p = [[UIImageView alloc]init];
-    stampView_l = [[UIImageView alloc]init];
-    
-    bannerButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
-    bannerButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
-    
-    closeXButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
-    closeXButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
-    
-    passBook_p = [UIButton buttonWithType:UIButtonTypeCustom];
-    passBook_l = [UIButton buttonWithType:UIButtonTypeCustom];
-    
-    
-    [passBook_p addTarget:self action:@selector(showPassbook) forControlEvents:UIControlEventTouchUpInside];
-    [passBook_l addTarget:self action:@selector(showPassbook) forControlEvents:UIControlEventTouchUpInside];
-    
+    /*
     twtIcon_p = [[UIButton alloc]initWithFrame:CGRectMake(96, 334, 174, 42)];
     twtIcon_l = [[UIButton alloc]initWithFrame:CGRectMake(175, 232, 174, 42)];
     fbIcon_p = [[UIButton alloc]initWithFrame:CGRectMake(50, 334, 42, 42)];
     fbIcon_l = [[UIButton alloc]initWithFrame:CGRectMake(128, 232, 42, 42)];
-    
+    */
     
     // ------------- Orientation Events Registration ------------------
     
@@ -405,6 +534,7 @@
 
 - (void)deviceOrientationDidChange:(NSNotification *)notification
 {
+    [self hideScmMads];
     /*
     //Obtaining the current device orientation
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
@@ -483,20 +613,38 @@
             dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
             
             if ([[dictXmlInfo objectForKey:@"passbook"] isEqualToString:@"Y"]&&[PKPassLibrary isPassLibraryAvailable]) {
-        
-                
                 [passBook_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_PB_BADGE]]] forState:UIControlStateNormal];
-                
                 [passBook_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_PB_BADGE]]] forState:UIControlStateNormal];
-            }else{
                 
-                [passBook_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_Q10_BADGE]]] forState:UIControlStateNormal];
-                [passBook_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_Q10_BADGE]]] forState:UIControlStateNormal];
+                passBook_p.frame = CGRectMake(passbook_p_x, passbook_p_y, passbook_p_w, passbook_p_h);
+                passBook_l.frame = CGRectMake(passbook_l_x, passbook_l_y, passbook_l_w, passbook_l_h);
+            }
+
+            
+            // Custom Buttons
+            if ([btn_save_img isEqualToString:@"Y"]) {
+                [custom_btn_p_1 setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CUSTOM_1]]] forState:UIControlStateNormal];
+                [custom_btn_l_1 setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CUSTOM_1]]] forState:UIControlStateNormal];
+                
+                custom_btn_p_1.frame = CGRectMake(custom_btn_1_p_x, custom_btn_1_p_y, custom_btn_1_p_w, custom_btn_1_p_h);
+                custom_btn_l_1.frame = CGRectMake(custom_btn_1_l_x, custom_btn_1_l_y, custom_btn_1_l_w, custom_btn_1_l_h);
             }
             
-            // Rearrange view
-            passBook_p.frame = CGRectMake(99, 314, 122, 40);
-            passBook_l.frame = CGRectMake(61, 232, 120, 36);
+            if ([btn_link_1 isEqualToString:@"Y"]) {
+                [custom_btn_p_2 setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CUSTOM_2]]] forState:UIControlStateNormal];
+                [custom_btn_l_2 setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CUSTOM_2]]] forState:UIControlStateNormal];
+                
+                custom_btn_p_2.frame = CGRectMake(custom_btn_2_p_x, custom_btn_2_p_y, custom_btn_2_p_w, custom_btn_2_p_h);
+                custom_btn_l_2.frame = CGRectMake(custom_btn_2_l_x, custom_btn_2_l_y, custom_btn_2_l_w, custom_btn_2_l_h);
+            }
+            
+            if ([btn_link_2 isEqualToString:@"Y"]) {
+                [custom_btn_p_3 setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CUSTOM_3]]] forState:UIControlStateNormal];
+                [custom_btn_l_3 setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CUSTOM_3]]] forState:UIControlStateNormal];
+                
+                custom_btn_p_3.frame = CGRectMake(custom_btn_3_p_x, custom_btn_3_p_y, custom_btn_3_p_w, custom_btn_3_p_h);
+                custom_btn_l_3.frame = CGRectMake(custom_btn_3_l_x, custom_btn_3_l_y, custom_btn_3_l_w, custom_btn_3_l_h);
+            }
             
             /* disable SNS
             if ([self checkForPreviouslySavedAccessTokenInfo] == NO) {
@@ -551,6 +699,32 @@
                 [dictXmlInfo writeToFile:filePath atomically:YES];
                 dictXmlInfo = nil;
             }
+            
+            // -- * -- Start show animation -- * --
+                [UIView beginAnimations:@"showBanner" context:nil];
+                [UIView setAnimationDuration:0.5f];
+                [UIView setAnimationDelegate:self];
+                
+                currentOrientation = [[UIDevice currentDevice] orientation] ;
+                if (currentOrientation == UIDeviceOrientationPortrait) {
+                    bannerButton_l.hidden = YES;
+                    stampView_l.hidden = YES;
+                    bannerButton_p.hidden = NO;
+                    stampView_p.hidden = NO;
+                    
+                    self.view.frame = CGRectMake(0, -480, 480, 537);
+                }
+                else{
+                    bannerButton_p.hidden = YES;
+                    stampView_p.hidden = YES;
+                    bannerButton_l.hidden = NO;
+                    stampView_l.hidden = NO;
+                    
+                    self.view.frame = CGRectMake(0, -480, 480, 537);
+                }
+                
+                [UIView commitAnimations];
+            // -- * -- End show animation -- * --
 
         } else {
             isMissedView = YES;
@@ -619,31 +793,36 @@
                 [dictXmlInfo writeToFile:filePath atomically:YES];
                 dictXmlInfo = nil;
             }
-        }
         
-        [UIView beginAnimations:@"showBanner" context:nil];
-        [UIView setAnimationDuration:0.5f];
-        [UIView setAnimationDelegate:self];
+            // -- * -- Start show animation -- * --
+            if ([onlyShowSuccess isEqualToString:@"N"]) {
+                [UIView beginAnimations:@"showBanner" context:nil];
+                [UIView setAnimationDuration:0.5f];
+                [UIView setAnimationDelegate:self];
+                
+                currentOrientation = [[UIDevice currentDevice] orientation] ;
+                if (currentOrientation == UIDeviceOrientationPortrait) {
+                    bannerButton_l.hidden = YES;
+                    stampView_l.hidden = YES;
+                    bannerButton_p.hidden = NO;
+                    stampView_p.hidden = NO;
+                    
+                    self.view.frame = CGRectMake(0, -480, 480, 537);
+                }
+                else{
+                    bannerButton_p.hidden = YES;
+                    stampView_p.hidden = YES;
+                    bannerButton_l.hidden = NO;
+                    stampView_l.hidden = NO;
+                    
+                    self.view.frame = CGRectMake(0, -480, 480, 537);
+                }
+                
+                [UIView commitAnimations];
+            }
+            // -- * -- End show animation -- * --
         
-        currentOrientation = [[UIDevice currentDevice] orientation] ;
-        if (currentOrientation == UIDeviceOrientationPortrait) {
-            bannerButton_l.hidden = YES;
-            stampView_l.hidden = YES;
-            bannerButton_p.hidden = NO;
-            stampView_p.hidden = NO;
-            
-            self.view.frame = CGRectMake(0, -480, 480, 537);
         }
-        else{
-            bannerButton_p.hidden = YES;
-            stampView_p.hidden = YES;
-            bannerButton_l.hidden = NO;
-            stampView_l.hidden = NO;
-            
-            self.view.frame = CGRectMake(0, -480, 480, 537);
-        }
-        
-        [UIView commitAnimations];
         
         isDownloadOk = NO;
         isDownloading = NO;
@@ -746,6 +925,12 @@
     passBook_p.hidden   = flag;
     passBook_l.hidden   = flag;
     
+    custom_btn_p_1.hidden    = flag;
+    custom_btn_p_2.hidden    = flag;
+    custom_btn_p_3.hidden    = flag;
+    custom_btn_l_1.hidden    = flag;
+    custom_btn_l_2.hidden    = flag;
+    custom_btn_l_3.hidden    = flag;
 }
 
 - (void) buttonAlpha:(NSInteger)flag
@@ -764,6 +949,48 @@
 
 - (void) createStampView
 {
+    
+    // ------------- Initiate UI ------------------
+    
+    stampView_p = [[UIImageView alloc]init];
+    stampView_l = [[UIImageView alloc]init];
+    
+    bannerButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
+    bannerButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    closeXButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
+    closeXButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    passBook_p = [UIButton buttonWithType:UIButtonTypeCustom];
+    passBook_l = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    
+    [passBook_p addTarget:self action:@selector(showPassbook) forControlEvents:UIControlEventTouchUpInside];
+    [passBook_l addTarget:self action:@selector(showPassbook) forControlEvents:UIControlEventTouchUpInside];
+    
+    // Custom button 1 - to save image
+    custom_btn_p_1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [custom_btn_p_1 addTarget:self action:@selector(saveCouponImage) forControlEvents:UIControlEventTouchUpInside];
+    
+    custom_btn_l_1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [custom_btn_l_1 addTarget:self action:@selector(saveCouponImage) forControlEvents:UIControlEventTouchUpInside];
+    
+    // Custom button 2 - link to a URL
+    custom_btn_p_2 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [custom_btn_p_2 addTarget:self action:@selector(btn2LinkCallback) forControlEvents:UIControlEventTouchUpInside];
+    
+    custom_btn_l_2 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [custom_btn_l_2 addTarget:self action:@selector(btn2LinkCallback) forControlEvents:UIControlEventTouchUpInside];
+    
+    // Custom button 3 - link to a URL
+    custom_btn_p_3 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [custom_btn_p_3 addTarget:self action:@selector(btn3LinkCallback) forControlEvents:UIControlEventTouchUpInside];
+    
+    custom_btn_l_3 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [custom_btn_l_3 addTarget:self action:@selector(btn3LinkCallback) forControlEvents:UIControlEventTouchUpInside];
+    
+    // ----------------------------------------------
+    
     self.view.frame = CGRectMake(0, -537, 480, 537);
 
     
@@ -771,20 +998,26 @@
     [stampView_p setUserInteractionEnabled:YES];
     
     bannerButton_p.frame = CGRectMake(0, 480, 320, 57);
-    closeXButton_p.frame = CGRectMake(270, 12, 36, 37);
+    
+    // Get Close X btn P coordinate
+    closeXButton_p.frame = CGRectMake(close_p_x, close_p_y, close_p_w, close_p_h);
     
     [bannerButton_p addTarget:self action:@selector(showStamp) forControlEvents:UIControlEventTouchUpInside];
     [closeXButton_p addTarget:self action:@selector(hideStamp) forControlEvents:UIControlEventTouchUpInside];
     
     [self.view addSubview:bannerButton_p];
     [self.view addSubview:stampView_p];
+    
     [stampView_p addSubview:closeXButton_p];
+    [stampView_p addSubview:custom_btn_p_1];
+    [stampView_p addSubview:custom_btn_p_2];
+    [stampView_p addSubview:custom_btn_p_3];
     
     [stampView_l setUserInteractionEnabled:YES];
     stampView_l.frame = CGRectMake(0, 160, 480, 320);
 
     bannerButton_l.frame = CGRectMake(0, 480, 480, 57);
-    closeXButton_l.frame = CGRectMake(434, 14, 36, 37);
+    closeXButton_l.frame = CGRectMake(close_l_x, close_l_y, close_l_w, close_l_h);
     
     
     [bannerButton_l addTarget:self action:@selector(showStamp) forControlEvents:UIControlEventTouchUpInside];
@@ -810,6 +1043,10 @@
     [self.view addSubview:bannerButton_l];
     [self.view addSubview:stampView_l];
     [stampView_l addSubview:closeXButton_l];
+    
+    [stampView_l addSubview:custom_btn_l_1];
+    [stampView_l addSubview:custom_btn_l_2];
+    [stampView_l addSubview:custom_btn_l_3];
 
     
 }
@@ -818,7 +1055,7 @@
 {
     // clear cached campaign files
     //[self clearCampaignFiles:[NSArray arrayWithObjects:IMG_STAMP_L, IMG_STAMP_P, SCM_AD_XML, nil]];
-    [self clearCampaignFiles:[NSArray arrayWithObjects:IMG_BANNER_P,IMG_BANNER_MISSED_P,IMG_STAMP_P,IMG_MISSED_P,IMG_BANNER_L,IMG_BANNER_MISSED_L,IMG_STAMP_L,IMG_MISSED_L,SCM_AD_PLIST,SCM_AD_XML, PASSBOOK_PKG, IMG_Q10_BADGE, nil]];
+    [self clearCampaignFiles:[NSArray arrayWithObjects:IMG_BANNER_P,IMG_BANNER_MISSED_P,IMG_STAMP_P,IMG_MISSED_P,IMG_BANNER_L,IMG_BANNER_MISSED_L,IMG_STAMP_L,IMG_MISSED_L,SCM_AD_PLIST,SCM_AD_XML, PASSBOOK_PKG, IMG_Q10_BADGE, IMG_COUPON_TO_SAVE, nil]];
     
     // Download NoCampaign images if files don't exist in the Documentation Directory.
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -1351,6 +1588,27 @@
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString: campaign_url]];
         }
     }
+}
+
+- (void)thisImage:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo {
+    if (error) {
+    
+    } else {
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle: @"Save Result"
+                              message: @"Successfully Saved Your Coupon."
+                              delegate: nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil];
+        [alert show];
+    }
+}
+
+- (void)saveCouponImage
+{
+    NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    UIImageWriteToSavedPhotosAlbum([UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_COUPON_TO_SAVE]]], self, @selector(thisImage:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
+
 }
 
 -(void)addPassesViewControllerDidFinish:(PKAddPassesViewController *)controller
