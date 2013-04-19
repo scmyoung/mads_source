@@ -1551,7 +1551,7 @@
 }
 */
 
-
+#pragma mark - custom button callback
 
 - (void)showPassbook
 {
@@ -1580,6 +1580,7 @@
                            animated:YES
                          completion:nil];
     }
+    /*
     else{
         NSString *campaign_url = [dictXmlInfo objectForKey:@"redeem_link"];
         NSLog(@"url: %@", campaign_url);
@@ -1588,6 +1589,7 @@
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString: campaign_url]];
         }
     }
+    */
 }
 
 - (void)thisImage:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo {
@@ -1609,6 +1611,24 @@
     NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     UIImageWriteToSavedPhotosAlbum([UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_COUPON_TO_SAVE]]], self, @selector(thisImage:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
 
+}
+
+- (void)btn2LinkCallback
+{
+    NSLog(@"url: %@", link_1);
+    if (link_1.length > 0) {
+        NSLog(@"open url");
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString: link_1]];
+    }
+}
+
+- (void)btn3LinkCallback
+{
+    NSLog(@"url: %@", link_2);
+    if (link_2.length > 0) {
+        NSLog(@"open url");
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString: link_2]];
+    }
 }
 
 -(void)addPassesViewControllerDidFinish:(PKAddPassesViewController *)controller
