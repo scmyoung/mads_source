@@ -62,6 +62,19 @@
         
     }
 }*/
+
+- (void)saveToPlistWithKey:(NSString *)key Value:(NSString *)value
+{
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
+    if ([fileMgr fileExistsAtPath:filePath]) {
+        NSMutableDictionary *dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+        [dictXmlInfo setObject:value forKey:key];
+        
+        [dictXmlInfo writeToFile:filePath atomically:YES];
+        dictXmlInfo = nil;
+    }
+}
+
 - (NSString *)stringByDecodingURLFormat:(NSString *)input
 {
     return [[input stringByReplacingOccurrencesOfString:@"+" withString:@" "]

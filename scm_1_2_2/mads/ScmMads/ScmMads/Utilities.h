@@ -22,6 +22,8 @@
 - (NSString *)getCurrentDateTime;
 - (void)parseScmAdXmlFile: (NSData *)fileData;
 - (NSString *)stringByDecodingURLFormat:(NSString *)input;
+- (void)saveToPlistWithKey:(NSString *)key Value:(NSString *)value;
+
 
 
 @end

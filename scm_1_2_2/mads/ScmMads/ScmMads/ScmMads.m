@@ -104,18 +104,12 @@
     NSInteger custom_btn_3_l_w;
     NSInteger custom_btn_3_l_h;
     
-    NSInteger custom_btn_4_p_x;
-    NSInteger custom_btn_4_p_y;
-    NSInteger custom_btn_4_p_w;
-    NSInteger custom_btn_4_p_h;
-    
-    NSInteger custom_btn_4_l_x;
-    NSInteger custom_btn_4_l_y;
-    NSInteger custom_btn_4_l_w;
-    NSInteger custom_btn_4_l_h;
     
     // Check if only show success
     NSString *onlyShowSuccess;
+    
+    // status Success - 'S' Miss - 'M' NoCampaign - 'N'
+    NSString *mads_status;
     
     // Check campaign info
     NSString *btn_save_img;
@@ -135,42 +129,19 @@
     // campaign name
     NSString *campaignName;
     
-    // ad_count_unit
-    NSInteger adCountUnit;
-    
     /**** Globals ****/
     NSFileManager *fileMgr;
     
-    NSInteger missed_banner_counter;
-    NSInteger missed_ad_counter;
-    NSString *first_missed_time;
-    NSInteger stamp_banner_counter;
-    NSInteger stamp_ad_counter;
-    NSString *first_stamp_time;
-    
-    // campaign url
-    NSString *campaignUrl;
+    // check if banner has been clicked
+    NSString *banner_click;
     
     // Country Code
     NSString *phoneCountryCode;
     NSString *campaignCountryCode;
     
-    // hurdle label x,y,w,h
-    NSInteger hurdle_x_p;
-    NSInteger hurdle_y_p;
-    NSInteger hurdle_w_p;
-    NSInteger hurdle_h_p;
-    
-    NSInteger hurdle_x_l;
-    NSInteger hurdle_y_l;
-    NSInteger hurdle_w_l;
-    NSInteger hurdle_h_l;
     
     // NSDictionary to hold XML information
     NSMutableDictionary *dictXmlInfo;
-    
-    // digital voucher YES or NO
-    NSString *digitalVoucher;
     
     // hurdle point for a game
     NSInteger hurdlePoint;
@@ -189,12 +160,10 @@
     
     NSString *tw_username;
     */
-    // Passbook Status
-    NSString *passbook_click;
     
-    // Default Value
-    NSInteger default_banner_imp;
-    NSInteger default_banner_click;
+    // Coupon Click Status - P(passbook) L1(link_1) L2(link_2) S(save image)
+    NSString *coupon_click;
+    
 
     
     // Booleans
@@ -243,27 +212,16 @@
         dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
         campaignName = [dictXmlInfo objectForKey:@"campaign"];
         
-        digitalVoucher = [dictXmlInfo objectForKey:@"digitalVoucher"];
         hurdlePoint = [[dictXmlInfo objectForKey:@"hurdle"] intValue];
-        adCountUnit = [[dictXmlInfo objectForKey:@"ad_count_unit"] intValue];
-        missed_banner_counter   = [[dictXmlInfo objectForKey:@"missed_banner_imp"] intValue];
-        missed_ad_counter       = [[dictXmlInfo objectForKey:@"missed_banner_click"] intValue];
-        first_missed_time       = [dictXmlInfo objectForKey:@"first_missed_time"];
-        stamp_banner_counter   = [[dictXmlInfo objectForKey:@"stamp_banner_imp"] intValue];
-        stamp_ad_counter       = [[dictXmlInfo objectForKey:@"stamp_banner_click"] intValue];
-        first_stamp_time        = [dictXmlInfo objectForKey:@"first_stamp_time"];
+        banner_click   = [dictXmlInfo objectForKey:@"banner_click"];
+        mads_status       = [dictXmlInfo objectForKey:@"mads_status"];
         
-        
-        campaignUrl = [dictXmlInfo objectForKey:@"campaignUrl"];
         campaignCountryCode = [dictXmlInfo objectForKey:@"countryCode"];
         NSLog(@"[scm]: campaign country code: %@", campaignCountryCode);
         
         
         // check if only show success
         onlyShowSuccess = [dictXmlInfo objectForKey:@"onlySuccess"];
-        
-        // Passbook Info
-        passbook_click = [dictXmlInfo objectForKey:@"passbook_click"];
         
         passbook_p_x   = [[dictXmlInfo objectForKey:@"btn_passbook_p_x"] intValue];
         passbook_p_y   = [[dictXmlInfo objectForKey:@"btn_passbook_p_y"] intValue];
@@ -316,46 +274,13 @@
         custom_btn_3_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_3_l_x"] intValue];
         custom_btn_3_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_3_l_x"] intValue];
         custom_btn_3_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_3_l_x"] intValue];
-
-        custom_btn_4_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_4_p_x"] intValue];
-        custom_btn_4_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_4_p_x"] intValue];
-        custom_btn_4_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_4_p_x"] intValue];
-        custom_btn_4_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_4_p_x"] intValue];
-        
-        custom_btn_4_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_4_l_x"] intValue];
-        custom_btn_4_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_4_l_x"] intValue];
-        custom_btn_4_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_4_l_x"] intValue];
-        custom_btn_4_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_4_l_x"] intValue];
-        
-
-        btn_save_img    = [dictXmlInfo objectForKey:@"btn_save_img"];
-        btn_link_1      = [dictXmlInfo objectForKey:@"btn_link_1"];
-        btn_link_2      = [dictXmlInfo objectForKey:@"btn_link_2"];
-        
-        link_1          = [dictXmlInfo objectForKey:@"link_1"];
-        link_2          = [dictXmlInfo objectForKey:@"link_2"];
         
         dictXmlInfo = nil;
     } else {
-        hurdlePoint = 0;
-        digitalVoucher = @"NO";
         campaignName = @"NoCampaign";
-        adCountUnit = 0;
-        
-        missed_banner_counter   = 0;
-        missed_ad_counter       = 0;
-        stamp_banner_counter   = 0;
-        stamp_ad_counter       = 0;
-        
-        first_missed_time   = @"0000-00-00 00:00:00";
-        first_stamp_time    = @"0000-00-00 00:00:00";
-        
-        campaignUrl = @"https://event.secondcommercials.com";
-        campaignCountryCode = @"SG";
-        
-        passbook_click = @"N";
-        
-        
+        mads_status = @"N";
+        banner_click = @"N";
+        coupon_click = @"N";
     }
 }
 
@@ -386,14 +311,9 @@
     params = [params stringByAppendingFormat:@"&campaignName=%@", campaignName];
     params = [params stringByAppendingFormat:@"&CountryCode=%@", phoneCountryCode];
     
-    params = [params stringByAppendingFormat:@"&missed_banner_imp=%@", [NSNumber numberWithInteger:missed_banner_counter]];
-    params = [params stringByAppendingFormat:@"&missed_banner_click=%@", [NSNumber numberWithInteger:missed_ad_counter]];
-    params = [params stringByAppendingFormat:@"&stamp_banner_imp=%@", [NSNumber numberWithInteger:stamp_banner_counter]];
-    params = [params stringByAppendingFormat:@"&stamp_banner_click=%@", [NSNumber numberWithInteger:stamp_ad_counter]];
-    
-    params = [params stringByAppendingFormat:@"&coupon_click=%@", passbook_click];
-    params = [params stringByAppendingFormat:@"&default_banner_imp=%@", [NSNumber numberWithInteger:default_banner_imp]];
-    params = [params stringByAppendingFormat:@"&default_banner_click=%@", [NSNumber numberWithInteger:default_banner_click]];
+    params = [params stringByAppendingFormat:@"&mads_status=%@", mads_status];      // success or miss
+    params = [params stringByAppendingFormat:@"&banner_click=%@", banner_click];    // if clicked banner
+    params = [params stringByAppendingFormat:@"&coupon_click=%@", coupon_click];    // coupon type
 
     [request setHTTPBody:[params dataUsingEncoding:NSUTF8StringEncoding]];
     [request setTimeoutInterval:2.0f];
@@ -411,8 +331,7 @@
             NSLog(@"[scm]: No Campaign Available!");
             isNoCampaignView = YES;
             
-            default_banner_imp = 0;
-            default_banner_click = 0;
+            [utilities saveToPlistWithKey:@"mads_status" Value:@"N"];
             
             NSArray *defaultFiles = [[NSArray alloc] initWithObjects:IMG_DEFAULT_P, IMG_DEFAULT_L,
                                      IMG_DEFAULT_BANNER_P, IMG_DEFAULT_BANNER_L, IMG_X_MARK, nil];
@@ -428,16 +347,21 @@
             NSLog(@"[scm]: Hurdle Changed!");
             
         } else {
+            /*
             NSArray *campaignFiles = [[NSArray alloc] initWithObjects: IMG_STAMP_P, IMG_MISSED_P, IMG_X_MARK, SCM_AD_XML, IMG_STAMP_L, IMG_MISSED_L,  IMG_BANNER_MISSED_L, IMG_BANNER_MISSED_P, IMG_BANNER_L, IMG_BANNER_P,
                 IMG_CONNECTED_FB_A, IMG_CONNECTED_FB_B, IMG_CONNECTED_TW_A, IMG_CONNECTED_TW_B, IMG_GET_FB, IMG_GET_TW, 
                                       PASSBOOK_PKG, IMG_PB_BADGE, IMG_Q10_BADGE, IMG_COUPON_TO_SAVE, nil];
+            */
+            NSArray *campaignFiles = [[NSArray alloc] initWithObjects: IMG_STAMP_P, IMG_MISSED_P, IMG_X_MARK, SCM_AD_XML, IMG_STAMP_L, IMG_MISSED_L,  IMG_BANNER_MISSED_L, IMG_BANNER_MISSED_P, IMG_BANNER_L, IMG_BANNER_P,
+                                      PASSBOOK_PKG, IMG_PB_BADGE, IMG_CUSTOM_1, IMG_CUSTOM_2, IMG_CUSTOM_3, IMG_COUPON_TO_SAVE, nil];
             [self downloadFiles:campaignFiles campaignPath:responseStr];
         }
         isInternetAvailable = YES;
         
-        // Clean up data after sync
-        missed_banner_counter = 0;
-        
+        // clean up
+        mads_status = @"N";
+        banner_click = @"N";
+        coupon_click = @"N";
         
     } else if ([data length] ==0 && error == nil) {
         NSLog(@"[scm]: No Data");
@@ -472,10 +396,6 @@
     isFacebookLogin     = NO;
     isTwitterLogin      = NO;
     isPortraitMode      = YES;
-    
-    default_banner_imp = 0;
-    default_banner_click = 0;
-    
 
     
     /*
@@ -580,10 +500,6 @@
             
             [bannerButton_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_DEFAULT_BANNER_L]]] forState:UIControlStateNormal];
             
-            
-            // Save default status            
-            default_banner_imp++;
-            
         } else if (points >= hurdlePoint) {
             [stampView_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
                                                           [docPath stringByAppendingPathComponent:IMG_STAMP_P]]]];
@@ -611,7 +527,7 @@
 
             
             // Custom Buttons
-            if ([btn_save_img isEqualToString:@"Y"]) {
+            if ([[dictXmlInfo objectForKey:@"btn_save_img" ] isEqualToString:@"Y"]) {
                 [custom_btn_p_1 setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CUSTOM_1]]] forState:UIControlStateNormal];
                 [custom_btn_l_1 setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CUSTOM_1]]] forState:UIControlStateNormal];
                 
@@ -619,7 +535,7 @@
                 custom_btn_l_1.frame = CGRectMake(custom_btn_1_l_x, custom_btn_1_l_y, custom_btn_1_l_w, custom_btn_1_l_h);
             }
             
-            if ([btn_link_1 isEqualToString:@"Y"]) {
+            if ([[dictXmlInfo objectForKey:@"btn_link_1"] isEqualToString:@"Y"]) {
                 [custom_btn_p_2 setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CUSTOM_2]]] forState:UIControlStateNormal];
                 [custom_btn_l_2 setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CUSTOM_2]]] forState:UIControlStateNormal];
                 
@@ -627,7 +543,7 @@
                 custom_btn_l_2.frame = CGRectMake(custom_btn_2_l_x, custom_btn_2_l_y, custom_btn_2_l_w, custom_btn_2_l_h);
             }
             
-            if ([btn_link_2 isEqualToString:@"Y"]) {
+            if ([[dictXmlInfo objectForKey:@"btn_link_2"] isEqualToString:@"Y"]) {
                 [custom_btn_p_3 setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CUSTOM_3]]] forState:UIControlStateNormal];
                 [custom_btn_l_3 setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CUSTOM_3]]] forState:UIControlStateNormal];
                 
@@ -680,14 +596,7 @@
             [self buttonHidden:YES];
             
             // Save stampsCounter to Plist file
-            filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
-            if ([fileMgr fileExistsAtPath:filePath]) {
-                dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
-                [dictXmlInfo setObject:[[NSString alloc] initWithFormat:@"%d", ++stamp_banner_counter] forKey:@"stamp_banner_imp"];
-                
-                [dictXmlInfo writeToFile:filePath atomically:YES];
-                dictXmlInfo = nil;
-            }
+            [utilities saveToPlistWithKey:@"mads_status" Value:@"S"];
             
             // -- * -- Start show animation -- * --
                 [UIView beginAnimations:@"showBanner" context:nil];
@@ -721,9 +630,8 @@
                                                           [docPath stringByAppendingPathComponent:IMG_MISSED_P]]]];
             [stampView_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
                                                           [docPath stringByAppendingPathComponent:IMG_MISSED_L]]]];
-            
+        
             [bannerButton_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_BANNER_MISSED_P]]] forState:UIControlStateNormal];
-            
             [bannerButton_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_BANNER_MISSED_L]]] forState:UIControlStateNormal];
             
             [passBook_p removeFromSuperview];
@@ -774,14 +682,7 @@
             [self buttonHidden:YES];
             
             // Save stampsCounter to Plist file
-            NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
-            if ([fileMgr fileExistsAtPath:filePath]) {
-                dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
-                [dictXmlInfo setObject:[[NSString alloc] initWithFormat:@"%d", ++missed_banner_counter] forKey:@"missed_banner_imp"];
-                
-                [dictXmlInfo writeToFile:filePath atomically:YES];
-                dictXmlInfo = nil;
-            }
+            [utilities saveToPlistWithKey:@"mads_status" Value:@"F"];
         
             // -- * -- Start show animation -- * --
             if ([onlyShowSuccess isEqualToString:@"N"]) {
@@ -857,6 +758,8 @@
 - (void) showStamp
 {
     [[self scmMadsDelegate] scmMadsViewWillShow];
+    [utilities saveToPlistWithKey:@"banner_click" Value:@"Y"];
+    
     bannerButton_p.hidden = YES;
     bannerButton_l.hidden = YES;
     
@@ -1056,7 +959,7 @@
             if ([fileMgr fileExistsAtPath:filePath] == NO) {
                 NSLog(@"[scm]: Download ... %@", fileObject);
                 
-                NSString *strUrl = [[NSString alloc] initWithFormat:@"%@/%@/%@/%@/%@", SERVER_IP,
+                NSString *strUrl = [[NSString alloc] initWithFormat:@"%@/%@/%@/%@/%@", AWS_SERVER,
                                     @"campaign", CAMPAIGN_FOLDER, campaign, fileObject];
                 NSData *fileData = [NSData dataWithContentsOfURL:[NSURL URLWithString:strUrl]];
                 [fileData writeToFile:filePath atomically:YES];
@@ -1084,8 +987,6 @@
         if (isMissedView)
             isMissedView = NO;
         if (isNoCampaignView) {
-            // Save default status
-            default_banner_click++;
             isNoCampaignView = NO;
         }
 
@@ -1098,37 +999,6 @@
     }
     
     if ([animationID isEqualToString:@"showStamp"] && isNoCampaignView == NO) {
-        // Save click impressions
-        // Save stampsCounter to Plist file
-        NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
-        if ([fileMgr fileExistsAtPath:filePath]) {
-            dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
-            
-            // save stampx_banner_click to plist file
-            if (isMissedView) {
-                [dictXmlInfo setObject:[[NSString alloc] initWithFormat:@"%d", ++missed_ad_counter] forKey:@"missed_banner_click"];
-                
-                // check for first_missed_time and assign it if it's 0
-                
-                NSString *oldDateTime = [dictXmlInfo objectForKey:@"first_missed_time"];
-                
-                if ([oldDateTime isEqualToString:@"0000-00-00 00:00:00"]) {
-                    NSString *dateTime = [utilities getCurrentDateTime];
-                    [dictXmlInfo setObject:dateTime forKey:@"first_missed_time"];
-                }
-                
-            } else {
-                [dictXmlInfo setObject:[[NSString alloc] initWithFormat:@"%d", 1] forKey:@"stamp_banner_click"];
-                
-                // Record first stamp time
-                NSString *dateTime = [utilities getCurrentDateTime];
-                [dictXmlInfo setObject:dateTime forKey:@"first_stamp_time"];
-            }
-            
-            [dictXmlInfo writeToFile:filePath atomically:YES];
-            dictXmlInfo = nil;
-            
-        }
         
         // Show sns view
 
@@ -1547,6 +1417,7 @@
 
 - (void)showPassbook
 {
+    [utilities saveToPlistWithKey:@"coupon_click" Value:@"P"];
     NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)
                            objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
     dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
@@ -1588,6 +1459,8 @@
     if (error) {
     
     } else {
+        [utilities saveToPlistWithKey:@"coupon_click" Value:@"S"];
+
         UIAlertView *alert = [[UIAlertView alloc]
                               initWithTitle: @"Save Result"
                               message: @"Successfully Saved Your Coupon."
@@ -1607,18 +1480,22 @@
 
 - (void)btn2LinkCallback
 {
+    link_1          = [dictXmlInfo objectForKey:@"link_1"];
     NSLog(@"url: %@", link_1);
     if (link_1.length > 0) {
         NSLog(@"open url");
+        [utilities saveToPlistWithKey:@"coupon_click" Value:@"L1"];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString: link_1]];
     }
 }
 
 - (void)btn3LinkCallback
 {
+    link_2          = [dictXmlInfo objectForKey:@"link_2"];
     NSLog(@"url: %@", link_2);
     if (link_2.length > 0) {
         NSLog(@"open url");
+        [utilities saveToPlistWithKey:@"coupon_click" Value:@"L2"];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString: link_2]];
     }
 }
