@@ -79,7 +79,7 @@
 
 #define FB_APP_ID               @"196736437067322"
 
-#define PHP_LOGIC_FILE          @"mads_1_2_2.php"
+#define PHP_LOGIC_FILE          @"mads_aws_server.php"
 #define FB_EMAIL_FILE           @"sendMailToFacebook_1_2_2.php"
 #define CAMPAIGN_FOLDER         @"122_campaign"
 

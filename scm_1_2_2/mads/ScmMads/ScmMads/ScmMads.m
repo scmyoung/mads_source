@@ -259,16 +259,6 @@
         NSLog(@"[scm]: campaign country code: %@", campaignCountryCode);
         
         
-        hurdle_x_p = [[dictXmlInfo objectForKey:@"hurdle_x_p"] intValue];
-        hurdle_y_p = [[dictXmlInfo objectForKey:@"hurdle_y_p"] intValue];
-        hurdle_w_p = [[dictXmlInfo objectForKey:@"hurdle_w_p"] intValue];
-        hurdle_h_p = [[dictXmlInfo objectForKey:@"hurdle_h_p"] intValue];
-        
-        hurdle_x_l = [[dictXmlInfo objectForKey:@"hurdle_x_l"] intValue];
-        hurdle_y_l = [[dictXmlInfo objectForKey:@"hurdle_y_l"] intValue];
-        hurdle_w_l = [[dictXmlInfo objectForKey:@"hurdle_w_l"] intValue];
-        hurdle_h_l = [[dictXmlInfo objectForKey:@"hurdle_h_l"] intValue];
-        
         // check if only show success
         onlyShowSuccess = [dictXmlInfo objectForKey:@"onlySuccess"];
         
@@ -394,23 +384,17 @@
     params = [params stringByAppendingFormat:@"&DeviceID=%@", deviceId];
     params = [params stringByAppendingFormat:@"&AppID=%@", appId];
     params = [params stringByAppendingFormat:@"&campaignName=%@", campaignName];
-    params = [params stringByAppendingFormat:@"&adCountUnit=%@", [NSNumber numberWithInteger:adCountUnit]];
-    params = [params stringByAppendingFormat:@"&digitalVoucher=%@", digitalVoucher];
-    params = [params stringByAppendingFormat:@"&hurdle=%@", [NSNumber numberWithInteger:hurdlePoint]];
     params = [params stringByAppendingFormat:@"&CountryCode=%@", phoneCountryCode];
     
     params = [params stringByAppendingFormat:@"&missed_banner_imp=%@", [NSNumber numberWithInteger:missed_banner_counter]];
     params = [params stringByAppendingFormat:@"&missed_banner_click=%@", [NSNumber numberWithInteger:missed_ad_counter]];
-    params = [params stringByAppendingFormat:@"&first_missed_time=%@", first_missed_time];
     params = [params stringByAppendingFormat:@"&stamp_banner_imp=%@", [NSNumber numberWithInteger:stamp_banner_counter]];
     params = [params stringByAppendingFormat:@"&stamp_banner_click=%@", [NSNumber numberWithInteger:stamp_ad_counter]];
-    params = [params stringByAppendingFormat:@"&first_stamp_time=%@", first_stamp_time];
     
-    params = [params stringByAppendingFormat:@"&passbook_click=%@", passbook_click];
+    params = [params stringByAppendingFormat:@"&coupon_click=%@", passbook_click];
     params = [params stringByAppendingFormat:@"&default_banner_imp=%@", [NSNumber numberWithInteger:default_banner_imp]];
     params = [params stringByAppendingFormat:@"&default_banner_click=%@", [NSNumber numberWithInteger:default_banner_click]];
 
-    
     [request setHTTPBody:[params dataUsingEncoding:NSUTF8StringEncoding]];
     [request setTimeoutInterval:2.0f];
     
@@ -450,6 +434,11 @@
             [self downloadFiles:campaignFiles campaignPath:responseStr];
         }
         isInternetAvailable = YES;
+        
+        // Clean up data after sync
+        missed_banner_counter = 0;
+        
+        
     } else if ([data length] ==0 && error == nil) {
         NSLog(@"[scm]: No Data");
     } else if  (error) {
@@ -1104,6 +1093,9 @@
         [[self scmMadsDelegate] scmMadsViewDidFinish];
     }
     
+    if ([animationID isEqualToString:@"hideBanner"]) {
+        [self syncToServer];
+    }
     
     if ([animationID isEqualToString:@"showStamp"] && isNoCampaignView == NO) {
         // Save click impressions
