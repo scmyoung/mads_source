@@ -66,13 +66,29 @@
 - (void)saveToPlistWithKey:(NSString *)key Value:(NSString *)value
 {
     NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
+    fileMgr = [[NSFileManager alloc] init];
+
     if ([fileMgr fileExistsAtPath:filePath]) {
         NSMutableDictionary *dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
         [dictXmlInfo setObject:value forKey:key];
         
         [dictXmlInfo writeToFile:filePath atomically:YES];
         dictXmlInfo = nil;
+        fileMgr = nil;
     }
+}
+
+- (void)saveToDefaultPlistWithKey:(NSString *)key Value:(NSString *)value
+{
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_DEFAULT_PLIST];
+    fileMgr = [[NSFileManager alloc] init];
+    
+    NSMutableDictionary *dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+    [dictXmlInfo setObject:value forKey:key];
+        
+    [dictXmlInfo writeToFile:filePath atomically:YES];
+    dictXmlInfo = nil;
+    fileMgr = nil;
 }
 
 - (NSString *)stringByDecodingURLFormat:(NSString *)input
@@ -134,7 +150,7 @@
     currentElement = nil;
     fileMgr = [NSFileManager defaultManager];
 
-    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"scmAdPlist.plist"];
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
     
     if ([fileMgr fileExistsAtPath:filePath]) {
         [fileMgr removeItemAtPath:filePath error:nil];

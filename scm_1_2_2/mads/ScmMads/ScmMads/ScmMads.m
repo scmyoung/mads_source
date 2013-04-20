@@ -178,6 +178,8 @@
     BOOL isTwitterLogin;
     
     BOOL isPortraitMode;
+    
+    NSString *isSaveToDatabase;
 }
 
 @end
@@ -215,10 +217,10 @@
         hurdlePoint = [[dictXmlInfo objectForKey:@"hurdle"] intValue];
         banner_click   = [dictXmlInfo objectForKey:@"banner_click"];
         mads_status       = [dictXmlInfo objectForKey:@"mads_status"];
+        coupon_click    = [dictXmlInfo objectForKey:@"coupon_click"];
         
         campaignCountryCode = [dictXmlInfo objectForKey:@"countryCode"];
-        NSLog(@"[scm]: campaign country code: %@", campaignCountryCode);
-        
+        //NSLog(@"[scm]: campaign country code: %@", campaignCountryCode);
         
         // check if only show success
         onlyShowSuccess = [dictXmlInfo objectForKey:@"onlySuccess"];
@@ -246,46 +248,47 @@
         
         // Custom Btns
         custom_btn_1_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_1_p_x"] intValue];
-        custom_btn_1_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_1_p_x"] intValue];
-        custom_btn_1_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_1_p_x"] intValue];
-        custom_btn_1_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_1_p_x"] intValue];
+        custom_btn_1_p_y    = [[dictXmlInfo objectForKey:@"btn_custom_1_p_y"] intValue];
+        custom_btn_1_p_w    = [[dictXmlInfo objectForKey:@"btn_custom_1_p_w"] intValue];
+        custom_btn_1_p_h    = [[dictXmlInfo objectForKey:@"btn_custom_1_p_h"] intValue];
         
         custom_btn_1_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_1_l_x"] intValue];
-        custom_btn_1_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_1_l_x"] intValue];
-        custom_btn_1_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_1_l_x"] intValue];
-        custom_btn_1_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_1_l_x"] intValue];
+        custom_btn_1_l_y    = [[dictXmlInfo objectForKey:@"btn_custom_1_l_y"] intValue];
+        custom_btn_1_l_w    = [[dictXmlInfo objectForKey:@"btn_custom_1_l_w"] intValue];
+        custom_btn_1_l_h    = [[dictXmlInfo objectForKey:@"btn_custom_1_l_h"] intValue];
         
         custom_btn_2_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_2_p_x"] intValue];
-        custom_btn_2_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_2_p_x"] intValue];
-        custom_btn_2_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_2_p_x"] intValue];
-        custom_btn_2_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_2_p_x"] intValue];
+        custom_btn_2_p_y    = [[dictXmlInfo objectForKey:@"btn_custom_2_p_y"] intValue];
+        custom_btn_2_p_w    = [[dictXmlInfo objectForKey:@"btn_custom_2_p_w"] intValue];
+        custom_btn_2_p_h    = [[dictXmlInfo objectForKey:@"btn_custom_2_p_h"] intValue];
         
         custom_btn_2_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_2_l_x"] intValue];
-        custom_btn_2_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_2_l_x"] intValue];
-        custom_btn_2_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_2_l_x"] intValue];
-        custom_btn_2_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_2_l_x"] intValue];
+        custom_btn_2_l_y    = [[dictXmlInfo objectForKey:@"btn_custom_2_l_y"] intValue];
+        custom_btn_2_l_w    = [[dictXmlInfo objectForKey:@"btn_custom_2_l_w"] intValue];
+        custom_btn_2_l_h    = [[dictXmlInfo objectForKey:@"btn_custom_2_l_h"] intValue];
         
         custom_btn_3_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_3_p_x"] intValue];
-        custom_btn_3_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_3_p_x"] intValue];
-        custom_btn_3_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_3_p_x"] intValue];
-        custom_btn_3_p_x    = [[dictXmlInfo objectForKey:@"btn_custom_3_p_x"] intValue];
+        custom_btn_3_p_y    = [[dictXmlInfo objectForKey:@"btn_custom_3_p_y"] intValue];
+        custom_btn_3_p_w    = [[dictXmlInfo objectForKey:@"btn_custom_3_p_w"] intValue];
+        custom_btn_3_p_h    = [[dictXmlInfo objectForKey:@"btn_custom_3_p_h"] intValue];
         
         custom_btn_3_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_3_l_x"] intValue];
-        custom_btn_3_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_3_l_x"] intValue];
-        custom_btn_3_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_3_l_x"] intValue];
-        custom_btn_3_l_x    = [[dictXmlInfo objectForKey:@"btn_custom_3_l_x"] intValue];
+        custom_btn_3_l_y    = [[dictXmlInfo objectForKey:@"btn_custom_3_l_y"] intValue];
+        custom_btn_3_l_w    = [[dictXmlInfo objectForKey:@"btn_custom_3_l_w"] intValue];
+        custom_btn_3_l_h    = [[dictXmlInfo objectForKey:@"btn_custom_3_l_h"] intValue];
         
         dictXmlInfo = nil;
     } else {
         campaignName = @"NoCampaign";
         mads_status = @"N";
-        banner_click = @"N";
+        //banner_click = @"N";
         coupon_click = @"N";
     }
 }
 
 - (void) syncToServer
 {
+    
     [self parseScmPlistFile];
     
     NSString* appId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
@@ -298,10 +301,10 @@
     NSUUID *adId = adManager.advertisingIdentifier;
     NSString *deviceId = adId.UUIDString;
     
-    NSString *baseUrl = [[NSString alloc] initWithFormat:@"http://%@/%@", AWS_SERVER, PHP_LOGIC_FILE];
+    NSString *baseUrl = [[NSString alloc] initWithFormat:@"%@/logic/%@", AWS_SERVER, PHP_LOGIC_FILE];
     baseUrl = [baseUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSURL *url = [NSURL URLWithString:baseUrl];
-            
+                
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     [request setHTTPMethod:@"POST"];
     NSString *params = [[NSString alloc] initWithFormat:@"id=M.AD.S&passwd=qkrtkdwls78!"];
@@ -314,6 +317,10 @@
     params = [params stringByAppendingFormat:@"&mads_status=%@", mads_status];      // success or miss
     params = [params stringByAppendingFormat:@"&banner_click=%@", banner_click];    // if clicked banner
     params = [params stringByAppendingFormat:@"&coupon_click=%@", coupon_click];    // coupon type
+    
+    params = [params stringByAppendingFormat:@"&saveToDB=%@", isSaveToDatabase];    // coupon type
+    isSaveToDatabase = @"N";
+
 
     [request setHTTPBody:[params dataUsingEncoding:NSUTF8StringEncoding]];
     [request setTimeoutInterval:2.0f];
@@ -345,7 +352,6 @@
             isCountryCodeMatch = NO;
         } else if ([responseStr isEqualToString:@"HurdleChange"]) {
             NSLog(@"[scm]: Hurdle Changed!");
-            
         } else {
             /*
             NSArray *campaignFiles = [[NSArray alloc] initWithObjects: IMG_STAMP_P, IMG_MISSED_P, IMG_X_MARK, SCM_AD_XML, IMG_STAMP_L, IMG_MISSED_L,  IMG_BANNER_MISSED_L, IMG_BANNER_MISSED_P, IMG_BANNER_L, IMG_BANNER_P,
@@ -358,10 +364,9 @@
         }
         isInternetAvailable = YES;
         
-        // clean up
-        mads_status = @"N";
+        // cleanup
         banner_click = @"N";
-        coupon_click = @"N";
+        
         
     } else if ([data length] ==0 && error == nil) {
         NSLog(@"[scm]: No Data");
@@ -396,6 +401,7 @@
     isFacebookLogin     = NO;
     isTwitterLogin      = NO;
     isPortraitMode      = YES;
+    isSaveToDatabase    = @"N";
 
     
     /*
@@ -443,7 +449,7 @@
 
 - (void)deviceOrientationDidChange:(NSNotification *)notification
 {
-    [self hideScmMads];
+    //[self hideScmMads];
     /*
     //Obtaining the current device orientation
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
@@ -485,6 +491,8 @@
         
         [closeXButton_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_X_MARK]]] forState:UIControlStateNormal];
         [closeXButton_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_X_MARK]]] forState:UIControlStateNormal];
+        closeXButton_p.frame = CGRectMake(close_p_x, close_p_y, close_p_w, close_p_h);
+        closeXButton_l.frame = CGRectMake(close_l_x, close_l_y, close_l_w, close_l_h);
         
         // No Campaign Default View
         if (isNoCampaignView == YES) {
@@ -494,11 +502,43 @@
             [stampView_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
                                                           [docPath stringByAppendingPathComponent:IMG_DEFAULT_L]]]];
 
-
+            closeXButton_p.frame = CGRectMake(270, 12, 36, 37);
+            closeXButton_l.frame = CGRectMake(434, 14, 36, 37);
             
             [bannerButton_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_DEFAULT_BANNER_P]]] forState:UIControlStateNormal];
             
             [bannerButton_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_DEFAULT_BANNER_L]]] forState:UIControlStateNormal];
+            
+            // Save stampsCounter to Plist file
+            [utilities saveToPlistWithKey:@"mads_status" Value:@"N"];
+            
+            // -- * -- Start show animation -- * --
+            [UIView beginAnimations:@"showBanner" context:nil];
+            [UIView setAnimationDuration:0.5f];
+            [UIView setAnimationDelegate:self];
+            
+            currentOrientation = [UIApplication sharedApplication].statusBarOrientation;
+            
+            if (currentOrientation == UIDeviceOrientationPortrait) {
+                bannerButton_l.hidden = YES;
+                stampView_l.hidden = YES;
+                bannerButton_p.hidden = NO;
+                stampView_p.hidden = NO;
+                
+                self.view.frame = CGRectMake(0, -480, 480, 537);
+            }
+            else{
+                bannerButton_p.hidden = YES;
+                stampView_p.hidden = YES;
+                bannerButton_l.hidden = NO;
+                stampView_l.hidden = NO;
+                
+                self.view.frame = CGRectMake(0, -480, 480, 537);
+            }
+            
+            [UIView commitAnimations];
+            // -- * -- End show animation -- * --
+            
             
         } else if (points >= hurdlePoint) {
             [stampView_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
@@ -603,7 +643,8 @@
                 [UIView setAnimationDuration:0.5f];
                 [UIView setAnimationDelegate:self];
                 
-                currentOrientation = [[UIDevice currentDevice] orientation] ;
+                currentOrientation = [UIApplication sharedApplication].statusBarOrientation;
+
                 if (currentOrientation == UIDeviceOrientationPortrait) {
                     bannerButton_l.hidden = YES;
                     stampView_l.hidden = YES;
@@ -625,72 +666,103 @@
             // -- * -- End show animation -- * --
 
         } else {
-            isMissedView = YES;
-            [stampView_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
-                                                          [docPath stringByAppendingPathComponent:IMG_MISSED_P]]]];
-            [stampView_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
-                                                          [docPath stringByAppendingPathComponent:IMG_MISSED_L]]]];
-        
-            [bannerButton_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_BANNER_MISSED_P]]] forState:UIControlStateNormal];
-            [bannerButton_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_BANNER_MISSED_L]]] forState:UIControlStateNormal];
-            
-            [passBook_p removeFromSuperview];
-            [passBook_l removeFromSuperview];
-            
-            /* disable SNS
-            if ([self checkForPreviouslySavedAccessTokenInfo] == NO) {
-                NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
-                
-                [fbIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_GET_FB]]] forState:UIControlStateNormal];
-                [fbIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_GET_FB]]] forState:UIControlStateNormal];
-                [twtIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_GET_TW]]] forState:UIControlStateNormal];
-                [twtIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_GET_TW]]] forState:UIControlStateNormal];
-                
-                fbIcon_p.frame = CGRectMake(50, 334, 174, 42);
-                fbIcon_l.frame = CGRectMake(128, 232, 174, 42);
-                twtIcon_p.frame = CGRectMake(228, 334, 42, 42);
-                twtIcon_l.frame = CGRectMake(305, 232, 42, 42);
-            } else if (isFacebookLogin == YES) {
-                NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
-                
-                [fbIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_FB_A]]] forState:UIControlStateNormal];
-                [fbIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_FB_A]]] forState:UIControlStateNormal];
-                [twtIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_TW_A]]] forState:UIControlStateNormal];
-                [twtIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_TW_A]]] forState:UIControlStateNormal];
-                
-                
-                fbIcon_p.frame = CGRectMake(50, 334, 174, 42);
-                fbIcon_l.frame = CGRectMake(128, 232, 174, 42);
-                twtIcon_p.frame = CGRectMake(228, 334, 42, 42);
-                twtIcon_l.frame = CGRectMake(305, 232, 42, 42);
-                
-            } else if (isTwitterLogin == YES) {
-                NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
-                [twtIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_TW_B]]] forState:UIControlStateNormal];
-                [twtIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_TW_B]]] forState:UIControlStateNormal];
-                [fbIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_FB_B]]] forState:UIControlStateNormal];
-                [fbIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_FB_B]]] forState:UIControlStateNormal];
-                
-                
-                fbIcon_p.frame = CGRectMake(50, 334, 42, 42);
-                fbIcon_l.frame = CGRectMake(128, 232, 42, 42);
-                twtIcon_p.frame = CGRectMake(96, 334, 174, 42);
-                twtIcon_l.frame = CGRectMake(175, 232, 174, 42);
-            }
-            */
-            
-            [self buttonHidden:YES];
-            
-            // Save stampsCounter to Plist file
-            [utilities saveToPlistWithKey:@"mads_status" Value:@"F"];
-        
-            // -- * -- Start show animation -- * --
             if ([onlyShowSuccess isEqualToString:@"N"]) {
+                
+                isMissedView = YES;
+                [stampView_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
+                                                              [docPath stringByAppendingPathComponent:IMG_MISSED_P]]]];
+                [stampView_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:
+                                                              [docPath stringByAppendingPathComponent:IMG_MISSED_L]]]];
+                
+                [bannerButton_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_BANNER_MISSED_P]]] forState:UIControlStateNormal];
+                [bannerButton_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_BANNER_MISSED_L]]] forState:UIControlStateNormal];
+                
+                [passBook_p removeFromSuperview];
+                [passBook_l removeFromSuperview];
+                
+                NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)
+                                       objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
+                dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+                
+                // Custom Buttons
+                if ([[dictXmlInfo objectForKey:@"miss_btn_save_img" ] isEqualToString:@"Y"]) {
+                    [custom_btn_p_1 setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CUSTOM_1]]] forState:UIControlStateNormal];
+                    [custom_btn_l_1 setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CUSTOM_1]]] forState:UIControlStateNormal];
+                    
+                    custom_btn_p_1.frame = CGRectMake(custom_btn_1_p_x, custom_btn_1_p_y, custom_btn_1_p_w, custom_btn_1_p_h);
+                    custom_btn_l_1.frame = CGRectMake(custom_btn_1_l_x, custom_btn_1_l_y, custom_btn_1_l_w, custom_btn_1_l_h);
+                }
+                
+                if ([[dictXmlInfo objectForKey:@"miss_btn_link_1"] isEqualToString:@"Y"]) {
+                    [custom_btn_p_2 setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CUSTOM_2]]] forState:UIControlStateNormal];
+                    [custom_btn_l_2 setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CUSTOM_2]]] forState:UIControlStateNormal];
+                    
+                    custom_btn_p_2.frame = CGRectMake(custom_btn_2_p_x, custom_btn_2_p_y, custom_btn_2_p_w, custom_btn_2_p_h);
+                    custom_btn_l_2.frame = CGRectMake(custom_btn_2_l_x, custom_btn_2_l_y, custom_btn_2_l_w, custom_btn_2_l_h);
+                }
+                
+                if ([[dictXmlInfo objectForKey:@"miss_btn_link_2"] isEqualToString:@"Y"]) {
+                    [custom_btn_p_3 setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CUSTOM_3]]] forState:UIControlStateNormal];
+                    [custom_btn_l_3 setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CUSTOM_3]]] forState:UIControlStateNormal];
+                    
+                    custom_btn_p_3.frame = CGRectMake(custom_btn_3_p_x, custom_btn_3_p_y, custom_btn_3_p_w, custom_btn_3_p_h);
+                    custom_btn_l_3.frame = CGRectMake(custom_btn_3_l_x, custom_btn_3_l_y, custom_btn_3_l_w, custom_btn_3_l_h);
+                }
+                
+                /* disable SNS
+                 if ([self checkForPreviouslySavedAccessTokenInfo] == NO) {
+                 NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
+                 
+                 [fbIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_GET_FB]]] forState:UIControlStateNormal];
+                 [fbIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_GET_FB]]] forState:UIControlStateNormal];
+                 [twtIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_GET_TW]]] forState:UIControlStateNormal];
+                 [twtIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_GET_TW]]] forState:UIControlStateNormal];
+                 
+                 fbIcon_p.frame = CGRectMake(50, 334, 174, 42);
+                 fbIcon_l.frame = CGRectMake(128, 232, 174, 42);
+                 twtIcon_p.frame = CGRectMake(228, 334, 42, 42);
+                 twtIcon_l.frame = CGRectMake(305, 232, 42, 42);
+                 } else if (isFacebookLogin == YES) {
+                 NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
+                 
+                 [fbIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_FB_A]]] forState:UIControlStateNormal];
+                 [fbIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_FB_A]]] forState:UIControlStateNormal];
+                 [twtIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_TW_A]]] forState:UIControlStateNormal];
+                 [twtIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_TW_A]]] forState:UIControlStateNormal];
+                 
+                 
+                 fbIcon_p.frame = CGRectMake(50, 334, 174, 42);
+                 fbIcon_l.frame = CGRectMake(128, 232, 174, 42);
+                 twtIcon_p.frame = CGRectMake(228, 334, 42, 42);
+                 twtIcon_l.frame = CGRectMake(305, 232, 42, 42);
+                 
+                 } else if (isTwitterLogin == YES) {
+                 NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES) objectAtIndex:0];
+                 [twtIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_TW_B]]] forState:UIControlStateNormal];
+                 [twtIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_TW_B]]] forState:UIControlStateNormal];
+                 [fbIcon_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_FB_B]]] forState:UIControlStateNormal];
+                 [fbIcon_p setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_CONNECTED_FB_B]]] forState:UIControlStateNormal];
+                 
+                 
+                 fbIcon_p.frame = CGRectMake(50, 334, 42, 42);
+                 fbIcon_l.frame = CGRectMake(128, 232, 42, 42);
+                 twtIcon_p.frame = CGRectMake(96, 334, 174, 42);
+                 twtIcon_l.frame = CGRectMake(175, 232, 174, 42);
+                 }
+                 */
+                
+                [self buttonHidden:YES];
+                
+                // Save stampsCounter to Plist file
+                [utilities saveToPlistWithKey:@"mads_status" Value:@"F"];
+                
+                // -- * -- Start show animation -- * --
                 [UIView beginAnimations:@"showBanner" context:nil];
                 [UIView setAnimationDuration:0.5f];
                 [UIView setAnimationDelegate:self];
                 
-                currentOrientation = [[UIDevice currentDevice] orientation] ;
+                //currentOrientation = [[UIDevice currentDevice] orientation] ;
+                currentOrientation = [UIApplication sharedApplication].statusBarOrientation;
                 if (currentOrientation == UIDeviceOrientationPortrait) {
                     bannerButton_l.hidden = YES;
                     stampView_l.hidden = YES;
@@ -711,7 +783,7 @@
                 [UIView commitAnimations];
             }
             // -- * -- End show animation -- * --
-        
+            
         }
         
         isDownloadOk = NO;
@@ -729,8 +801,9 @@
     [UIView beginAnimations:@"hideBanner" context:nil];
     [UIView setAnimationDuration:0.6f];
     [UIView setAnimationDelegate:self];
+    [UIView setAnimationDidStopSelector:@selector(scmAdAnimationFinished:finished:context:)];
     
-    currentOrientation = [[UIDevice currentDevice] orientation] ;
+    currentOrientation = [UIApplication sharedApplication].statusBarOrientation;
     if (currentOrientation == UIDeviceOrientationPortrait) {
         bannerButton_l.hidden = YES;
         stampView_l.hidden = YES;
@@ -759,6 +832,7 @@
 {
     [[self scmMadsDelegate] scmMadsViewWillShow];
     [utilities saveToPlistWithKey:@"banner_click" Value:@"Y"];
+    banner_click = @"Y";
     
     bannerButton_p.hidden = YES;
     bannerButton_l.hidden = YES;
@@ -770,7 +844,7 @@
     } else {
         self.view.frame = CGRectMake(0, 0, 480, 320);
     }
-     */
+    */
     
     [UIImageView beginAnimations:@"showStamp" context:nil];
     [UIImageView setAnimationDuration:0.5];
@@ -852,6 +926,7 @@
     
     closeXButton_p = [UIButton buttonWithType:UIButtonTypeCustom];
     closeXButton_l = [UIButton buttonWithType:UIButtonTypeCustom];
+
     
     passBook_p = [UIButton buttonWithType:UIButtonTypeCustom];
     passBook_l = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -890,10 +965,7 @@
     [stampView_p setUserInteractionEnabled:YES];
     
     bannerButton_p.frame = CGRectMake(0, 480, 320, 57);
-    
-    // Get Close X btn P coordinate
-    closeXButton_p.frame = CGRectMake(close_p_x, close_p_y, close_p_w, close_p_h);
-    
+        
     [bannerButton_p addTarget:self action:@selector(showStamp) forControlEvents:UIControlEventTouchUpInside];
     [closeXButton_p addTarget:self action:@selector(hideStamp) forControlEvents:UIControlEventTouchUpInside];
     
@@ -909,7 +981,6 @@
     stampView_l.frame = CGRectMake(0, 160, 480, 320);
 
     bannerButton_l.frame = CGRectMake(0, 480, 480, 57);
-    closeXButton_l.frame = CGRectMake(close_l_x, close_l_y, close_l_w, close_l_h);
     
     
     [bannerButton_l addTarget:self action:@selector(showStamp) forControlEvents:UIControlEventTouchUpInside];
@@ -947,7 +1018,7 @@
 {
     // clear cached campaign files
     //[self clearCampaignFiles:[NSArray arrayWithObjects:IMG_STAMP_L, IMG_STAMP_P, SCM_AD_XML, nil]];
-    [self clearCampaignFiles:[NSArray arrayWithObjects:IMG_BANNER_P,IMG_BANNER_MISSED_P,IMG_STAMP_P,IMG_MISSED_P,IMG_BANNER_L,IMG_BANNER_MISSED_L,IMG_STAMP_L,IMG_MISSED_L,SCM_AD_PLIST,SCM_AD_XML, PASSBOOK_PKG, IMG_Q10_BADGE, IMG_COUPON_TO_SAVE, nil]];
+    [self clearCampaignFiles:[NSArray arrayWithObjects:IMG_BANNER_P,IMG_BANNER_MISSED_P,IMG_STAMP_P,IMG_MISSED_P,IMG_BANNER_L,IMG_BANNER_MISSED_L,IMG_STAMP_L,IMG_MISSED_L,SCM_AD_PLIST,SCM_AD_XML, PASSBOOK_PKG, IMG_COUPON_TO_SAVE, IMG_CUSTOM_1, IMG_CUSTOM_2, IMG_CUSTOM_3, nil]];
     
     // Download NoCampaign images if files don't exist in the Documentation Directory.
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -989,12 +1060,29 @@
         if (isNoCampaignView) {
             isNoCampaignView = NO;
         }
+        
+        custom_btn_p_1.frame = CGRectZero;
+        custom_btn_p_2.frame = CGRectZero;
+        custom_btn_p_3.frame = CGRectZero;
+        custom_btn_l_1.frame = CGRectZero;
+        custom_btn_l_2.frame = CGRectZero;
+        custom_btn_l_3.frame = CGRectZero;
 
+        isSaveToDatabase = @"Y";
         [self syncToServer];
         [[self scmMadsDelegate] scmMadsViewDidFinish];
     }
     
     if ([animationID isEqualToString:@"hideBanner"]) {
+        isSaveToDatabase = @"Y";
+        
+        custom_btn_p_1.frame = CGRectZero;
+        custom_btn_p_2.frame = CGRectZero;
+        custom_btn_p_3.frame = CGRectZero;
+        custom_btn_l_1.frame = CGRectZero;
+        custom_btn_l_2.frame = CGRectZero;
+        custom_btn_l_3.frame = CGRectZero;
+        
         [self syncToServer];
     }
     
@@ -1418,30 +1506,23 @@
 - (void)showPassbook
 {
     [utilities saveToPlistWithKey:@"coupon_click" Value:@"P"];
-    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)
-                           objectAtIndex:0] stringByAppendingPathComponent:SCM_AD_PLIST];
-    dictXmlInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
-    
-    // Save passbook_click to Plist file
-    dispatch_async( dispatch_get_main_queue(), ^{
-        [dictXmlInfo setObject:@"Y" forKey:@"passbook_click"];
-        [dictXmlInfo writeToFile:filePath atomically:YES];
-    });
     
     if ([[dictXmlInfo objectForKey:@"passbook"] isEqualToString:@"Y"]&&[PKPassLibrary isPassLibraryAvailable]) {
                 
-                
         NSString* passFile = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
         NSData *passData = [NSData dataWithContentsOfFile:[passFile stringByAppendingPathComponent:PASSBOOK_PKG]];
-        PKPass *pass = [[PKPass alloc] initWithData:passData error:nil];
-        
-        PKAddPassesViewController *addPassViewController =
-        [[PKAddPassesViewController alloc] initWithPass:pass];
-        addPassViewController.delegate = self;
-        
-        [self presentViewController:addPassViewController
-                           animated:YES
-                         completion:nil];
+        if (passData) {
+            PKPass *pass = [[PKPass alloc] initWithData:passData error:nil];
+            
+            PKAddPassesViewController *addPassViewController =
+            [[PKAddPassesViewController alloc] initWithPass:pass];
+            addPassViewController.delegate = self;
+            
+            [self presentViewController:addPassViewController
+                               animated:YES
+                             completion:nil];
+        }
+
     }
     /*
     else{

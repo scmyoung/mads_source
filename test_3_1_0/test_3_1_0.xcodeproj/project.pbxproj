@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2C2BF902161D6174000610F4 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2BF901161D6174000610F4 /* FacebookSDK.framework */; };
-		2C69813D1676E0DA0052A751 /* ScmMads.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C69813C1676E0DA0052A751 /* ScmMads.framework */; };
 		2C69813F1676E0EA0052A751 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C69813E1676E0EA0052A751 /* AdSupport.framework */; };
 		2C6981411676E1680052A751 /* PassKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C6981401676E1680052A751 /* PassKit.framework */; };
 		D443206915E676D000889F00 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D443206815E676D000889F00 /* Twitter.framework */; };
@@ -22,11 +20,10 @@
 		D470364915DD23DD000A287C /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D470364715DD23DD000A287C /* MainStoryboard.storyboard */; };
 		D470364C15DD23DD000A287C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D470364B15DD23DD000A287C /* ViewController.m */; };
 		D48E7EA015E6A29500170ED0 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D48E7E9F15E6A29500170ED0 /* libsqlite3.dylib */; };
+		E2B406AF17219C4A00A44F66 /* ScmMads.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B406AE17219C4A00A44F66 /* ScmMads.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2C2BF901161D6174000610F4 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
-		2C69813C1676E0DA0052A751 /* ScmMads.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ScmMads.framework; sourceTree = "<group>"; };
 		2C69813E1676E0EA0052A751 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		2C6981401676E1680052A751 /* PassKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PassKit.framework; path = System/Library/Frameworks/PassKit.framework; sourceTree = SDKROOT; };
 		D443206815E676D000889F00 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
@@ -45,6 +42,7 @@
 		D470364A15DD23DD000A287C /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		D470364B15DD23DD000A287C /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		D48E7E9F15E6A29500170ED0 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		E2B406AE17219C4A00A44F66 /* ScmMads.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScmMads.framework; path = ../../../../Desktop/ScmMads.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,10 +50,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2B406AF17219C4A00A44F66 /* ScmMads.framework in Frameworks */,
 				2C6981411676E1680052A751 /* PassKit.framework in Frameworks */,
 				2C69813F1676E0EA0052A751 /* AdSupport.framework in Frameworks */,
-				2C69813D1676E0DA0052A751 /* ScmMads.framework in Frameworks */,
-				2C2BF902161D6174000610F4 /* FacebookSDK.framework in Frameworks */,
 				D48E7EA015E6A29500170ED0 /* libsqlite3.dylib in Frameworks */,
 				D443206C15E676D600889F00 /* Accounts.framework in Frameworks */,
 				D443206915E676D000889F00 /* Twitter.framework in Frameworks */,
@@ -71,10 +68,9 @@
 		D470362615DD23DD000A287C = {
 			isa = PBXGroup;
 			children = (
+				E2B406AE17219C4A00A44F66 /* ScmMads.framework */,
 				2C6981401676E1680052A751 /* PassKit.framework */,
 				2C69813E1676E0EA0052A751 /* AdSupport.framework */,
-				2C69813C1676E0DA0052A751 /* ScmMads.framework */,
-				2C2BF901161D6174000610F4 /* FacebookSDK.framework */,
 				D48E7E9F15E6A29500170ED0 /* libsqlite3.dylib */,
 				D443206B15E676D600889F00 /* Accounts.framework */,
 				D443206815E676D000889F00 /* Twitter.framework */,

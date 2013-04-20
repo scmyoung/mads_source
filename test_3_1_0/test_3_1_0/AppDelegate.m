@@ -15,7 +15,6 @@
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation
 {
-    return [FBSession.activeSession handleOpenURL:url];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -50,7 +49,6 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     
-    [FBSession.activeSession close];
 
 }
 
