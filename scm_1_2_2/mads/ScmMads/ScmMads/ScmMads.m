@@ -365,8 +365,8 @@
         isInternetAvailable = YES;
         
         // cleanup
-        banner_click = @"N";
-        
+        [utilities saveToPlistWithKey:@"banner_click" Value:@"N"];
+        [utilities saveToPlistWithKey:@"coupon_click" Value:@"N"];
         
     } else if ([data length] ==0 && error == nil) {
         NSLog(@"[scm]: No Data");
@@ -1554,8 +1554,11 @@
 
 - (void)saveCouponImage
 {
-    NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    UIImageWriteToSavedPhotosAlbum([UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_COUPON_TO_SAVE]]], self, @selector(thisImage:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:IMG_COUPON_TO_SAVE];
+    if ([fileMgr fileExistsAtPath:filePath]) {
+        NSData *imgData = [NSData dataWithContentsOfFile:filePath];
+        UIImageWriteToSavedPhotosAlbum([UIImage imageWithData:imgData], self, @selector(thisImage:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
+    }
 
 }
 
