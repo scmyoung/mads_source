@@ -509,8 +509,7 @@
             
             [bannerButton_l setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:[docPath stringByAppendingPathComponent:IMG_DEFAULT_BANNER_L]]] forState:UIControlStateNormal];
             
-            // Save stampsCounter to Plist file
-            [utilities saveToPlistWithKey:@"mads_status" Value:@"N"];
+            // Save stampsCounter to Plist fileß
             
             // -- * -- Start show animation -- * --
             [UIView beginAnimations:@"showBanner" context:nil];
@@ -795,6 +794,8 @@
 
 - (void) hideScmMads
 {
+    banner_click = @"N";
+    
     bannerButton_p.hidden = NO;
     bannerButton_l.hidden = NO;
     
@@ -1061,6 +1062,8 @@
             isNoCampaignView = NO;
         }
         
+        passBook_p.frame = CGRectZero;
+        passBook_l.frame = CGRectZero;
         custom_btn_p_1.frame = CGRectZero;
         custom_btn_p_2.frame = CGRectZero;
         custom_btn_p_3.frame = CGRectZero;
@@ -1076,6 +1079,8 @@
     if ([animationID isEqualToString:@"hideBanner"]) {
         isSaveToDatabase = @"Y";
         
+        passBook_p.frame = CGRectZero;
+        passBook_l.frame = CGRectZero;
         custom_btn_p_1.frame = CGRectZero;
         custom_btn_p_2.frame = CGRectZero;
         custom_btn_p_3.frame = CGRectZero;
